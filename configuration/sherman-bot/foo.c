@@ -1,11 +1,13 @@
 #include "foo.h"
 
-static char* private();
+static char *private();
 
-char* message() {
+char *message()
+{
     return private();
 }
 
-static char* private() {
+static char *private()
+{
     return "Best string";
 }
