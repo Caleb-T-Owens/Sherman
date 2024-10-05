@@ -1,1 +1,1 @@
-char *message();
+char *message(void);
