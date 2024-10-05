@@ -1,0 +1,38 @@
+tap "aws/tap"
+tap "homebrew/bundle"
+
+# C/C++ tools
+brew "cmake"
+
+# Version control
+brew "gh"
+brew "mercurial"
+
+# Compression Tools
+brew "zlib"
+# brew "pigz"
+
+# cURL but not Curly
+brew "wget"
+
+# Ruby
+brew "openssl@3"
+brew "rbenv"
+
+# Deployment software
+brew "aws/tap/copilot-cli"
+
+# Editors and terminals
+brew "neovim"
+# brew "tmux"
+# brew "tmuxinator"
+
+# Casks:
+
+# Editors and terminals
+cask "alacritty"
+cask "emacs"
+cask "vscodium"
+
+# Fancy mouse movment
+cask "linearmouse"
