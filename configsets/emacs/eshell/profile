@@ -1,0 +1,5 @@
+# Make a tmpfile for writing things to be sourced to
+setq tmpfile $(make-temp-file "shellfile")
+
+/opt/homebrew/bin/brew shellenv > $tmpfile
+. $tmpfile

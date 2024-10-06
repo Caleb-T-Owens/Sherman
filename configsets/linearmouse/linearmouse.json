@@ -1,0 +1,62 @@
+{
+    "schemes": [
+        {
+            "pointer": {
+                "speed": 0.0689655172413792768,
+                "acceleration": 0.6875,
+                "disableAcceleration": false
+            },
+            "if": {
+                "device": {
+                    "serialNumber": "18-3f-70-d8-30-fc",
+                    "productID": "0x265",
+                    "vendorID": "0x4c",
+                    "category": "trackpad",
+                    "productName": "Magic Trackpad"
+                }
+            }
+        },
+        {
+            "pointer": {
+                "speed": 0.0689655172413792768,
+                "disableAcceleration": false,
+                "acceleration": 0.6875
+            },
+            "if": {
+                "device": {
+                    "productName": "Apple Internal Keyboard / Trackpad",
+                    "category": "trackpad",
+                    "productID": "0x0",
+                    "vendorID": "0x0"
+                }
+            }
+        },
+        {
+            "pointer": {
+                "speed": 0.0689655172413792768,
+                "disableAcceleration": true,
+                "acceleration": 0.75
+            },
+            "if": {
+                "device": {
+                    "category": "mouse",
+                    "vendorID": "0x47d",
+                    "productID": "0x8018",
+                    "productName": "Expert Wireless TB"
+                }
+            },
+            "scrolling": {
+                "acceleration": {
+                    "vertical": 1
+                },
+                "distance": {
+                    "vertical": 3
+                },
+                "speed": {
+                    "vertical": 0
+                }
+            }
+        }
+    ],
+    "$schema": "https://schema.linearmouse.app/0.10.0"
+}

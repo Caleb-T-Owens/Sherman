@@ -1,0 +1,21 @@
+[gpg]
+	format = ssh
+[user]
+	signingkey = /Users/calebowens/.ssh/gitbutler.pub
+	name = Caleb Owens
+	email = caleb@gitbutler.com
+[commit]
+	gpgsign = true
+[push]
+	autoSetupRemote = true
+[gitbutler]
+	gitbutlerCommitter = 0
+	aiOpenAIKeyOption = bringYourOwn
+	aiModelProvider = anthropic
+	aiAnthropicKeyOption = bringYourOwn
+	aiAnthropicModelName = claude-3-5-sonnet-20240620
+	aiOpenAIModelName = gpt-4o-mini
+[alias]
+	loglog = log --oneline --graph --all
+[submodule]
+	recurse = true

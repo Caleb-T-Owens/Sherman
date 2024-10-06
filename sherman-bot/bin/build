@@ -6,7 +6,7 @@
 
 CC=clang
 # Yell at me if I do something wrong.
-WARNING_FLAGS="-Wpedantic -Wall -Wextra -Werror"
+WARNING_FLAGS="-Wpedantic -Wall -Wextra -Wshadow -Werror"
 # Not sure what the "best" version to use is. C99 will do just fine.
 VERSION_FLAGS="-std=c99"
 
