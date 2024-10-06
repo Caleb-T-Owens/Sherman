@@ -1,0 +1,3 @@
+[submodule "sherman-bot/cJSON"]
+	path = sherman-bot/cJSON
+	url = git@github.com:DaveGamble/cJSON.git
