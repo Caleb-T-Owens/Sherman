@@ -1,0 +1,4 @@
+# Ignore projects which get manually cloned
+gitbutler-client/
+gitbutler-web/
+website/

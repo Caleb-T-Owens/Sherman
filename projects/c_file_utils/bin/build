@@ -1,21 +1,16 @@
 #!/bin/bash
 
-# I know Makefiles exist, but I've read ten different guides and it still
-# Mystifies me. I'm just going to use a shell script because its easy to
-# understand.
-
 CC=clang
 # Yell at me if I do something wrong.
 WARNING_FLAGS="-Wpedantic -Wall -Wextra -Wshadow -Werror"
 # Not sure what the "best" version to use is. C99 will do just fine.
 VERSION_FLAGS="-std=c99"
 
-OUT_FLAGS="-o build/sherman-bot"
+OUT_FLAGS="-o build/c_starter"
 
-FILE_UTILS_FILES="c_file_utils/lib.c"
 CJSON_FILES="cJSON/cJSON.c"
-SHERMAN_FILES="src/json.c src/main.c"
-C_FILES="${CJSON_FILES} ${FILE_UTILS_FILES} ${SHERMAN_FILES}"
+SHERMAN_FILES="foo.c main.c"
+C_FILES="${CJSON_FILES} ${SHERMAN_FILES}"
 
 # Make a bin directory if it doesn't exist.
 if [ ! -d "build" ]; then

@@ -1,0 +1,13 @@
+#!/bin/bash
+
+echo "Entering directory './sherman-bot'"
+pushd ./sherman-bot
+
+echo "Running './bin/build'"
+./bin/build
+
+echo "Exiting directory './sherman-bot'"
+popd
+
+echo "Running './sherman-bot/build/sherman-bot'"
+./sherman-bot/build/sherman-bot

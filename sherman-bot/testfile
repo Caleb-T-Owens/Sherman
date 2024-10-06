@@ -1,9 +1,0 @@
-1) Copies the null-terminated byte string pointed to by src, including the null terminator, to the character array whose first element is pointed to by dest.
- The behavior is undefined if the dest array is not large enough. The behavior is undefined if the strings overlap. The behavior is undefined if either dest is not a pointer to a character array or src is not a pointer to a null-terminated byte string.
-2) Same as (1), except that it may clobber the rest of the destination array with unspecified values and that the following errors are detected at runtime and call the currently installed constraint handler function:
-src or dest is a null pointer
-destsz is zero or greater than RSIZE_MAX
-destsz is less or equal strnlen_s(src, destsz); in other words, truncation would occur
-overlap would occur between the source and the destination strings
- The behavior is undefined if the size of the character array pointed to by dest <= strnlen_s(src, destsz) < destsz; in other words, an erroneous value of destsz does not expose the impending buffer overflow.
-As with all bounds-checked functions, strcpy_s is only guaranteed to be available if __STDC_LIB_EXT1__ is defined by the implementation and if the user defines __STDC_WANT_LIB_EXT1__ to the integer constant 1 before including <string.h>.
