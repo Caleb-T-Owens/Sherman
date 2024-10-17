@@ -24,8 +24,8 @@ brew "aws/tap/copilot-cli"
 
 # Editors and terminals
 brew "neovim"
-# brew "tmux"
-# brew "tmuxinator"
+brew "tmux"
+brew "tmuxinator"
 
 # Casks:
 

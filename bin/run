@@ -1,13 +1,31 @@
-#!/bin/bash
+#!/bin/zsh
 
-echo "Entering directory './sherman-bot'"
-pushd ./sherman-bot
+pushd $HOME/sherman
 
-echo "Running './bin/build'"
-./bin/build
+if [ -e $HOME/sherman/env.local.sh ]
+then
+    source $HOME/sherman/env.local.sh
+fi
 
-echo "Exiting directory './sherman-bot'"
+for file in $HOME/sherman/configsets/*
+do
+    if [ -e $file/install.sh ]
+    then
+        echo "Installing $file"
+        source $file/install.sh
+    fi
+done
+
+# echo "Entering directory './sherman-bot'"
+# pushd ./sherman-bot
+
+# echo "Running './bin/build'"
+# ./bin/build
+
+# echo "Exiting directory './sherman-bot'"
+# popd
+
+# echo "Running './sherman-bot/build/sherman-bot'"
+# ./sherman-bot/build/sherman-bot
+
 popd
-
-echo "Running './sherman-bot/build/sherman-bot'"
-./sherman-bot/build/sherman-bot

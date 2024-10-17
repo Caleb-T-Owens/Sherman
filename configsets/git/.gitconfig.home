@@ -1,7 +1,7 @@
 [gpg]
 	format = ssh
 [user]
-	signingkey = /Users/calebowens/.ssh/id.pub
+	signingkey = /Users/calebowens/.ssh/id_ed25519.pub
 	name = Caleb Owens
 	email = hello@calebowens.com
 [commit]
