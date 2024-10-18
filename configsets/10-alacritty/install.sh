@@ -15,4 +15,4 @@ then
 fi
 
 echo "Installing new configs"
-cp "$HOME/sherman/configsets/alacritty/alacritty.toml" "$HOME/.config/alacritty/alacritty.toml"
+cp "$HOME/sherman/configsets/10-alacritty/alacritty.toml" "$HOME/.config/alacritty/alacritty.toml"

@@ -1,8 +1,15 @@
 tap "aws/tap"
 tap "homebrew/bundle"
+# tap "sdkman/tap"
 
 # C/C++ tools
 brew "cmake"
+
+# Java tools
+# brew "sdkman-cli"
+
+# JavaScript
+brew "nvm"
 
 # Version control
 brew "gh"

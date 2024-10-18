@@ -1,4 +1,5 @@
 #!/bin/zsh
+set -eu -o pipefail
 
 pushd $HOME/sherman
 
@@ -29,3 +30,11 @@ done
 # ./sherman-bot/build/sherman-bot
 
 popd
+
+pushd $HOME
+
+source "$HOME/.zshrc"
+
+popd
+
+echo "Complete!"

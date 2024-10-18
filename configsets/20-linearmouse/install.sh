@@ -15,4 +15,4 @@ then
 fi
 
 echo "Installing new configs"
-cp "$HOME/sherman/configsets/linearmouse/linearmouse.json" "$HOME/.config/linearmouse/linearmouse.json"
+cp "$HOME/sherman/configsets/20-linearmouse/linearmouse.json" "$HOME/.config/linearmouse/linearmouse.json"
