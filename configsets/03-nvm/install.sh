@@ -15,3 +15,5 @@ nvm alias default lts/iron
 
 # Would be good to have a neater way of managing global packages
 npm install -g @angular/cli
+# Ionic seems to break when installing multiple times
+# npm install -g @ionic/cli

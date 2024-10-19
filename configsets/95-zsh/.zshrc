@@ -1,6 +1,6 @@
 set -eu -o pipefail
 
-if [ -e /opt/homebrew/min/brew shellenv ]
+if [ -e /opt/homebrew/bin/brew ]
 then
     eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
@@ -19,11 +19,11 @@ then
     eval "$(rbenv init - zsh)"
 fi
 
-if [ -e $HOME/.sdkman ]
-then
-    export SDKMAN_DIR="$HOME/.sdkman"
-    [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
-fi
+# if [ -e $HOME/.sdkman ]
+# then
+#     export SDKMAN_DIR="$HOME/.sdkman"
+#     [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
+# fi
 
 if type -a codium >&2;
 then
@@ -50,3 +50,12 @@ function pp {
         npm $*
     fi
 }
+
+function sherman_reload {
+    if [ -e $HOME/sherman/bin/run ]
+    then
+        source "$HOME/sherman/bin/run"
+    fi
+}
+
+set +eu +o pipefail
