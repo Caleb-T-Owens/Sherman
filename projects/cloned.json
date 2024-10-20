@@ -1,11 +1,5 @@
 {
-    "gitbutler-client": {
-        "url": "git@github.com:gitbutlerapp/gitbutler.git"
-    },
-    "gitbutler-web": {
-        "url": "git@github.com:gitbutlerapp/web.git"
-    },
-    "website": {
-        "url": "git@github.com:Caleb-T-Owens/website.git"
-    }
+  "website": {
+    "url": "git@github.com:Caleb-T-Owens/website.git"
+  }
 }

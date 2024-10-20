@@ -37,4 +37,10 @@ source "$HOME/.zshrc"
 
 popd
 
+pushd $HOME/sherman/projects/project-cloner
+
+bun run index.ts
+
+popd
+
 echo "Complete!"

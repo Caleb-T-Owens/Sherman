@@ -1,5 +1,6 @@
 tap "aws/tap"
 tap "homebrew/bundle"
+tap "oven-sh/bun"
 # tap "sdkman/tap"
 
 # C/C++ tools
@@ -10,6 +11,7 @@ brew "cmake"
 
 # JavaScript
 brew "nvm"
+brew "bun"
 
 # Version control
 brew "gh"
