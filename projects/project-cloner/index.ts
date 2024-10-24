@@ -12,6 +12,7 @@ const clonedSchema = z.record(
   z.string(),
   z.object({
     url: z.string(),
+    deployable: z.optional(z.boolean()),
   })
 );
 
@@ -38,6 +39,10 @@ const joinedGitignore = gitignore.join("\n");
 await $`echo "${joinedGitignore}" > ${gitignorePath}`;
 
 for (const [folderName, object] of Object.entries(cloned)) {
+  if (env.SHERMAN_ENV === "deploy" && !object.deployable) {
+    continue;
+  }
+
   const folderPath = `${projectsDir}/${folderName}`;
 
   const { exitCode: projectExists } = await $`[ -e ${folderPath} ]`.nothrow();

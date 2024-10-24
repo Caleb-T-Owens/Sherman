@@ -1,5 +1,10 @@
 {
   "website": {
-    "url": "git@github.com:Caleb-T-Owens/website.git"
+    "url": "git@github.com:Caleb-T-Owens/website.git",
+    "deployable": false
+  },
+  "libgit2": {
+    "url": "git@github.com:libgit2/libgit2.git",
+    "deployable": false
   }
 }

@@ -3,10 +3,7 @@ set -eu -o pipefail
 
 pushd $HOME/sherman
 
-if [ -e $HOME/sherman/env.local.sh ]
-then
-    source $HOME/sherman/env.local.sh
-fi
+export SHERMAN_ENV="$(cat $HOME/sherman/CURRENT_ENV)"
 
 for file in $HOME/sherman/configsets/*
 do
@@ -37,10 +34,6 @@ source "$HOME/.zshrc"
 
 popd
 
-pushd $HOME/sherman/projects/project-cloner
-
-bun run index.ts
-
-popd
+source "$HOME/sherman/bin/clone"
 
 echo "Complete!"
