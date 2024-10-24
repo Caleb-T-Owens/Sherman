@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/bin/bash
 set -eu -o pipefail
 
 pushd $HOME/sherman
@@ -6,10 +6,9 @@ pushd $HOME/sherman
 export SHERMAN_DIR=$HOME/sherman
 export SHERMAN_ENV="$(cat $HOME/sherman/CURRENT_ENV)"
 
-pushd $HOME/sherman/projects/project-cloner
-
-bun run index.ts
-
-popd
+if [ $SHERMAN_ENV = "electron" ]
+then
+    source $SHERMAN_DIR/deploy/electron/deploy.sh
+fi
 
 popd
