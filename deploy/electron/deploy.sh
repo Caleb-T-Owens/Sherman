@@ -9,6 +9,6 @@ fi
 
 echo "Updating nginx config"
 
-rm /etc/nginx/sites-enabled/*
+find /etc/nginx/sites-enabled -maxdepth 1 -type f -name '*' -delete
 
-cp $HOME/sherman/deploy/electron/domains/* /etc/nginx/sites-enabled
+cp /home/electron/sherman/deploy/electron/domains/* /etc/nginx/sites-enabled
