@@ -4,9 +4,9 @@ set -eu -o pipefail
 
 echo "Updating nginx config"
 
-find /etc/nginx/sites-enabled -maxdepth 1 -type f -name '*' -delete
+sudo find /etc/nginx/sites-enabled -maxdepth 1 -type f -name '*' -delete
 
-cp /home/electron/sherman/deploy/electron/domains/* /etc/nginx/sites-enabled
+sudo cp $SHERMAN_DIR/deploy/electron/domains/* /etc/nginx/sites-enabled
 
 echo "Restarting nginx..."
 
@@ -16,7 +16,7 @@ echo "Restared nginx"
 
 echo "Deploying services"
 
-for service in $HOME/sherman/deploy/electron/services/*
+for service in $SHERMAN_DIR/deploy/electron/services/*
 do
     if [ -e $service/deploy.sh ]
     then
