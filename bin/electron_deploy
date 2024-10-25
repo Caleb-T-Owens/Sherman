@@ -1,0 +1,11 @@
+#!/bin/zsh
+set -eu -o pipefail
+
+pushd $HOME/sherman
+
+export SHERMAN_DIR=$HOME/sherman
+export SHERMAN_ENV="$(cat $HOME/sherman/CURRENT_ENV)"
+
+ssh electron -t "cd sherman && git fetch && git pull && bin/deploy";
+
+popd

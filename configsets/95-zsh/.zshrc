@@ -58,4 +58,11 @@ function sherman_reload {
     fi
 }
 
+function sherman_electron_deploy {
+    if [ -e $HOME/sherman/bin/electron_deploy ]
+    then
+        source "$HOME/sherman/bin/electron_deploy"
+    fi
+}
+
 set +eu +o pipefail
