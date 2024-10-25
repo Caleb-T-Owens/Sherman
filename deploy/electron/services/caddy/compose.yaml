@@ -1,8 +1,0 @@
-services:
-  caddy:
-    image: caddy:2.8-alpine
-    restart: unless-stopped
-    ports:
-      - "3020:80"
-    volumes:
-      - ./Caddyfile:/etc/caddy/Caddyfile
