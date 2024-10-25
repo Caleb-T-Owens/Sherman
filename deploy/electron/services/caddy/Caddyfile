@@ -1,0 +1,4 @@
+calebowens.com, www.calebowens.com, blog.calebowens.com {
+    # Redirect to cto.je
+    redir https://cto.je permanent
+}
