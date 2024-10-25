@@ -5,4 +5,4 @@ services:
     ports:
       - "3020:80"
     volumes:
-      - $PWD/Caddyfile:/etc/caddy/Caddyfile
+      - ./Caddyfile:/etc/caddy/Caddyfile
