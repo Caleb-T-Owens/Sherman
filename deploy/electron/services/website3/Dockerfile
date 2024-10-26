@@ -5,4 +5,5 @@ COPY . /app
 WORKDIR /app
 
 RUN npm install
-CMD npm run production:run
+RUN npm run build
+CMD npm run serve:ssr:website3

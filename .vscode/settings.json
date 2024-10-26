@@ -1,0 +1,27 @@
+{
+	"[javascript]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"[javascriptreact]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"[typescript]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"[typescriptreact]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"[go]": {
+		// "editor.defaultFormatter": "golang.go"
+	},
+	"[ruby]": {
+		// "editor.defaultFormatter": "testdouble.vscode-standard-ruby"
+	},
+    "editor.formatOnSave": true,
+    "eslint.workingDirectories": [
+        "projects/empower-learn/frontend"
+    ],
+    "javascript.preferences.importModuleSpecifier": "non-relative",
+	// "solargraph.bundlerPath": "/Users/calebowens/.rbenv/shims/bundle",
+	// "solargraph.commandPath": "solargraph",
+}

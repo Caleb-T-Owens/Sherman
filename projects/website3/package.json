@@ -8,7 +8,7 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "serve:ssr:website2": "node dist/website2/server/server.mjs",
+    "serve:ssr:website3": "node dist/website2/server/server.mjs",
     "lint": "ng lint",
     "check": "prettier . --check",
     "fix": "ng lint --fix && prettier . --write"
