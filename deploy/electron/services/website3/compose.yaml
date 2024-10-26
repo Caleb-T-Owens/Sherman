@@ -5,4 +5,4 @@ services:
       dockerfile: ../Dockerfile
     restart: unless-stopped
     ports:
-      - "3010:4200"
+      - "3010:4000"
