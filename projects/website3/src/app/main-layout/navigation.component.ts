@@ -24,7 +24,8 @@ import { RouterLink } from '@angular/router'
         <h2>External</h2>
         <ul>
           <li>
-            <a href="https://github.com/Caleb-T-Owens/website"
+            <a
+              href="https://github.com/Caleb-T-Owens/Sherman/tree/main/projects/website3"
               >Website source code</a
             >
           </li>
