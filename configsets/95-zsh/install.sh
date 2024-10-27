@@ -1,5 +1,5 @@
 #!/bin/zsh
-set -eu -o pipefail
+
 
 if [ -e $HOME/.zshrc ]
 then

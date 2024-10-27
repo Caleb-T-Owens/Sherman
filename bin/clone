@@ -1,5 +1,5 @@
 #!/bin/zsh
-set -eu -o pipefail
+
 
 pushd $HOME/sherman
 

@@ -1,10 +1,12 @@
 #!/bin/bash
-set -eu -o pipefail
+
 
 pushd $HOME/sherman
 
-git fetch
-git pull
+echo "Fetching origin main"
+git fetch origin main
+echo "Pulling origin main"
+git pull origin main
 
 export SHERMAN_DIR=$HOME/sherman
 export SHERMAN_ENV="$(cat $HOME/sherman/CURRENT_ENV)"
