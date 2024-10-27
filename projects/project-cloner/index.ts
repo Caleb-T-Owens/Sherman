@@ -39,7 +39,7 @@ const joinedGitignore = gitignore.join("\n");
 await $`echo "${joinedGitignore}" > ${gitignorePath}`;
 
 for (const [folderName, object] of Object.entries(cloned)) {
-  if (env.SHERMAN_ENV === "deploy" && !object.deployable) {
+  if (env.SHERMAN_ENV === "electron" && !object.deployable) {
     continue;
   }
 
