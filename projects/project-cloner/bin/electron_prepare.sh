@@ -1,4 +1,4 @@
-pushd $SHERMAN_DIR/proejcts/project-cloner
+pushd $SHERMAN_DIR/projects/project-cloner
 
 if type -a bun >&2;
 then
