@@ -7,7 +7,7 @@ services:
     ports:
       - "3040:3000"
     volumes:
-      - data:pb_data
+      - data:/app/pb_data
 
 volumes:
   data:

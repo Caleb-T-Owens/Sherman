@@ -6,6 +6,6 @@ pushd $HOME/sherman
 export SHERMAN_DIR=$HOME/sherman
 export SHERMAN_ENV="$(cat $HOME/sherman/CURRENT_ENV)"
 
-ssh electron -t "cd sherman && bin/deploy";
+ssh electron -t "cd sherman && bin/deploy" || echo "something failed"
 
 popd
