@@ -40,6 +40,7 @@ brew "tmuxinator"
 
 # Editors and terminals
 cask "alacritty"
+cask "wezterm"
 cask "emacs"
 cask "vscodium"
 
