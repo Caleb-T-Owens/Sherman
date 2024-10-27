@@ -1,0 +1,13 @@
+services:
+  web:
+    build:
+      context: microblog_api
+      dockerfile: ../Dockerfile
+    restart: unless-stopped
+    ports:
+      - "3040:3000"
+    volumes:
+      - data:pb_data
+
+volumes:
+  data:
