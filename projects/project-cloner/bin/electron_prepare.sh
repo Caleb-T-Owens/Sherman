@@ -1,3 +1,5 @@
+pushd $SHERMAN_DIR/proejcts/project-cloner
+
 if type -a bun >&2;
 then
     echo "Bun installed"
@@ -6,3 +8,7 @@ else
 
     source /home/electron/.bashrc
 fi
+
+bun install
+
+popd
