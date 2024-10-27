@@ -3,8 +3,6 @@
 
 pushd $HOME/sherman
 
-echo "Fetching origin main"
-git fetch origin main
 echo "Pulling origin main"
 git pull origin main
 
