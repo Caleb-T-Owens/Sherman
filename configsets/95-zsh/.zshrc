@@ -1,5 +1,3 @@
-set -eu -o pipefail
-
 if [ -e /opt/homebrew/bin/brew ]
 then
     eval "$(/opt/homebrew/bin/brew shellenv)"
@@ -64,5 +62,3 @@ function sherman_electron_deploy {
         source "$HOME/sherman/bin/electron_deploy"
     fi
 }
-
-set +eu +o pipefail
