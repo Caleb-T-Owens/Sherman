@@ -10,5 +10,13 @@
   "empower-learn": {
     "url": "git@github.com:learningproject/empower-learn-monorepo.git",
     "deployable": true
+  },
+  "gitbutler-client": {
+    "url": "git@github.com:gitbutlerapp/gitbutler.git",
+    "deployable": false
+  },
+  "gitbutler-web": {
+    "url": "git@github.com:gitbutlerapp/web.git",
+    "deployable": false
   }
 }
