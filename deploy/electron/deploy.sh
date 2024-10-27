@@ -1,5 +1,7 @@
 #!/bin/bash
 
+source /home/electron/.bashrc
+
 echo "Preparing project cloner"
 
 source "$SHERMAN_DIR/projects/project-cloner/bin/electron_prepare.sh"
