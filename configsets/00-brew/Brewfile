@@ -46,3 +46,6 @@ cask "vscodium"
 
 # Fancy mouse movment
 cask "linearmouse"
+
+# Monitor control
+cask "MonitorControl"
