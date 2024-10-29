@@ -38,12 +38,13 @@ services:
 
     restart: unless-stopped
 
+    env_file: .env
+
     environment:
       SELF_HOSTED: "true"
       RAILS_FORCE_SSL: "true"
       RAILS_ASSUME_SSL: "true"
       GOOD_JOB_EXECUTION_MODE: async
-      SECRET_KEY_BASE: ${SECRET_KEY_BASE:?}
       DB_HOST: postgres
       POSTGRES_DB: maybe
       POSTGRES_USER: postgres
