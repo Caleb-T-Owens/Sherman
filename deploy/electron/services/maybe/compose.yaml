@@ -38,8 +38,6 @@ services:
 
     restart: unless-stopped
 
-    env_file: .env
-
     environment:
       SELF_HOSTED: "true"
       RAILS_FORCE_SSL: "true"
@@ -48,7 +46,8 @@ services:
       DB_HOST: postgres
       POSTGRES_DB: maybe
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postges
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?}
+      SECRET_KEY_BASE: ${SECRET_KEY_BASE:?}
 
     depends_on:
       postgres:
@@ -62,7 +61,7 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_DB: maybe
-      POSTGRES_PASSWORD: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?}
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
       interval: 5s
