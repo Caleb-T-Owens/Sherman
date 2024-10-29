@@ -1,5 +1,6 @@
-import { Component } from '@angular/core'
+import { Component, Inject, OnDestroy } from '@angular/core'
 import { RouterLink } from '@angular/router'
+import { SEOService } from '../seo.service'
 
 @Component({
   selector: 'cto-home-page',
@@ -7,4 +8,12 @@ import { RouterLink } from '@angular/router'
   templateUrl: 'home.component.html',
   imports: [RouterLink],
 })
-export class HomeComponent {}
+export class HomeComponent implements OnDestroy {
+  constructor(@Inject(SEOService) private seoService: SEOService) {
+    this.seoService.updateCanonicalUrl('https://cto.je')
+  }
+
+  ngOnDestroy(): void {
+    this.seoService.clearCanonicalUrl()
+  }
+}
