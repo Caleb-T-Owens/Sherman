@@ -1,5 +1,3 @@
-
-
 pushd $SHERMAN_DIR/deploy/electron/services/website3
 
 cp -R $SHERMAN_DIR/projects/website3 website3
