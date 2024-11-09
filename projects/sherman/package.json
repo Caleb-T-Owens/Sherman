@@ -1,0 +1,17 @@
+{
+  "name": "sherman-3",
+  "module": "index.ts",
+  "type": "module",
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "zod": "^3.23.8"
+  },
+  "scripts": {
+    "start": "bun run index.ts"
+  }
+}
