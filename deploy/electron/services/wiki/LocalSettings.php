@@ -129,7 +129,7 @@ wfLoadSkin( 'MinervaNeue' );
 
 ## Default skin: you can change the default skin. Use the internal symbolic
 ## names, e.g. 'vector' or 'monobook':
-$wgDefaultSkin = 'minervaneue';
+$wgDefaultSkin = 'minerva';
 
 # Enabled extensions. Most of the extensions are enabled by adding
 # wfLoadExtension( 'ExtensionName' );
