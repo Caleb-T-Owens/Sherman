@@ -15,9 +15,6 @@ if ( !defined( 'MEDIAWIKI' ) ) {
 	exit;
 }
 
-
-
-
 ## Uncomment this to disable output compression
 # $wgDisableOutputCompression = true;
 
@@ -103,14 +100,14 @@ $wgLocaltimezone = 'UTC';
 ## be publicly accessible from the web.
 #$wgCacheDirectory = "$IP/cache";
 
-$wgSecretKey = 'e81ad5c7b15d17f34726616eb7cc66027a4dfe8e0aee4e6d28af6047390ae9dd';
+$wgSecretKey = getenv('SECRET_KEY_BASE');
 
 # Changing this will log out all existing sessions.
 $wgAuthenticationTokenVersion = '1';
 
 # Site upgrade key. Must be set to a string (default provided) to turn on the
 # web installer while LocalSettings.php is in place
-$wgUpgradeKey = '9e3cbe68648efb3d';
+$wgUpgradeKey = getenv('UPGRADE_KEY');
 
 ## For attaching licensing metadata to pages, and displaying an
 ## appropriate copyright notice / icon. GNU Free Documentation
