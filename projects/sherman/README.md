@@ -2,14 +2,14 @@
 
 ## Example usage
 
-sher.json
+codium.sher.json
 
 ```json
 {
   "name": "brew--codium",
   "layer": "brew",
   "commands": {
-    "upsert": "echo 'cask 'codium''"
+    "upsert": "echo \"cask \\\"codium\\\"\""
   },
   "dependencies": ["brew"]
 }

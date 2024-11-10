@@ -59,6 +59,6 @@ const shermanFileString = await readFile(shermanFilePath);
 if (!shermanFileString) {
   throw new Error("sherman.json not found in current directory.");
 }
-const shermanFile = parseJsonString(shermanFileString);
+const shermanFile = parseJsonString(shermanFileString, shermanFileSchema);
 
-console.log("Hello via Bun!");
+console.log("Hello via Bun!", shermanFile);
