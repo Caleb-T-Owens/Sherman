@@ -1,0 +1,8 @@
+services:
+    nextcloud-whiteboard-server:
+        image: ghcr.io/nextcloud-releases/whiteboard:release
+        ports:
+            - 3080:3002
+        environment:
+            - NEXTCLOUD_URL=https://cloud.cto.je
+            - JWT_SECRET_KEY={JWT_SECRET_KEY:?}
