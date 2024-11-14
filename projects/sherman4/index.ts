@@ -7,7 +7,7 @@ import { z } from "zod";
  * Returns undefined if the file can't be found
  */
 async function readFile(path: string): Promise<string | undefined> {
-  const shellResponse = await $`cat ${path}`.nothrow();
+  const shellResponse = await $`cat ${path}`.nothrow().quiet();
   if (shellResponse.exitCode === 0) {
     return shellResponse.text();
   }
@@ -29,7 +29,7 @@ function parseJsonString<Schema extends z.ZodType>(
   return verifiedObject;
 }
 
-const currentWorkingDirectory = await $`pwd`.text();
+const currentWorkingDirectory = (await $`pwd`.quiet().text()).trim();
 const shermanFilePath = `${currentWorkingDirectory}/sherman.json`;
 
 const shermanFileSchema = z.object({
@@ -57,8 +57,8 @@ const shermanFileSchema = z.object({
 
 const shermanFileString = await readFile(shermanFilePath);
 if (!shermanFileString) {
-  throw new Error("sherman.json not found in current directory.");
+  throw new Error(`sherman.json not found in ${currentWorkingDirectory}.`);
 }
 const shermanFile = parseJsonString(shermanFileString, shermanFileSchema);
 
-console.log("Hello via Bun!", shermanFile);
+console.log(shermanFile);

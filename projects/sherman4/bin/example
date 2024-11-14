@@ -1,0 +1,7 @@
+#!/bin/bash
+
+pushd example
+
+bun ../index.ts
+
+popd
