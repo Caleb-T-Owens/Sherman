@@ -43,6 +43,7 @@ cask "alacritty"
 cask "wezterm"
 cask "emacs"
 cask "vscodium"
+cask "eloston-chromium"
 
 # Fancy mouse movment
 cask "linearmouse"
