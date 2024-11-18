@@ -11,7 +11,9 @@ codium.sher.json
   "commands": {
     "upsert": "echo \"cask \\\"codium\\\"\""
   },
-  "dependencies": ["brew"]
+  "dependencies": {
+    "brew": {}
+  }
 }
 ```
 
