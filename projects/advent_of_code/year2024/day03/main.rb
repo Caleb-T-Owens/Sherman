@@ -9,20 +9,18 @@ def one(input)
 end
 
 def two(input)
-  
-  input.size
   doing = true
-  
-  input.scan(/((mul\([0-9]+,[0-9]+\))|(do\(\))|(don\'t\(\)))/).sum { 
-    if _1[0] == "do()"
+
+  input.scan(/(?:mul\([0-9]+,[0-9]+\))|(?:do\(\))|(?:don\'t\(\))/).sum { 
+    if _1 == "do()"
       doing = true
       next 0
-    elsif _1[0] == "don't()"
+    elsif _1 == "don't()"
       doing = false
       next 0
     end
     next 0 unless doing
-    a, b = _1[0].split("(")[1].split(")")[0].split(",").map(&:to_i)
+    a, b = _1.split("(")[1].split(")")[0].split(",").map(&:to_i)
     a * b
   }
 end
