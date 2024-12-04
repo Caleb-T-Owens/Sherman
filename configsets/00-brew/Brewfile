@@ -30,6 +30,7 @@ brew "rbenv"
 
 # Deployment software
 brew "aws/tap/copilot-cli"
+brew "awscli"
 
 # Editors and terminals
 brew "neovim"
@@ -44,6 +45,9 @@ cask "wezterm"
 cask "emacs"
 cask "vscodium"
 cask "eloston-chromium"
+
+# IRC
+cask "halloy"
 
 # Fancy mouse movment
 cask "linearmouse"
