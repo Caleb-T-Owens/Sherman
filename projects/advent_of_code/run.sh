@@ -7,4 +7,3 @@ do
     source "run.sh"
     popd
 done
-
