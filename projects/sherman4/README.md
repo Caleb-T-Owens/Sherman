@@ -1,4 +1,4 @@
-# Sherman
+# Sherman v4 - The "Aaahh, shell is a monster, lets write it in TS" version
 
 ## Example usage
 
@@ -11,7 +11,9 @@ codium.sher.json
   "commands": {
     "upsert": "echo \"cask \\\"codium\\\"\""
   },
-  "dependencies": ["brew"]
+  "dependencies": {
+    "brew": {}
+  }
 }
 ```
 

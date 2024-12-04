@@ -1,0 +1,28 @@
+{
+  "platforms": {
+    "macos": {
+      "entries": [
+        "./entries/macos/**/sher.json",
+        "./entries/macos/**/*.sher.json"
+      ],
+      "profiles": {
+        "home": {
+          "requires": "sherman-home.json",
+          "commands": ["upsert"]
+        }
+      }
+    }
+  },
+  "layers": {
+    "one": {},
+    "two": {
+      "dependencies": ["one"]
+    },
+    "three": {
+      "dependencies": ["one", "two"]
+    },
+    "four": {
+      "dependencies": ["two", "three"]
+    }
+  }
+}

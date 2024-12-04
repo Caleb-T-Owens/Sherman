@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "four--bar": {},
+    "three--foo": {},
+    "two--foo": {},
+    "one--bar": {}
+  }
+}

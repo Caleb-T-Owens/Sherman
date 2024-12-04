@@ -1,0 +1,11 @@
+#!/bin/bash
+
+pushd example
+
+export SHERMAN_DIRECTORY="$(pwd)"
+export SHERMAN_PROFILE="home"
+export SHERMAN_PLATFORM="macos"
+
+bun run --cwd ../ start
+
+popd

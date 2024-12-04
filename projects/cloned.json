@@ -18,5 +18,9 @@
   "gitbutler-web": {
     "url": "git@github.com:gitbutlerapp/web.git",
     "deployable": false
+  },
+  "bot-hub": {
+    "url": "git@gitea.somegamecorp.com:BotHub/bot-hub.git",
+    "deployable": false
   }
 }
