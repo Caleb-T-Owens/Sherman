@@ -1,79 +1,64 @@
-input = File.readlines("aoc-input.txt", chomp: true)
-test_input =  File.readlines("aoc-test.txt", chomp: true)
-
-def get_directions(x, y, input)
-  output = []
-  if x < input.size - 3
-    if y < input[0].size - 3
-      output << [[x, y], [x + 1, y + 1], [x + 2, y + 2], [x + 3, y + 3]]
-    end
-
-      output << [[x, y], [x + 1, y], [x + 2, y], [x + 3, y]]
-
-    if y > 2
-      output << [[x, y], [x + 1, y - 1], [x + 2, y - 2], [x + 3, y - 3]]
-    end
-  end
-
-  if x > 2
-    if y < input[0].size - 3
-      output << [[x, y], [x - 1, y + 1], [x - 2, y + 2], [x - 3, y + 3]]
-    end
-
-      output << [[x, y], [x - 1, y], [x - 2, y], [x - 3, y]]
-
-    if y > 2
-      output << [[x, y], [x - 1, y - 1], [x - 2, y - 2], [x - 3, y - 3]]
-    end
-  end
-
-  if y > 2
-      output << [[x, y], [x, y - 1], [x, y - 2], [x, y - 3]]
-  end
-
-  if y < input[0].size - 3
-    output << [[x, y], [x, y + 1], [x, y + 2], [x, y + 3]]
-  end
-  
-  output
-end
+input = File.read("aoc-input.txt", chomp: true)
+test_input =  File.read("aoc-test.txt", chomp: true)
 
 def one(input)
-  count = 0
-  input.size.times do |x|
-    input[0].size.times do |y|
-      directions = get_directions(x, y, input)
+  head, tail = input.split("\n\n")
+  order_rules = head.lines.map { _1.split("|").map(&:to_i) }
+  sequences = tail.lines.map { _1.split(",").map(&:to_i) }
 
-      count += directions.count { |direction| direction.map { |a, b| input[a][b] }.join("") == "XMAS" }
-    end
-  end
-
-  count
+  # Select the sequences that match the ordering
+  sequences.select { |a|
+    order_rules.all? { |b|
+      if key_index = a.index(b[0])
+        if other_idex = a.index(b[1])
+          key_index < other_idex
+        else
+          true
+        end
+      else
+        true
+      end
+    }
+  }.sum { _1[_1.size / 2] }
 end
 
 def two(input)
-  count = 0
-  (input.size - 2).times do |a|
-    (input[0].size - 2).times do |b|
-      x = a + 1
-      y = b + 1
+  head, tail = input.split("\n\n")
+  order_rules = head.lines.map { _1.split("|").map(&:to_i) }
+  sequences = tail.lines.map { _1.split(",").map(&:to_i) }
 
-      m = input[x][y]
-
-      next if m != "A"
-
-      tl = input[x - 1][y - 1]
-      tr = input[x - 1][y + 1]
-      bl = input[x + 1][y - 1]
-      br = input[x + 1][y + 1]
-
-      if (tl + tr == "MM" || tr + br == "MM" || bl + br == "MM" || bl + tl == "MM") && (tl + tr == "SS" || tr + br == "SS" || bl + br == "SS" || bl + tl == "SS")
-        count += 1
+  sequences.reject { |a|
+    order_rules.all? { |b|
+      if key_index = a.index(b[0])
+        if other_idex = a.index(b[1])
+          key_index < other_idex
+        else
+          true
+        end
+      else
+        true
       end
-    end
-  end
+    }
+  }.map { |a|
+    c = a.dup
+    old_a = nil
 
-  count
+    until old_a == c
+      old_a = c.dup
+      order_rules.each { |b|
+        if key_index = c.index(b[0])
+          if other_idex = c.index(b[1])
+            if !(key_index < other_idex)
+              value = c.delete_at(other_idex)
+              c.insert(key_index, value)
+            end
+          end
+        end
+      }
+    end
+
+    c
+  }.sum { _1[_1.size / 2] }
 end
 
 puts "test:"
