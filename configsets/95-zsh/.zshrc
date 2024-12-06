@@ -17,11 +17,11 @@ then
     eval "$(rbenv init - zsh)"
 fi
 
-# if [ -e $HOME/.sdkman ]
-# then
-#     export SDKMAN_DIR="$HOME/.sdkman"
-#     [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
-# fi
+if [ -e $HOME/.sdkman ]
+then
+    export SDKMAN_DIR="$HOME/.sdkman"
+    [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
+fi
 
 if type -a codium >&2;
 then
