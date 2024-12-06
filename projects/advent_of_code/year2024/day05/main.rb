@@ -48,7 +48,7 @@ def two(input)
       order_rules.each { |b|
         if key_index = c.index(b[0])
           if other_idex = c.index(b[1])
-            if !(key_index < other_idex)
+            if key_index > other_idex
               value = c.delete_at(other_idex)
               c.insert(key_index, value)
             end
