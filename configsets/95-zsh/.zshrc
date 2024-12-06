@@ -62,3 +62,6 @@ function sherman_electron_deploy {
         source "$HOME/sherman/bin/electron_deploy"
     fi
 }
+
+# Disable some of the worst TUI bullshit I've ever seen
+export COMPOSE_MENU=0
