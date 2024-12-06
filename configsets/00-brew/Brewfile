@@ -23,6 +23,7 @@ brew "zlib"
 
 # cURL but not Curly
 brew "wget"
+brew "nmap"
 
 # Ruby
 brew "openssl@3"
