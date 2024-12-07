@@ -4,7 +4,7 @@ input = File.readlines("aoc-input.txt", chomp: true)
 test_input =  File.readlines("aoc-test.txt", chomp: true)
 
 def one(input)
-  input.sum do |i|
+  Parallel.map(input, in_processes: 16) do |i|
     target, tail = i.split(": ")
     target = target.to_i
     tail = tail.split(" ").map(&:to_i)
@@ -14,7 +14,7 @@ def one(input)
     else
       0
     end
-  end
+  end.sum
 end
 
 def addmul(target, current, digets)
@@ -42,7 +42,7 @@ def addmul(target, current, digets)
 end
 
 def two(input)
-  input.sum do |i|
+  Parallel.map(input, in_processes: 16) do |i|
     target, tail = i.split(": ")
     target = target.to_i
     tail = tail.split(" ").map(&:to_i)
@@ -52,7 +52,7 @@ def two(input)
     else
       0
     end
-  end
+  end.sum
 end
 
 def addmulconc(target, current, digets)
