@@ -5,7 +5,7 @@ services:
     build: .
     restart: unless-stopped
     ports:
-      - "3040:3000"
+      - "3090:3000"
     volumes:
       - data:/app/pb_data
       - data:/app/pb_migrations
