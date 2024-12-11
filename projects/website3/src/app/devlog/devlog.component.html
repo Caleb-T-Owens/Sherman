@@ -1,0 +1,49 @@
+<article>
+  <h1>Devlogs</h1>
+
+  <p>
+    Some mini-updates for some of the things that I've been working. Clicking on
+    a project name links you to where you can learn more about it. This is
+    typically an
+    <a href="https://en.wikipedia.org/wiki/Internal_and_external_links"
+      >external link</a
+    >
+    to a
+    <a href="https://github.com">GitHub</a>&nbsp;<a
+      href="https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository"
+      >repository</a
+    >, or <a href="https://en.wikipedia.org/wiki/Landing_page">landing page</a>.
+    Clicking "(ref)" at the end of an entry links to where you can read more
+    about a particular entry. This is typically an external link to a GitHub
+    <a
+      href="https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-pull-requests"
+      >pull request</a
+    >
+    or <a href="https://git-scm.com">git</a>&nbsp;<a
+      href="https://git-scm.com/book/en/v2/Git-Basics-Recording-Changes-to-the-Repository"
+      >commit</a
+    >
+  </p>
+
+  <section>
+    <ul>
+      @for (devlog of devlogs | async; track $index) {
+        <li>
+          {{ devlog.occuredAt.toLocaleDateString() }}
+          @if (devlog.project.referenceUrl) {
+            <a [href]="devlog.project.referenceUrl" target="_blank"
+              ><b>{{ devlog.project.name }}</b></a
+            >:
+          } @else {
+            <b>{{ devlog.project.name }}</b
+            >:
+          }
+          {{ devlog.entry }}
+          @if (devlog.referenceUrl) {
+            <a [href]="devlog.referenceUrl" target="_blank">(ref)</a>
+          }
+        </li>
+      }
+    </ul>
+  </section>
+</article>

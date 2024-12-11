@@ -4,6 +4,7 @@ import { MainLayoutComponent } from './main-layout/main-layout.component'
 import { MagpiesNestComponent } from './phrases/magpies-nest/magpies-nest.component'
 import { PhrasesComponent } from './phrases/phrases.component'
 import { ProjectsComponent } from './projects/projects.component'
+import { DevlogComponent } from './devlog/devlog.component'
 
 export const routes: Routes = [
   {
@@ -21,6 +22,10 @@ export const routes: Routes = [
       {
         path: 'projects',
         children: [{ path: '', component: ProjectsComponent }],
+      },
+      {
+        path: 'devlog',
+        children: [{ path: '', component: DevlogComponent }],
       },
     ],
   },

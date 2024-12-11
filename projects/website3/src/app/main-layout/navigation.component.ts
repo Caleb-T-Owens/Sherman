@@ -19,6 +19,7 @@ import { RouterLink } from '@angular/router'
         <h2>Tech</h2>
         <ul>
           <li><a routerLink="/projects">Projects</a></li>
+          <li><a routerLink="/devlog">Devlog</a></li>
         </ul>
       </nav>
       <nav>
