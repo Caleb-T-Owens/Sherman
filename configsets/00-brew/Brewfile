@@ -46,6 +46,7 @@ cask "wezterm"
 cask "emacs"
 cask "vscodium"
 cask "eloston-chromium"
+cask "tableplus"
 
 # IRC
 cask "halloy"
