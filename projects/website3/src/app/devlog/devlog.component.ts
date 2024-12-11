@@ -72,7 +72,7 @@ export class DevlogComponent {
   constructor(httpClient: HttpClient) {
     const projectsById = httpClient
       .get<CollectionResponse<ApiProject>>(
-        'http://serverless.cto.je/api/collections/projects/records',
+        'https://serverless.cto.je/api/collections/projects/records',
         {
           params: {
             perPage: 999,
@@ -90,7 +90,7 @@ export class DevlogComponent {
       )
 
     const apiDevlogs = httpClient.get<CollectionResponse<ApiDevlog>>(
-      'http://serverless.cto.je/api/collections/devlogs/records',
+      'https://serverless.cto.je/api/collections/devlogs/records',
       {
         params: {
           perPage: 999,
