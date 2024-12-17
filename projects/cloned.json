@@ -22,5 +22,9 @@
   "bot-hub": {
     "url": "git@gitea.somegamecorp.com:BotHub/bot-hub.git",
     "deployable": false
+  },
+  "gitlab": {
+    "url": "https://gitlab.com/gitlab-org/gitlab.git",
+    "deployable": false
   }
 }
