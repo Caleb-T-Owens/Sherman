@@ -56,3 +56,6 @@ cask "linearmouse"
 
 # Monitor control
 cask "MonitorControl"
+
+# Money money money
+cask "gnucash"
