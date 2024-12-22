@@ -133,52 +133,26 @@ def print_path(path)
   print "\n"
 end
 
-def apply_mapping(path, mapping)
-  return cv unless cv.nil?
-
-  possibilities = [[]]
-  path.each_cons(2) do |a, b|
-    next_possibilities = []
-    possibilities.each do |possibility|
-      kinds = mapping[[a, b]] || [["A"]]
-      kinds.each do |kind|
-        next_possibilities << [*possibility, *kind]
-      end
-    end
-
-    possibilities = next_possibilities
-  end
-
-  possibilities
-end
-
+# Global cache! Conversion between currencies got too hard
 CACHE = {}
-def county_count(a, b, depth, map, start)
-  cv = CACHE[[a, b, depth, map, start]]
+def county_count(a, b, depth, map)
+  cv = CACHE[[a, b, depth, map]]
   return cv if cv
-  if depth == 0
+
+  if depth.zero?
     return map[[a, b]]&.first&.size || 1
   end
 
   pointss = map[[a, b]] || [["A"]]
-
-  if start || true
-    pointss = pointss.map { ["A", *_1] }
-  end
-
-  # if depth == 1
-  #   pp [a, b]
-  #   pp pointss
-  # end
+  pointss = pointss.map { ["A", *_1] }
 
   out = pointss.map do |points|
     points
       .each_cons(2)
-      .each_with_index
-      .sum { |((x, y), i)| county_count(x, y, depth - 1, DIR_PATHS, i == 0 && start) }
+      .sum { |(x, y)| county_count(x, y, depth - 1, DIR_PATHS) }
   end.min
 
-  CACHE[[a, b, depth, map, start]] = out
+  CACHE[[a, b, depth, map]] = out
   out
 end
 
@@ -186,8 +160,7 @@ def one(input)
   out = input.sum do |target|
     min_size = ["A", *target.split("")]
       .each_cons(2)
-      .each_with_index
-      .sum { |((x, y), i)| county_count(x, y, 2, NUM_PATHS, i == 0) }
+      .sum { |(x, y)| county_count(x, y, 2, NUM_PATHS) }
     min_size * target.to_i
   end
   out
@@ -197,8 +170,7 @@ def two(input)
   out = input.sum do |target|
     min_size = ["A", *target.split("")]
       .each_cons(2)
-      .each_with_index
-      .sum { |((x, y), i)| county_count(x, y, 25, NUM_PATHS, i == 0) }
+      .sum { |(x, y)| county_count(x, y, 25, NUM_PATHS) }
     min_size * target.to_i
   end
   out
