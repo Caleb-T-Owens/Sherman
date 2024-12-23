@@ -54,6 +54,7 @@ def one(input)
   end
 end
 
+# Let's do some algebra this time
 def two(input)
   input = parse_input(input)
   input.sum do |i|
@@ -64,38 +65,18 @@ def two(input)
     tx += 10000000000000
     ty += 10000000000000
 
-    pc = (tx / ax).floor
-    oc = (tx % bx)
+    det = ax * by - ay * bx
+    next 0 if det.zero?
 
-    candidates = []
+    m = by * tx - bx * ty
+    n = ax * ty - ay * tx
 
-    loop do
-      # Break if out of bounds
-      if pc < 0
-        break
-      end
+    next 0 unless (m % det).zero?
+    next 0 unless (n % det).zero?
+    m /= det
+    n /= det
 
-      xsize = pc * ax + oc * bx
-      ysize = pc * ay + oc * by
-
-      if xsize == tx && ysize == ty
-        pp [pc, oc]
-        candidates << [pc, oc]
-      end
-
-      if xsize > tx
-        pc -= 1
-      elsif xsize < tx
-        oc += 1
-      else
-        pc -= 1
-      end
-
-    end
-
-    pp candidates
-
-    candidates.map { |(x, y)| x * 3 + y }.min || 0
+    m * 3 + n
   end
 end
 
