@@ -1,4 +1,5 @@
 require "enumerator"
+require "set"
 require "json"
 
 input = File.readlines("aoc-input.txt", chomp: true)
@@ -9,17 +10,18 @@ def add((a1, a2), (b1, b2))
 end
 
 DIRECTIONS = {
-  up: [-1, 0],
-  down: [+1, 0],
-  left: [0, -1],
-  right: [0, +1],
+  north: [-1, 0],
+  south: [+1, 0],
+  west: [0, -1],
+  east: [0, +1],
 }
 
 def d(dir)
   DIRECTIONS[dir]
 end
 
-def dirs()= DIRECTIONS.keys
+def dks()= DIRECTIONS.keys
+def dvs()= DIRECTIONS.values
 
 class GraphNode
   attr_accessor :value
@@ -27,6 +29,7 @@ class GraphNode
   attr_accessor :neighbours
 
   def initialize(key:, value:, neighbours:)
+    @key = key
     @value = value
     @neighbours = neighbours
   end
@@ -59,9 +62,9 @@ class Graph
     end
   end
 
-  def remove(key:)
+  def remove(key)
     node = @nodes[key]
-    raise NodeNotFound, "Node #{neighbour} not found" if node.nil?
+    raise NodeNotFound, "Node #{key} not found" if node.nil?
 
     @nodes.delete(key)
 
@@ -72,7 +75,7 @@ class Graph
 
   def get(key)
     node = @nodes[key]
-    raise NodeNotFound, "Node #{neighbour} not found" if node.nil?
+    raise NodeNotFound, "Node #{key} not found" if node.nil?
     node
   end
 
@@ -93,90 +96,6 @@ class Graph
   def each(&block)
     @nodes.each(&block)
   end
-end
-
-def build_graph(input)
-  graph = Graph.new
-
-  input.each_with_index do |row, x|
-    row.split("").each_with_index do |letter, y|
-      next if letter == "#"
-
-      neighbours = dirs.filter_map do |dir|
-        neighbour_pos = add([x, y], d(dir))
-        if graph.key?(neighbour_pos)
-          neighbour_pos
-        end
-      end
-
-      graph.add(key: [x, y], value: {}, neighbours:)
-    end
-  end
-
-  graph
-end
-
-# def remove_tails(graph)
-#   tails = graph.select do |key, node|
-#     node.neighbours.size == 1
-#   end.map(&:first).to_a
-
-#   loop do
-#     break if tails.empty?
-
-#     tail = tails.pop
-#     next unless graph.key?(tail)
-#     tails.push(*graph.get(tail).neighbours)
-#     graph.remove(key: tail)
-#   end
-# end
-
-$smallest_score = 236824
-
-def find_paths(graph, point, acc, opath, finish)
-  score = score_path(opath)
-  if score >= $smallest_score
-    return [], []
-  end
-
-  if point == finish
-    $smallest_score = score
-    pp "found!"
-    pp opath.size
-    pp $smallest_score
-    return [], [opath]
-  end
-
-  # this_path = acc.dup
-  # this_path[point] = true
-  this_opath = opath.dup
-  this_opath << point
-
-  paths = []
-  opaths = []
-
-  ns = graph.get(point).neighbours.reject { this_opath.reverse_each.include? _1 }
-  ns = if this_opath.size >= 2
-    same_dir = ns.find { |n| heading(this_opath[-2], this_opath[-1]) == heading(this_opath[-1], n) }
-    if same_dir.nil?
-      ns
-    else
-      ns.delete(same_dir)
-      [same_dir, *ns]
-    end
-  else
-    ns
-  end
-
-  ns.each do |neighbour|
-    # next if this_path.key? neighbour
-
-    nps, ops = find_paths(graph, neighbour, {}, this_opath, finish)
-    #paths.push(*nps)
-    opaths.push(*ops)
-  end
-
-  return paths, opaths
 end
 
 def find_start_and_finish(input)
@@ -210,38 +129,137 @@ def heading((ax, ay), (bx, by))
   HEADINGS[[(bx - ax), (by - ay)]]
 end
 
-def score_path(path)
-  facing = :east
-  sum = 0
-  path.each_with_index do |point, index|
-    sum += 1
-    next_point = path[index + 1]
-    next unless next_point
-    next_direction = heading(point, next_point)
-    if next_direction != facing
-      facing = next_direction
-      sum += 1000
+def build_graph(input)
+  graph = Graph.new
+
+  input.each_with_index do |row, x|
+    row.split("").each_with_index do |char, y|
+      if ["S", "E", "."].include? char
+        graph.add(key: [[x, y], :north], value: Float::INFINITY, neighbours: [])
+        graph.add(key: [[x, y], :south], value: Float::INFINITY, neighbours: [])
+        graph.add(key: [[x, y], :east], value: Float::INFINITY, neighbours: [])
+        graph.add(key: [[x, y], :west], value: Float::INFINITY, neighbours: [])
+        graph.get([[x, y], :north]).neighbours.push([[x, y], :east], [[x, y], :west])
+        graph.get([[x, y], :south]).neighbours.push([[x, y], :east], [[x, y], :west])
+        graph.get([[x, y], :east]).neighbours.push([[x, y], :north], [[x, y], :south])
+        graph.get([[x, y], :west]).neighbours.push([[x, y], :north], [[x, y], :south])
+      end
     end
   end
-  sum
+
+  input.each_with_index do |row, x|
+    row.split("").each_with_index do |char, y|
+      if ["S", "E", "."].include? char
+        DIRECTIONS.each do |dir, vec|
+          ox, oy = add([x, y], vec)
+          over = input[x][y]
+          next unless graph.key? [[ox, oy], dir]
+          if ["S", "E", "."].include? over
+            graph.get([[x, y], dir]).neighbours.push([[ox, oy], dir])
+            graph.get([[ox, oy], dir]).neighbours.push([[x, y], dir])
+          end
+        end
+      end
+    end
+  end
+
+  graph
+end
+
+def score_graph(graph, current, cscore)
+  here = graph.get(current)
+  here.value = cscore
+
+  here.neighbours.each do |key|
+    neighbour = graph.get(key)
+    nscore = if key.last == current.last
+      1 + cscore
+    else
+      1000 + cscore
+    end
+    if neighbour.value > nscore
+      score_graph(graph, key, nscore)
+    end
+  end
+end
+
+def score_graph_bf(graph, start)
+  graph.get(start).value = 0
+  currents = [start]
+
+  until currents.empty?
+    nexts = []
+    currents.each do |current|
+      here = graph.get(current)
+      here.neighbours.each do |key|
+        neighbour = graph.get(key)
+        nscore = if key.last == current.last
+          1 + here.value
+        else
+          1000 + here.value
+        end
+        if neighbour.value > nscore
+          neighbour.value = nscore
+          nexts << key
+        end
+      end
+    end
+
+    currents = nexts
+  end
 end
 
 def one(input)
-  $smallest_score = Float::INFINITY
-  graph = build_graph(input)
-  pp graph.count { _1[1].neighbours.size > 2}
   start, finish = find_start_and_finish(input)
-  found = find_paths(graph, start, {}, [], finish)
-  puts JSON.generate(found[1])
-  pp found.size
-  min_cost = found[1].map do |path|
-    score_path(path)
-  end.min
-  min_cost
+  graph = build_graph(input)
+  score_graph_bf(graph, [start, :east])
+  [
+    graph[[finish, :north]],
+    graph[[finish, :south]],
+    graph[[finish, :east]],
+    graph[[finish, :west]]
+  ].min
+end
+
+def find_paths(graph, points)
+  heads = points
+  found = heads.to_set
+
+  until heads.empty?
+    next_heads = []
+    heads.each do |hk|
+      head = graph.get(hk)
+      if head.value.zero?
+        next
+      end
+      ns = head.neighbours.map { graph.get(_1) }
+      ns = ns.select { _1.value < head.value }
+      ns.each do |n|
+        found << n.key[0]
+        next_heads << n.key
+      end
+    end
+
+    heads = next_heads.uniq
+  end
+
+  found
 end
 
 def two(input)
-  input.size
+  start, finish = find_start_and_finish(input)
+  graph = build_graph(input)
+  score_graph_bf(graph, [start, :east])
+  fs = [
+    graph.get([finish, :north]),
+    graph.get([finish, :south]),
+    graph.get([finish, :east]),
+    graph.get([finish, :west])
+  ]
+  min = fs.map { _1.value }.min
+  fs = fs.select { |a| a.value == min }
+  pp find_paths(graph, fs.map(&:key)).size
+  123
 end
 
 puts "test:"
@@ -267,6 +285,24 @@ puts one("#################
 #################".lines)
 puts "p2:"
 puts two(test_input)
+puts "p2.b:"
+puts two("#################
+#...#...#...#..E#
+#.#.#.#.#.#.#.#.#
+#.#.#.#...#...#.#
+#.#.#.#.###.#.#.#
+#...#.#.#.....#.#
+#.#.#.#.#.#####.#
+#.#...#.#.#.....#
+#.#.#####.#.###.#
+#.#.#.......#...#
+#.#.###.#####.###
+#.#.#...#.....#.#
+#.#.#.#####.###.#
+#.#.#.........#.#
+#.#.#.#########.#
+#S#.............#
+#################".lines)
 puts "input:"
 puts "p1:"
 puts one(input)
