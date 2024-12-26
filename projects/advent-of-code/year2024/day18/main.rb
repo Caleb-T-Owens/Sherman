@@ -106,7 +106,6 @@ def two(input, take)
   loop do
     point_map = current_set.map { [_1, true] }.to_h
     map = {}
-    pp current_set.last
 
     (max_x + 1).times do |x|
       (max_y + 1).times do |y|

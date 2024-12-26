@@ -58,27 +58,31 @@ OPS = {
 }
 
 def two(input)
-  rs, is = parse_input(input)
+  if ENV["DEBUG_PRINT"] == "1"
+    rs, is = parse_input(input)
 
-  a = rs.select { |k, v| k.start_with? "x" }.sort_by { _1 }.map { |k, v| v.to_s }.join("").to_i(2)
-  b =  rs.select { |k, v| k.start_with? "y" }.sort_by { _1 }.map { |k, v| v.to_s }.join("").to_i(2)
-  puts (a + b).to_s(2)
+    a = rs.select { |k, v| k.start_with? "x" }.sort_by { _1 }.map { |k, v| v.to_s }.join("").to_i(2)
+    b =  rs.select { |k, v| k.start_with? "y" }.sort_by { _1 }.map { |k, v| v.to_s }.join("").to_i(2)
+    puts (a + b).to_s(2)
 
-  # Bung this into mermaid. Good luck :D
-  is.each do |i|
-    puts "    #{i[:lhs]} --#{OPS[i[:op]]} #{i[:out]}"
-    puts "    #{i[:rhs]} --#{OPS[i[:op]]} #{i[:out]}"
-    case i[:op]
-    when "XOR"
-      rs[i[:out]] = (rs[i[:lhs]] || 0) ^ (rs[i[:rhs]] || 0)
-    when "OR"
-      rs[i[:out]] = (rs[i[:lhs]] || 0) | (rs[i[:rhs]] || 0)
-    when "AND"
-      rs[i[:out]] = (rs[i[:lhs]] || 0) & (rs[i[:rhs]] || 0)
+    # Bung this into mermaid. Good luck :D
+    is.each do |i|
+      puts "    #{i[:lhs]} --#{OPS[i[:op]]} #{i[:out]}"
+      puts "    #{i[:rhs]} --#{OPS[i[:op]]} #{i[:out]}"
+      case i[:op]
+      when "XOR"
+        rs[i[:out]] = (rs[i[:lhs]] || 0) ^ (rs[i[:rhs]] || 0)
+      when "OR"
+        rs[i[:out]] = (rs[i[:lhs]] || 0) | (rs[i[:rhs]] || 0)
+      when "AND"
+        rs[i[:out]] = (rs[i[:lhs]] || 0) & (rs[i[:rhs]] || 0)
+      end
     end
-  end
 
-  puts rs.select { |k, v| k.start_with? "z" }.sort_by { _1 }.map { |k, v| v.to_s }.join("").reverse
+    rs.select { |k, v| k.start_with? "z" }.sort_by { _1 }.map { |k, v| v.to_s }.join("").reverse
+  else
+    "Not automated, run DEBUG_PRINT for mermaid"
+  end
 end
 
 puts "test:"
