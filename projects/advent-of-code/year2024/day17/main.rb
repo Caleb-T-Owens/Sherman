@@ -146,12 +146,16 @@ def two(input)
 end
 
 puts "test:"
+puts "p1:"
 puts one(test_input)
+puts "p2:"
 puts two("Register A: 2024
 Register B: 0
 Register C: 0
 
 Program: 0,3,5,4,3,0")
 puts "input:"
+puts "p1:"
 puts one(input)
+puts "p2:"
 puts two(input)

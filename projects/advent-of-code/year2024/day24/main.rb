@@ -82,7 +82,9 @@ def two(input)
 end
 
 puts "test:"
+puts "p1:"
 puts one(test_input)
+puts "p2:"
 puts two("x00: 0
 x01: 1
 x02: 0
@@ -103,5 +105,7 @@ x03 AND y03 -> z03
 x04 AND y04 -> z04
 x05 AND y05 -> z00")
 puts "input:"
+puts "p1:"
 puts one(input)
+puts "p2:"
 puts two(input)

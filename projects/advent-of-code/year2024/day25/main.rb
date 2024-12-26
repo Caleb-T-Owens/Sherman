@@ -34,6 +34,8 @@ def one(input)
 end
 
 puts "test:"
+puts "p1:"
 puts one(test_input)
 puts "input:"
+puts "p1:"
 puts one(input)

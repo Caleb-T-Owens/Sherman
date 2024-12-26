@@ -26,8 +26,12 @@ def two(input)
 end
 
 puts "test:"
+puts "p1:"
 puts one(test_input)
+puts "p2:"
 puts two("xmul(2,4)&mul[3,7]!^don't()_mul(5,5)+mul(32,64](mul(11,8)undo()?mul(8,5))")
 puts "input:"
+puts "p1:"
 puts one(input)
+puts "p2:"
 puts two(input)

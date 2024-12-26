@@ -270,6 +270,7 @@ end
 
 puts "test:"
 
+puts "p1.a:"
 puts one("########
 #..O.O.#
 ##@.O..#
@@ -280,7 +281,9 @@ puts one("########
 ########
 
 <^^>>>vv<v>>v<<")
+puts "p1.orig:"
 puts one(test_input)
+puts "p1.c:"
 puts two("#######
 #...#.#
 #.....#
@@ -291,6 +294,7 @@ puts two("#######
 
 <vv<<^^<<^^")
 
+puts "p2.a:"
 puts two("#######
 #.....#
 #.O#..#
@@ -300,6 +304,7 @@ puts two("#######
 
 <v<<^")
 
+puts "p2.b:"
 puts two("######
 #....#
 #.O..#
@@ -310,6 +315,7 @@ puts two("######
 
 <vv<<^")
 
+puts "p2.c:"
 puts two("#######
 #.....#
 #.#O..#
@@ -319,6 +325,7 @@ puts two("#######
 
 <v<^")
 
+puts "p2.d:"
 puts two("#######
 #.....#
 #.OO@.#
@@ -327,6 +334,7 @@ puts two("#######
 
 <<")
 
+puts "p2.e:"
 puts two("#######
 #.....#
 #.O.O@#
@@ -337,6 +345,7 @@ puts two("#######
 
 <v<<>vv<^^")
 
+puts "p2.f:"
 puts two("#######
 #.....#
 #.#O..#
@@ -346,7 +355,10 @@ puts two("#######
 
 <v<^")
 
+puts "p2.orig:"
 puts two(test_input)
 puts "input:"
+puts "p1:"
 puts one(input)
+puts "p2:"
 puts two(input)

@@ -133,8 +133,12 @@ def two(input, take)
 end
 
 puts "test:"
+puts "p1:"
 puts one(test_input, 12)
+puts "p2:"
 puts two(test_input, 12)
 puts "input:"
+puts "p1:"
 puts one(input, 1024)
+puts "p2:"
 puts two(input, 1024)

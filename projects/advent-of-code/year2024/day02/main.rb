@@ -24,8 +24,12 @@ def list_with_one_missing(list)
 end
 
 puts "test:"
+puts "p1:"
 puts one(test_input)
+puts "p2:"
 puts two(test_input)
 puts "input:"
+puts "p1:"
 puts one(input)
+puts "p2:"
 puts two(input)

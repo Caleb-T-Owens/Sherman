@@ -72,14 +72,19 @@ def two(input, width, height)
     end
   end
 
-  print_board(bots, width, height)
+  if ENV["DEBUG_PRINT"] == "1"
+    print_board(bots, width, height)
+  end
 
   count
 end
 
 puts "test:"
+puts "p1:"
 puts one(test_input, 11, 7)
 # puts two(test_input, 11, 7)
 puts "input:"
+puts "p1:"
 puts one(input, 101, 103)
+puts "p2:"
 puts two(input, 101, 103)

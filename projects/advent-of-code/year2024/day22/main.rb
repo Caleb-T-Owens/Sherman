@@ -60,11 +60,15 @@ def two(input)
 end
 
 puts "test:"
+puts "p1:"
 puts one(test_input)
+puts "p2:"
 puts two("1
 2
 3
 2024".lines)
 puts "input:"
+puts "p1:"
 puts one(input)
+puts "p2:"
 puts two(input)
