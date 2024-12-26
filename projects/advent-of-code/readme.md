@@ -15,3 +15,15 @@ A big thanks to Eric and the other kind folks who make Advent of Code happen. I 
 ## Incomplete solutions
 
 -   year2024/day24 part 2 was solved via manual inspection
+
+## Inputs
+
+My solutions typically expect to find the puzzle input under a gitignored `aoc-input.txt`. I've set up [GreenLightning's Advent of Code downloader](https://github.com/GreenLightning/advent-of-code-downloader), which will download all of your inputs automagically.
+
+It requires a `.env` folder which looks like:
+
+```sh
+export SESSION_COOKIE=xxxx
+```
+
+You can find the right cookie using the instructions provided by GreenLightning.
