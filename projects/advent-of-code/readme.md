@@ -27,3 +27,9 @@ export SESSION_COOKIE=xxxx
 ```
 
 You can find the right cookie using the instructions provided by GreenLightning.
+
+## Large Language Models
+
+In general I have a fairly dim view of LLMs when it comes to software development. I would much rather think about a problem and then write code, rather than having an LLM generate some code-like output which I then have to validate and debug. Smashing an intelligent monkey into a typewriter is still a monkey and a typewriter.
+
+The whole point of solving coding puzzles is the problem-solving and learning that comes from completing it. Using an LLM would make it an unintelligent game of cat and mouse.
