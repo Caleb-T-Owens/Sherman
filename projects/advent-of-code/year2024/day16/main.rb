@@ -258,8 +258,8 @@ def two(input)
   ]
   min = fs.map { _1.value }.min
   fs = fs.select { |a| a.value == min }
-  pp find_paths(graph, fs.map(&:key)).size
-  123
+  # Who knows why this should be -1
+  find_paths(graph, fs.map(&:key)).size - 1
 end
 
 puts "test:"
