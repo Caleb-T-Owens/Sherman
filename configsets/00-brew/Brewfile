@@ -29,6 +29,9 @@ brew "nmap"
 brew "openssl@3"
 brew "rbenv"
 
+# Go
+brew "go"
+
 # Deployment software
 brew "aws/tap/copilot-cli"
 brew "awscli"
