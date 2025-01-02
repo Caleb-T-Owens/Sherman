@@ -1,0 +1,33 @@
+<%# locals: (puzzle_completion:) %>
+<%= form_with(model: [puzzle_completion.puzzle, puzzle_completion]) do |form| %>
+  <% if puzzle_completion.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(puzzle_completion.errors.count, "error") %> prohibited this puzzle completion from being saved:</h2>
+
+      <ul>
+        <% puzzle_completion.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <p>
+    <label>Started At</label>
+    <%= form.datetime_field :started_at %>
+  </p>
+
+  <p>
+    <label>Finished At</label>
+    <%= form.datetime_field :finished_at %>
+  </p>
+
+  <p>
+    <label>Completed untimed</label>
+    <%= form.checkbox :completed_untimed %>
+  </p>
+
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>

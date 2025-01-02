@@ -1,0 +1,137 @@
+/*
+ * This is a manifest file that'll be compiled into application.css.
+ *
+ * With Propshaft, assets are served efficiently without preprocessing steps. You can still include
+ * application-wide styles in this file, but keep in mind that CSS precedence will follow the standard
+ * cascading order, meaning styles declared later in the document or manifest will override earlier ones,
+ * depending on specificity.
+ *
+ * Consider organizing styles into separate files for maintainability.
+ */
+
+:root {
+  --color-text: black;
+  --color-border: black;
+  --color-background: white;
+  --readable-width: 1000px;
+}
+
+* {
+  box-sizing: border-box;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+p,
+a,
+legend,
+label,
+time,
+i,
+li,
+button,
+input[type='submit'] {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+button,
+input {
+    font-size: 1rem;
+}
+
+/* Don't style links inside headers */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  a {
+    font-family: Georgia, 'Times New Roman', Times, serif;
+  }
+}
+
+html {
+  background-color: var(--color-background);
+  color: var(--color-text);
+  font-size: 20px;
+
+  /* &.font-large {
+    font-size: 20px;
+  }
+
+  &.font-small {
+    font-size: 15px;
+  } */
+}
+
+input[type='radio'] {
+  width: 1.05rem; /* Oh Apple oh Apple */
+  height: 1rem;
+  margin: 0.5rem;
+}
+
+.page-header {
+  border-bottom: 2px solid var(--color-border);
+  border-top: 2px solid var(--color-border);
+
+  > nav {
+    display: inline-block;
+    vertical-align: top;
+
+    padding-right: 1rem;
+    padding-left: 1rem;
+    padding-bottom: 1rem;
+
+    > ul {
+      list-style-type: none;
+      padding-left: 0;
+
+      > li {
+        margin-bottom: 0.5rem;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+    }
+  }
+}
+
+article,
+section,
+.readable-width {
+  max-width: var(--readable-width);
+  margin: 0 auto;
+}
+
+.title {
+  font-size: 3em;
+}
+h1 {
+  font-size: 2em;
+}
+
+.puzzle {
+    h5 {
+        margin-bottom: 0.5rem;
+    }
+
+    p {
+        margin-top: 0;
+        margin-bottom: 0.5rem;
+    }
+}
+
+.inline {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.indent {
+    margin-left: 1rem;
+}
+
+details {
+    margin-bottom: 1rem;
+}

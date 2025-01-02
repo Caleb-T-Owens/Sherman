@@ -1,0 +1,27 @@
+<%= form_with(model: site) do |form| %>
+  <% if site.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(site.errors.count, "error") %> prohibited this site from being saved:</h2>
+
+      <ul>
+        <% site.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <p>
+    <label>Name</label>
+    <%= form.text_field :name %>
+  </p>
+
+  <p>
+    <label>Url</label>
+    <%= form.text_field :url %>
+  </p>
+
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>

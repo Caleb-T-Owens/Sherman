@@ -1,0 +1,57 @@
+<p style="color: green"><%= notice %></p>
+
+<h2>Welcome to the Puzzle Planner!</h2>
+
+<p>
+    Puzzle Planner (better name pending) is a private leaderboard for some
+    friends and I who love solving programming puzzles. Most puzzle sites like
+    <a href="https://adventofcode.com">Advent of Code</a> have their own
+    leaderboards, but they often rank based on who completed them the soonest
+    after a particular problem was released. This means that even if two people
+    want to compare and contrast scores, they have to both start each problem
+    at the same time, which can be much harder to organize.
+</p>
+
+<p>
+    Puzzle Planner solves this problem by allowing users to report a
+    start and finish time. This self-reported completion time is then used to
+    generate the rankings.
+</p>
+
+<h3>Puzzle Sites:</h3>
+
+<ul>
+    <% @sites.each do |site| %>
+        <li><%= link_to site.name, site_path(site) %></li>
+    <% end %>
+</ul>
+
+<% if authenticated? %>
+    <%= link_to "Create new", new_site_path, class: "button" %>
+<% end %>
+
+<h3>User rankings:</h3>
+
+<p>Rankings sorted by timed entries:</p>
+
+<ol>
+    <li>Tomi - based on 90 out of 140 timed entries</li>
+    <li>Louis - based on 70 out of 150 timed entries</li>
+    <li>Caleb - based on 100 out of 110 timed entries</li>
+</ol>
+
+<p>User v user time comparisons</p>
+
+<ul>
+    <li>Tomi 24.34 v Louis 5.23 - based on 30 out of 140 and 150 timed entries</li>
+    <li>Tomi 30.34 v Caleb 3.23 - based on 60 out of 140 and 110 timed entries</li>
+    <li>Louis 17.53 v Caleb 6.67 - based on 40 out of 150 and 110 timed entries</li>
+</ul>
+
+<p>Rankings sorted by total entries:</p>
+
+<ol>
+    <% total_rankings.each do |entry| %>
+        <li><%= entry[:username] %> - <%= entry[:total] %> total, <%= entry[:timed] %> timed</li>
+    <% end %>
+</ol>

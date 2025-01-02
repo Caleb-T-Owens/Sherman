@@ -1,0 +1,33 @@
+<p style="color: green"><%= notice %></p>
+
+<h2><%= @site.name %> <a href="<%= @site.url %>">(ext)</a></h2>
+
+<% @site.grouped_puzzles.each do |series_name, puzzles| %>
+  <% if series_name %>
+    <details>
+      <summary><%= series_name %></summary>
+
+      <% puzzles.each do |puzzle| %>
+          <%= render "shared/puzzle", puzzle: %>
+      <% end %>
+    </details>
+  <% else %>
+    <% puzzles.each do |puzzle| %>
+      <%= render "shared/puzzle", puzzle: %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<% if authenticated? %>
+  <h2>Modify this site</h2>
+  <div class="inline">
+    <% if Current.user.admin? %>
+      <%= link_to "Edit this site", edit_site_path(@site) %>
+      <%= button_to "Destroy this site", @site, method: :delete %>
+    <% else %>
+      <% unless @site.protected? %>
+        <%= link_to "Edit this site", edit_site_path(@site) %>
+      <% end %>
+    <% end %>
+  </div>
+<% end %>

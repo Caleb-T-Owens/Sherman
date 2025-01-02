@@ -1,0 +1,28 @@
+<%# locals: (puzzle:, puzzle_completion:)%>
+
+<%= turbo_frame_tag puzzle_completion do %>
+  <% if authenticated? %>
+    <% if puzzle_completion %>
+      <% if puzzle_completion.finished? %>
+        <div class="inline">
+          <% if puzzle_completion.finished_at.present? %>
+            <p>You've finished this puzzle <%= completed_in(puzzle_completion) %>!</p>
+          <% else %>
+            <p>You've finished this puzzle!</p>
+          <% end %>
+          <%= link_to "Edit", edit_puzzle_puzzle_completion_path(puzzle, puzzle_completion) %>
+        </div>
+      <% else %>
+        <div class="inline">
+          <p>Puzzle in progress, <%= completed_in(puzzle_completion) %>.
+          <%= button_to "Finish puzzle", finish_timed_puzzle_puzzle_completion_path(puzzle, puzzle_completion), method: :post, data: {turbo_frame: dom_id(puzzle)} %>
+        </div>
+      <% end %>
+    <% else %>
+      <div class="inline">
+        <%= button_to "Start timed completion", start_timed_puzzle_puzzle_completions_path(puzzle), method: :post, data: {turbo_frame: dom_id(puzzle)} %>
+        <%= button_to "Record untimed completion", mark_completed_untimed_puzzle_puzzle_completions_path(puzzle), method: :post, data: {turbo_frame: dom_id(puzzle)} %>
+      </div>
+    <% end %>
+  <% end %>
+<% end %>

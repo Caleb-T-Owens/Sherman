@@ -1,0 +1,19 @@
+<%# locals: (puzzle:)%>
+<%= turbo_frame_tag puzzle, refresh: :morph, class: "puzzle" do %>
+  <h4><%= puzzle.name %> <a href="<%= puzzle.url %>">(ext)</a></h4>
+
+  <div class="indent">
+    <% current_user_completion = puzzle.current_user_completion(current_user) %>
+    <%= render "shared/completion", puzzle:, puzzle_completion: current_user_completion %>
+
+    <% other_completions = puzzle.other_users_completions(current_user) %>
+    <% if other_completions.size > 0 %>
+      <h5>Completed by:</h5>
+      <ul>
+        <% other_completions.each do |puzzle_completion| %>
+          <li><%= puzzle_completion.user.username %> - <%= completed_in(puzzle_completion) %></li>
+        <% end %>
+      </ul>
+    <% end %>
+  </div>
+<% end %>
