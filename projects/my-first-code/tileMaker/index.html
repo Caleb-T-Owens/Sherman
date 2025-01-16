@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="main.css">
+  <title>tileMaker</title>
+</head>
+<body>
+  <div class="children-left">
+    <canvas width="1000px" height="1000px" id="canvas"></canvas>
+    <div class="blocks" id="blocks">
+      <input class="file-input" type="file" multiple="" required name="images" id="images" accept="images/png">
+      <input type="button" value="Upload!" id="upload" class="upload-button" onclick="onUploadPressed()">
+    </div>
+  </div>
+</body>
+<script src="main.js"></script>
+</html>

@@ -1,0 +1,9 @@
+{
+  "PinkFluffyLlama": {
+    "password": "aSecureHash",
+    "isFrozen": false,
+    "accounts": {
+      "main": 256
+    }
+  }
+}

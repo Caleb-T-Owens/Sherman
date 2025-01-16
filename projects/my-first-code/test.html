@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Mum</title>
+</head>
+<body>
+    <h1>Hello everything!</h1>
+    <p>dsadsasmj sajn fjeiam jsiam hjei hjsneia wjnfds</p>
+    <input type="text" placeholder="text to add" id="myInput"/>
+    <button onclick="addText()">Press Me!</button>
+    <p id="myOutput"></p>
+
+</body>
+<script>
+function addText() {
+    let myInputText = document.getElementById("myInput").value;
+    document.getElementById("myOutput").innerHTML = myInputText;
+}
+
+</script>
+</html>
