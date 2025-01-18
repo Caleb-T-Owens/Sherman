@@ -35,7 +35,7 @@ what is inside.
   devices, including: Brew package management, NVM installation, Git configuration,
   Alacritty configuration, Emacs configuration, LinearMouse configuration,
   NeoVim configuration, SdkMan installation, WezTerm configuration, and ZSH
-  configuration.
+  configuration, Ghostty configuration & theme.
 - [bin](/bin): Contains root scripts for controling Sherman.
   - [clone](/bin/clone): Runs [project cloner](/projects/project-cloner)
     inside my [projects](/projects) folder.
