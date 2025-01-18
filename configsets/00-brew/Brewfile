@@ -40,6 +40,7 @@ brew "awscli"
 brew "neovim"
 brew "tmux"
 brew "tmuxinator"
+cask "ghostty"
 
 # Casks:
 
