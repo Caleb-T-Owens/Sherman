@@ -8,5 +8,5 @@ then
 fi
 
 echo "Installing new configs"
-cp "$HOME/sherman/configsets/40-ghostty/ghostty" "$HOME/.config/ghostty"
+cp -R "$HOME/sherman/configsets/40-ghostty/ghostty" "$HOME/.config/ghostty"
 
