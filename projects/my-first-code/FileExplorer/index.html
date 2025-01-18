@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>File Explorer</title>
+</head>
+<body>
+    <canvas height="40" width="40" id="canvas"></canvas>
+</body>
+<script src="./main.js"></script>
+<style>
+html {
+    padding:0px;
+    margin:0px;
+}
+body {
+    padding:0px;
+    margin:0px;
+}
+canvas {
+    height: 100vw;
+    padding:0px;
+    margin:0px;
+    background-color: black;
+    image-rendering: optimizeSpeed;             /* Older versions of FF          */
+    image-rendering: -moz-crisp-edges;          /* FF 6.0+                       */
+    image-rendering: -webkit-optimize-contrast; /* Safari                        */
+    image-rendering: -o-crisp-edges;            /* OS X & Windows Opera (12.02+) */
+    image-rendering: pixelated;                 /* Awesome future-browsers       */
+    -ms-interpolation-mode: nearest-neighbor;   /* IE                            */
+}
+</style>
+</html>

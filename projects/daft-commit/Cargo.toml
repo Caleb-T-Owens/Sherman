@@ -1,0 +1,10 @@
+[package]
+name = "daft-commit"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+
+gix = { version = "0.69.1", features = [ "merge" ] }
+git2 = { version = "0.20.0", features = [ "vendored-libgit2" ] }
+clap = { version = "4.5.26", features = [ "derive", "env" ] }

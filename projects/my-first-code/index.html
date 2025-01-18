@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Quadratic Equation Solver</title>
+</head>
+<body>
+    <p>Welcome to this quadratic equation solver!</p>
+    <input type="text" id="input"><button onclick="solve()">Solve!</button></input>
+    <p id="output"></p>
+</body>
+<script>
+
+    function solve() {
+        let input = document.getElementById("input").value;
+        // input should be ax^2+bx+c=0;
+            let a = input.split("x")[0];
+            console.log(a);
+            let b = input.split("+")[1].split("x")[0];
+            console.log(b);
+            let c = input.split("+")[2].split("=")[0];
+            console.log(c);
+            let output = (-b+(b^2+-4*a*c))/a*2 + " or " + (-b-(b^2+-4*a*c))/a*2;
+        document.getElementById("output").innerHTML = output;
+    }
+
+</script>
+</html>

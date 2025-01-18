@@ -1,0 +1,53 @@
+* {
+  margin: 0px;
+  padding: 0px;
+  color: white;
+}
+
+body {
+  background-color: black;
+}
+
+.children-left {
+  display: flex;
+  float: left;
+}
+
+.blocks {
+  border: 1px solid white;
+  margin: 5px;
+  height: calc(100vh - 22px);
+  padding: 5px;
+  width: 250px;
+  overflow: scroll;
+}
+
+#canvas {
+  border: 1px solid white;
+  margin: 5px;
+  height: calc(100vh - 12px);
+}
+
+.file-input {
+  width: 100%;
+}
+
+.upload-button {
+  color: black;
+}
+
+.image-container {
+  margin-left: 5px;
+  margin-right: 5px;
+  margin-top: 5px;
+  padding-bottom: 5px;
+  scroll-padding-top: 5px;
+  border-bottom: 1px solid white;
+}
+
+.image {
+  height: 15px;
+  width: 15px;
+  margin-right: 5px;
+  border-radius: 15px;
+}
