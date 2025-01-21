@@ -63,5 +63,10 @@ function sherman_electron_deploy {
     fi
 }
 
+function run {
+    make
+    make unlock
+}
+
 # Disable some of the worst TUI bullshit I've ever seen
 export COMPOSE_MENU=0

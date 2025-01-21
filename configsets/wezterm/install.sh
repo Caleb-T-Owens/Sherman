@@ -1,4 +1,7 @@
-#!/bin/zsh
+#!/bin/bash
+
+# Dependency brew
+(cd $HOME/Sherman/configsets/brew && make)
 
 # We want to clean out the alacritty folder
 echo "Removing old configs"
@@ -8,5 +11,5 @@ then
 fi
 
 echo "Installing new configs"
-cp "$HOME/sherman/configsets/35-wezterm/.wezterm.lua" "$HOME/.wezterm.lua"
+cp "$HOME/sherman/configsets/wezterm/.wezterm.lua" "$HOME/.wezterm.lua"
 

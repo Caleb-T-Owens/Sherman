@@ -1,5 +1,4 @@
-#!/bin/zsh
-
+#!/bin/bash
 
 if [ -e $HOME/.zshrc ]
 then
@@ -7,4 +6,4 @@ then
     rm $HOME/.zshrc
 fi
 
-cp $HOME/sherman/configsets/95-zsh/.zshrc $HOME/.zshrc
+cp $HOME/sherman/configsets/zsh/.zshrc $HOME/.zshrc

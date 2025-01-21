@@ -1,5 +1,9 @@
-#!/bin/zsh
+#!/bin/bash
 
+# Dependency brew
+(cd $HOME/Sherman/configsets/brew && make)
+
+# Install
 
 if [ ! -d "$HOME/.config/nvim" ]
 then
@@ -15,4 +19,4 @@ then
 fi
 
 echo "Installing new configs"
-cp "$HOME/sherman/configsets/25-neovim/init.lua" "$HOME/.config/nvim/init.lua"
+cp "$HOME/sherman/configsets/neovim/init.lua" "$HOME/.config/nvim/init.lua"

@@ -1,5 +1,4 @@
-#!/bin/zsh
-
+#!/bin/bash
 
 if [ ! -e $HOME/.sdkman ]
 then

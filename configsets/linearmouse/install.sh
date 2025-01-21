@@ -1,5 +1,9 @@
-#!/bin/zsh
+#!/bin/bash
 
+# Dependency brew
+(cd $HOME/Sherman/configsets/brew && make)
+
+# Install
 
 if [ ! -d "$HOME/.config/linearmouse" ]
 then
@@ -15,4 +19,4 @@ then
 fi
 
 echo "Installing new configs"
-cp "$HOME/sherman/configsets/20-linearmouse/linearmouse.json" "$HOME/.config/linearmouse/linearmouse.json"
+cp "$HOME/sherman/configsets/linearmouse/linearmouse.json" "$HOME/.config/linearmouse/linearmouse.json"
