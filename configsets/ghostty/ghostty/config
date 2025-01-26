@@ -1,0 +1,7 @@
+font-family = CommitMonoDotted
+font-size = 22
+font-feature = -calt
+font-feature = -liga
+font-feature = -dlig
+theme = GhBlind
+window-padding-balance = true

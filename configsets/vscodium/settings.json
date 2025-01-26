@@ -1,0 +1,103 @@
+{
+    "editor.fontFamily": "CommitMonoDotted",
+    "editor.fontSize": 20,
+    "editor.renderWhitespace": "boundary",
+    "svelte.enable-ts-plugin": true,
+    "svelte.plugin.svelte.defaultScriptLanguage": "ts",
+    "prettier.useEditorConfig": false,
+    "editor.formatOnSave": true,
+    "typescript.updateImportsOnFileMove.enabled": "always",
+    "workbench.activityBar.location": "top",
+    "security.promptForLocalFileProtocolHandling": false,
+    "typescript.preferences.importModuleSpecifier": "non-relative",
+    "typescript.inlayHints.functionLikeReturnTypes.enabled": true,
+    "typescript.inlayHints.parameterTypes.enabled": true,
+    "typescript.inlayHints.variableTypes.enabled": true,
+    "typescript.inlayHints.propertyDeclarationTypes.enabled": true,
+    "javascript.preferences.importModuleSpecifier": "non-relative",
+    "gitlens.advanced.blame.customArguments": ["-C", "-C", "-C"],
+    "[ruby]": {
+        "editor.tabSize": 2
+    },
+    "rust-analyzer.check.command": "clippy",
+    "rust-analyzer.check.allTargets": true,
+    "rust-analyzer.check.features": "all",
+    "eslint.format.enable": true,
+    "prettier.tabWidth": 4,
+    "typescript.tsserver.experimental.enableProjectDiagnostics": true,
+    "editor.autoClosingBrackets": "never",
+    "editor.autoClosingQuotes": "never",
+    "editor.autoClosingDelete": "never",
+    "editor.autoClosingOvertype": "never",
+    "extensions.experimental.affinity": {
+        "asvetliakov.vscode-neovim": 1
+    },
+    "vim.normalModeKeyBindings": [
+        {
+            "before": ["<C-k>"],
+            "commands": ["editor.action.moveLinesUpAction"]
+        },
+        {
+            "before": ["<C-j>"],
+            "commands": ["editor.action.moveLinesDownAction"]
+        },
+        {
+            "before": ["<C-l>"],
+            "commands": ["editor.action.indentLines"]
+        },
+        {
+            "before": ["<C-h>"],
+            "commands": ["editor.action.outdentLines"]
+        }
+    ],
+    "vim.visualModeKeyBindings": [
+        {
+            "before": ["<C-k>"],
+            "commands": ["editor.action.moveLinesUpAction"]
+        },
+        {
+            "before": ["<C-j>"],
+            "commands": ["editor.action.moveLinesDownAction"]
+        },
+        {
+            "before": ["<C-l>"],
+            "commands": ["editor.action.indentLines"]
+        },
+        {
+            "before": ["<C-h>"],
+            "commands": ["editor.action.outdentLines"]
+        }
+    ],
+    "editor.autoClosingComments": "never",
+    "files.exclude": {
+        "**/.git": false
+    },
+    // "explorer.autoReveal": false,
+    "editor.inlayHints.enabled": "off",
+    "files.readonlyInclude": {
+        "/.cargo/registry/src//*.rs": true,
+        "/lib/rustlib/src/rust/libraryl/*.rs": true
+    },
+    "workbench.colorTheme": "GitHub Light Colorblind (Beta)",
+    "vscord.app.name": "VSCodium",
+    "vscord.status.details.text.viewing": "In {workspace}",
+    "vscord.status.details.text.editing": "In {workspace}",
+    "git.openRepositoryInParentFolders": "always",
+    "github.copilot.enable": {
+        "*": true,
+        "plaintext": false,
+        "markdown": false,
+        "scminput": false
+    },
+    "editor.wordWrap": "on",
+    "editor.wrappingStrategy": "advanced",
+    "redhat.telemetry.enabled": true,
+    "[jsonc]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "haskell.manageHLS": "GHCup",
+    "[erb]": {
+        "editor.defaultFormatter": "Shopify.ruby-lsp"
+    },
+    "chat.commandCenter.enabled": false
+}

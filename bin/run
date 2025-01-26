@@ -6,14 +6,7 @@ pushd $HOME/sherman
 export SHERMAN_DIR=$HOME/sherman
 export SHERMAN_ENV="$(cat $HOME/sherman/CURRENT_ENV)"
 
-for file in $HOME/sherman/configsets/*
-do
-    if [ -e $file/install.sh ]
-    then
-        echo "Installing $file"
-        source $file/install.sh
-    fi
-done
+(cd $HOME/sherman/configsets/ && make && make unlock)
 
 # echo "Entering directory './sherman-bot'"
 # pushd ./sherman-bot
