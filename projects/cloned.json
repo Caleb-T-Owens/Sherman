@@ -26,5 +26,9 @@
   "gitlab": {
     "url": "https://gitlab.com/gitlab-org/gitlab.git",
     "profiles": ["work", "home"]
+  },
+  "bun": {
+    "url": "git@github.com:Caleb-T-Owens/bun.git",
+    "profiles": ["work", "home"]
   }
 }
