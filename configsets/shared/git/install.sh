@@ -6,7 +6,7 @@ then
     rm $HOME/.gitconfig
 fi
 
-if [ $SHERMAN_ENV = "work" ]
+if [ $SHERMAN_ENV = work ]
 then
     cp .gitconfig.work $HOME/.gitconfig
 else

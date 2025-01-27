@@ -13,5 +13,5 @@ then
 fi
 
 echo "Installing new configs"
-cp -R ghostty/ghostty $HOME/.config/ghostty
+cp -R ghostty $HOME/.config/ghostty
 
