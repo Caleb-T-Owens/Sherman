@@ -1,0 +1,14 @@
+[gpg]
+	format = ssh
+[user]
+	signingkey = /home/anti/.ssh/id_ed25519.pub
+	name = Caleb Owens
+	email = hello@calebowens.com
+[commit]
+	gpgsign = true
+[push]
+	autoSetupRemote = true
+[alias]
+	loglog = log --oneline --graph --all
+[submodule]
+	recurse = true
