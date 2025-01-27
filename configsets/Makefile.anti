@@ -1,5 +1,5 @@
 CONFIGS = shared/git shared/neovim
-ACTIONS = shared/action-clone-projects
+ACTIONS = # shared/action-clone-projects
 
 .PHONY: all
 all:
