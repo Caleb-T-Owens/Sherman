@@ -5,7 +5,6 @@ all:
 	for config in $(CONFIGS); do \
 		(cd $$config && $(MAKE)); \
 	done
-	wait
 
 .PHONY: unlock
 unlock:
