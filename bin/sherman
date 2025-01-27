@@ -1,0 +1,17 @@
+#!/bin/bash
+
+source $HOME/Sherman/bin/utils/base.sh
+
+pushd $SHERMAN_DIR/configsets/
+
+make -f "Makefile.$SHERMAN_ENV"
+make unlock -f "Makefile.$SHERMAN_ENV"
+
+popd
+
+if [ $SHERMAN_PLATFORM = macos ]
+then
+    source "$HOME/.zshrc"
+fi
+
+echo "Complete!"

@@ -1,30 +1,30 @@
 {
   "website": {
     "url": "git@github.com:Caleb-T-Owens/website.git",
-    "deployable": false
+    "profiles": ["work", "home", "anti"]
   },
   "libgit2": {
     "url": "git@github.com:libgit2/libgit2.git",
-    "deployable": false
+    "profiles": ["work", "home"]
   },
   "empower-learn": {
     "url": "git@github.com:learningproject/empower-learn-monorepo.git",
-    "deployable": true
+    "profiles": ["work", "home", "electron"]
   },
   "gitbutler-client": {
     "url": "git@github.com:gitbutlerapp/gitbutler.git",
-    "deployable": false
+    "profiles": ["work", "home"]
   },
   "gitbutler-web": {
     "url": "git@github.com:gitbutlerapp/web.git",
-    "deployable": false
+    "profiles": ["work", "home"]
   },
   "bot-hub": {
     "url": "git@gitea.somegamecorp.com:BotHub/bot-hub.git",
-    "deployable": false
+    "profiles": ["work", "home"]
   },
   "gitlab": {
     "url": "https://gitlab.com/gitlab-org/gitlab.git",
-    "deployable": false
+    "profiles": ["work", "home"]
   }
 }

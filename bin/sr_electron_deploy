@@ -1,0 +1,5 @@
+#!/bin/zsh
+
+source $HOME/Sherman/bin/utils/base.sh
+
+ssh electron -t "cd Sherman && bash bin/sr_deploy" || echo "something failed"

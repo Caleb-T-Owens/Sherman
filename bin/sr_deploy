@@ -1,0 +1,18 @@
+#!/bin/bash
+
+source $HOME/Sherman/bin/utils/base.sh
+
+pushd $SHERMAN_DIR
+
+echo "Pulling origin main"
+git pull origin main
+
+export SHERMAN_DIR=$HOME/Sherman
+export SHERMAN_ENV="$(cat $HOME/Sherman/CURRENT_ENV)"
+
+if [ $SHERMAN_ENV = "electron" ]
+then
+    source $SHERMAN_DIR/deploy/electron/deploy.sh
+fi
+
+popd

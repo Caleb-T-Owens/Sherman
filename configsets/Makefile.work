@@ -1,0 +1,20 @@
+CONFIGS = macos/brew macos/nvm macos/linearmouse macos/sdkman macos/wezterm macos/ghostty macos/vscodium macos/zsh shared/git shared/neovim shared/bun
+ACTIONS = shared/action-clone-projects
+
+.PHONY: all
+all:
+	for config in $(CONFIGS); do \
+		(cd $$config && $(MAKE)); \
+	done
+	for action in $(ACTIONS); do \
+		(cd $$action && $(MAKE)); \
+	done
+
+.PHONY: unlock
+unlock:
+	for config in $(CONFIGS); do \
+		(cd $$config && $(MAKE) unlock); \
+	done
+	for action in $(ACTIONS); do \
+		(cd $$action && $(MAKE) unlock); \
+	done

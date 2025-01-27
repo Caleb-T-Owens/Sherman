@@ -1,0 +1,21 @@
+CONFIGS = shared/git shared/neovim
+ACTIONS = shared/action-clone-projects
+
+.PHONY: all
+all:
+	for config in $(CONFIGS); do \
+		(cd $$config && $(MAKE)); \
+	done
+	for action in $(ACTIONS); do \
+		(cd $$action && $(MAKE)); \
+	done
+
+.PHONY: unlock
+unlock:
+	for config in $(CONFIGS); do \
+		(cd $$config && $(MAKE) unlock); \
+	done
+	for action in $(ACTIONS); do \
+		(cd $$action && $(MAKE) unlock); \
+	done
+
