@@ -1,12 +1,12 @@
 #!/bin/bash
 
 # Depends on project-cloner
-(cd $SHERMAN_DIR/configsets/shared/project-cloner && make)
+(cd $SHERMAN_DIR/configsets/shared/project-cloner2 && make)
 
-pushd $SHERMAN_DIR/projects/project-cloner
+pushd $SHERMAN_DIR/projects
 
 export CLONER_PROFILE=$SHERMAN_ENV
-bun run index.ts
+project-cloner2
 unset CLONER_PROFILE
 
 popd

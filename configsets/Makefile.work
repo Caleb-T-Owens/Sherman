@@ -1,4 +1,4 @@
-CONFIGS = macos/brew macos/nvm macos/linearmouse macos/sdkman macos/wezterm macos/ghostty macos/vscodium macos/zsh shared/git shared/neovim shared/bun
+CONFIGS = macos/brew macos/nvm macos/linearmouse macos/sdkman macos/wezterm macos/ghostty macos/vscodium macos/zsh shared/git shared/neovim shared/bun shared/rustup
 ACTIONS = shared/action-clone-projects
 
 .PHONY: all
@@ -12,9 +12,4 @@ all:
 
 .PHONY: unlock
 unlock:
-	for config in $(CONFIGS); do \
-		(cd $$config && $(MAKE) unlock); \
-	done
-	for action in $(ACTIONS); do \
-		(cd $$action && $(MAKE) unlock); \
-	done
+	rm $(wildcard */make-lock */*/make-lock */*/*/make-lock)
