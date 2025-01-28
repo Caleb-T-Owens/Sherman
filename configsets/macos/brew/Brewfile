@@ -1,5 +1,6 @@
 tap "aws/tap"
 tap "homebrew/bundle"
+tap "music-assistant/tap"
 # tap "sdkman/tap"
 
 # C/C++ tools
@@ -61,3 +62,6 @@ cask "MonitorControl"
 
 # Money money money
 cask "gnucash"
+
+# Music companion
+cask "companion"
