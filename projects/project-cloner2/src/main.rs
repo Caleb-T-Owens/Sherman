@@ -72,9 +72,12 @@ fn clone_projects(base_path: PathBuf, profile: String, config: &Config) {
                 "--recurse-submodules",
             ])
             .current_dir(&base_path)
-            .spawn();
+            .spawn()
+            .unwrap()
+            .wait()
+            .unwrap();
 
-        if result.is_err() {
+        if !result.success() {
             println!("Failed to clone project.")
         }
     }
