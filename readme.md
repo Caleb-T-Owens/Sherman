@@ -33,6 +33,8 @@ what is inside.
         A private leaderboard for puzzle solving written with ruby on rails.
     -   [website3](/projects/website3):
         The current version of my website, written in Angular.
+    -   [aptfile](/projects/aptfile):
+        Brewfiles but for apt
 -   [configsets](/configsets): Contains configuration for most thinks on my macOs
     devices, including: Brew package management, NVM installation, Git configuration,
     Alacritty configuration, Emacs configuration, LinearMouse configuration,
