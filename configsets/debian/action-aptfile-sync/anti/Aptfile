@@ -24,7 +24,6 @@ fdisk
 file
 findutils
 firmware-misc-nonfree
-gettext-base
 gpgv
 groff-base
 init
@@ -240,6 +239,8 @@ zlib1g
 zlib1g-dev
 # Danger!
 sudo
+# Building essentials
+gettext
 # Build tools
 gcc
 g++
@@ -247,6 +248,7 @@ autoconf
 automake
 make
 cmake
+ninja-build
 # Package Management
 dpkg
 apt
