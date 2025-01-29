@@ -27,6 +27,18 @@ fn aptmark_showmanual() -> Vec<String> {
     output
 }
 
+fn aptmark_showauto() -> Vec<String> {
+    let output = Command::new("apt-mark")
+        .arg("showauto")
+        .output()
+        .unwrap()
+        .stdout;
+
+    let output = std::str::from_utf8(&output).unwrap();
+    let output = output.lines().map(Into::into).collect::<Vec<_>>();
+    output
+}
+
 fn aptmark_manual(package: &str) {
     Command::new("apt-mark")
         .args(["manual", package])
@@ -98,19 +110,20 @@ fn read_aptfile() -> Vec<String> {
     aptfile
         .trim()
         .lines()
-        .filter(|line| line.starts_with("#"))
+        .filter(|line| !line.starts_with("#"))
         .map(Into::into)
         .collect()
 }
 
 fn sync() {
     let manual_packages = aptmark_showmanual();
-    let auto_packages = aptmark_showmanual();
+    let auto_packages = aptmark_showauto();
     let aptfile_packages = read_aptfile();
 
     let missing_packages = aptfile_packages
         .iter()
         .filter(|package| !manual_packages.contains(package));
+
 
     for package in missing_packages {
         if auto_packages.contains(package) {
