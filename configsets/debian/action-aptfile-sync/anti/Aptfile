@@ -1,27 +1,12 @@
 adduser
-apt
-apt-listchanges
-apt-utils
-autoconf
-automake
 base-files
 base-passwd
-bash
-bash-completion
-bind9-dnsutils
-bind9-host
 bsdutils
-build-essential
 busybox
-bzip2
 ca-certificates
-cmake
 console-setup
 coreutils
 cpio
-cron
-cron-daemon-common
-curl
 dash
 dbus
 debconf
@@ -34,40 +19,22 @@ discover
 dmidecode
 dmsetup
 doc-debian
-dpkg
 e2fsprogs
 fdisk
 file
 findutils
-firmware-iwlwifi
 firmware-misc-nonfree
-gcc-12-base
 gettext-base
-git
 gpgv
-grep
 groff-base
-grub-common
-grub-pc
-gzip
-hostname
-htop
-ifupdown
-inetutils-telnet
 init
 init-system-helpers
 initramfs-tools
 installation-report
-intel-microcode
-iproute2
-iputils-ping
-isc-dhcp-client
-isc-dhcp-common
 keyboard-configuration
 kmod
 krb5-locales
 laptop-detect
-less
 libacl1
 libapparmor1
 libapt-pkg6.0
@@ -162,9 +129,6 @@ libudev1
 libunistring2
 libuuid1
 libwebp-dev
-libx11-dev
-libxft-dev
-libxinerama-dev
 libxtables12
 libxxhash0
 libzstd1
@@ -174,37 +138,21 @@ login
 logrotate
 logsave
 lsof
-man-db
-manpages
 mawk
 media-types
 mime-support
 mount
-nano
-ncurses-base
-ncurses-bin
-ncurses-term
-netbase
 netcat-traditional
-nftables
 openssh-client
 os-prober
 passwd
 pciutils
-perl
-perl-base
 procps
 python3-reportbug
 readline-common
 reportbug
-sed
 sensible-utils
-sudo
-systemd
-systemd-sysv
-systemd-timesyncd
 sysvinit-utils
-tar
 task-english
 task-laptop
 tasksel
@@ -213,21 +161,94 @@ traceroute
 tzdata
 ucf
 udev
-unzip
 usbutils
 usr-is-merged
 util-linux
 util-linux-extra
+wamerican
+whiptail
+xz-utils
+# Keeping the CPU safe
+intel-microcode
+# String manipulation
+grep
+sed
+# Pagers
+less
+# CRON
+cron
+cron-daemon-common
+# Performance monitoring
+htop
+# Shell
+bash
+bash-completion
+# Version contorl
+git
+# Docs
+man-db
+manpages
+# Boot / Grub
+grub-common
+grub-pc
+# GUI stuff
+xorg
+libx11-dev
+libxft-dev
+libxinerama-dev
+# ncurses
+ncurses-base
+ncurses-bin
+ncurses-term
+# editors
 vim-common
 vim-tiny
-w3m
-wamerican
+nano
+# systemd
+systemd
+systemd-sysv
+systemd-timesyncd
+# Downloading
 wget
-whiptail
+curl
+# T'interent
+netbase
+nftables
 wireless-tools
 wpasupplicant
-xorg
-xz-utils
+hostname
+ifupdown
+inetutils-telnet
+firmware-iwlwifi
+iproute2
+iputils-ping
+isc-dhcp-client
+isc-dhcp-common
+bind9-dnsutils
+bind9-host
+# Perl
+perl
+perl-base
+# Compression
+tar
+unzip
+gzip
+zstd
+bzip2
+# Compression libs
 zlib1g
 zlib1g-dev
-zstd
+# Danger!
+sudo
+# Build tools
+gcc
+g++
+autoconf
+automake
+make
+cmake
+# Package Management
+dpkg
+apt
+apt-listchanges
+apt-utils
