@@ -6,6 +6,6 @@
 if [ $SHERMAN_ENV = anti ]
 then
     pushd anti
-    aptfile sync
+    sudo $HOME/Sherman/bin/aptfile sync
     popd
 fi
