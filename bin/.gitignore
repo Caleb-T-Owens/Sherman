@@ -1,3 +1,11 @@
+# Programs should be installed into $SHERMAN_DIR/bin, but we don't want to
+# actually commit them, so we need to be a little bit careful and just make sure
+# to ignore them.
 bun
 project-cloner2
 aptfile
+dmenu
+dwm
+rg
+st
+dillo
