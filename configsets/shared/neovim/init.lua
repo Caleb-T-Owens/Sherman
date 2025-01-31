@@ -153,7 +153,7 @@ vim.opt.list = true
 vim.keymap.set('n', '<leader>x', '<cmd>tabonly|%bd|e#<cr>')
 
 -- Show me where the lines are!
-vim.opt.colorcolumn = '120'
+vim.opt.colorcolumn = '80'
 
 -- Standardrb
 vim.opt.signcolumn = "no" -- otherwise it bounces in and out, not strictly needed though
@@ -171,5 +171,6 @@ vim.api.nvim_create_autocmd("FileType", {
 -- Making my terninal look cooler
 vim.opt.laststatus = 1
 
--- Wrap markdown and comments at 120 columns
-vim.opt.textwidth = 120
+-- Wrap markdown and comments at ~~120~~ columns
+-- 80 is the new 120
+vim.opt.textwidth = 80
