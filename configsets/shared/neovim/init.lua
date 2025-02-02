@@ -27,7 +27,11 @@ require("lazy").setup({
 })
 
 -- Set colorscheme
-vim.cmd.colorscheme("github_light_colorblind")
+if os.getenv("SHERMAN_THEME") == "dark" then
+  vim.cmd.colorscheme("github_dark_colorblind")
+else
+  vim.cmd.colorscheme("github_light_colorblind")
+end
 
 -- Nvim Telescope
 local builtin = require('telescope.builtin')

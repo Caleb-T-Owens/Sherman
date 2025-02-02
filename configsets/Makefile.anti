@@ -1,5 +1,5 @@
-CONFIGS = shared/git shared/neovim shared/rustup
-ACTIONS = shared/action-clone-projects debian/action-aptfile-sync
+CONFIGS = shared/git shared/neovim shared/rustup debian/bash debian/dmenu debian/dwm debian/xorg debian/xinit-config debian/st shared/ripgrep
+ACTIONS = shared/action-clone-projects shared/action-sync-buildables debian/action-aptfile-sync
 
 .PHONY: all
 all:
