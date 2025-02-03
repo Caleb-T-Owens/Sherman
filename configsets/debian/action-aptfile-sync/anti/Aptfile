@@ -259,3 +259,9 @@ apt-listchanges
 apt-utils
 # Browser
 firefox-esr
+# Audio
+pipewire-audio
+pamixer
+moc
+# Java
+default-jre
