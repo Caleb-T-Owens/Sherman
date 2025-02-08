@@ -4,6 +4,7 @@ tap "music-assistant/tap"
 # tap "sdkman/tap"
 
 # C/C++ tools
+brew "bazel"
 brew "cmake"
 
 # Java tools

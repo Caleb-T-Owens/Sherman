@@ -30,5 +30,9 @@
   "bun": {
     "url": "git@github.com:Caleb-T-Owens/bun.git",
     "profiles": ["work", "home"]
+  },
+  "aphid": {
+    "url": "git@github.com:Caleb-T-Owens/aphid.git",
+    "profiles": ["work", "home"]
   }
 }

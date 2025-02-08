@@ -32,7 +32,7 @@ impl Default for RepositoryConfig {
     fn default() -> Self {
         Self {
             url: "https://example.com/foo.git".into(),
-            revision: "master".into(),
+            revision: "origin/master".into(),
         }
     }
 }
