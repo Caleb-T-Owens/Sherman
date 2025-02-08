@@ -57,7 +57,12 @@ The commit name format is as follows: `patc(<branch-name>): <patch-name>`.
 
 ### `patc reapply`
 
-This command performs several operations
+`patc reapply` will wipe the repo. Any changes made after the last reapply will
+be lost.
+
+`patc reapply` will clone the repo if it is not already cloned. After that it
+will checkout the specified revision. It will then apply the specified branches
+in the given order.
 
 ## What problem does Patc solve?
 
