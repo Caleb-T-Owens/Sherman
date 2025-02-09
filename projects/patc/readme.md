@@ -64,6 +64,18 @@ be lost.
 will checkout the specified revision. It will then apply the specified branches
 in the given order.
 
+### `patc commit <message>`
+
+Patc commit takes any changes that were made to the working copy, and write out
+a patch file in the branch at the top at the top of your stack. (The child-most
+stack in git terms).
+
+If there is applied branch, create one with `patc branch create <branch name>`
+
+### `patc branch create <branch name>`
+
+Creates an empty branch under the given name.
+
 ## What problem does Patc solve?
 
 With a program like `dwm` configuration is made by modifying the source code,
