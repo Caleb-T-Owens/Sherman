@@ -1,0 +1,13 @@
+diff --git a/foo b/foo
+index df8da09..cd8d8b7 100644
+--- a/foo
++++ b/foo
+@@ -3,7 +3,7 @@ asdf
+ 
+ asdf
+ 
+-Hello gitbutler!!
++Goodbye gitbutler
+ 
+ asdf
+ sadf

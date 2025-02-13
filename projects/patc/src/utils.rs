@@ -1,7 +1,3 @@
-use std::path;
-
-use serde::de::IntoDeserializer;
-
 use crate::config::Config;
 
 pub fn base_path() -> std::path::PathBuf {
@@ -99,7 +95,7 @@ pub fn git_reset_hard() {
 
     std::process::Command::new("git")
         .current_dir(&repo_path)
-        .args(["reset", "--hard"])
+        .args(["reset", "--hard", "--quiet"])
         .spawn()
         .expect("Failed to spawn git reset --hard")
         .wait_with_output()

@@ -2,6 +2,7 @@ mod commit;
 mod config;
 mod diff;
 mod init;
+mod log;
 mod reapply;
 mod utils;
 
@@ -21,6 +22,7 @@ enum Subcommand {
         #[clap(long, short)]
         message: String,
     },
+    Log,
 }
 
 fn main() {
@@ -31,5 +33,6 @@ fn main() {
         Subcommand::Reapply => reapply::reapply(),
         Subcommand::Diff => diff::diff(),
         Subcommand::Commit { message } => commit::commit(message),
+        Subcommand::Log => log::log(),
     }
 }

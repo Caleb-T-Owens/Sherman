@@ -12,9 +12,9 @@ Initializes an empty patc project in the current directory, creating the
 following structure:
 
 -   patc.json # A configuration which declares what repo should be checked
-    out, and what branches to apply
+    out, and what branches to apply.
 -   .gitignore # A basic gitignore that ignores the `repo/` folder, and
-    the `.patc-meta` file
+    the `.patc` folder.
 -   branches/ # An empty folder where your branches will be stored.
 
 `patc init` will only run if the `pwd` is empty.
@@ -27,7 +27,7 @@ following structure:
         "url": "repo url",
         "revision": "v6.5"
     },
-    "applied-branches": ["my-tweaks", "gaps"]
+    "branches": ["my-tweaks", "gaps"]
 }
 ```
 
@@ -36,7 +36,7 @@ following structure:
     of. This _can_ be anything `git rev-parse` accepts, but I strongly
     recommend avoiding relative revisions (like `HEAD`). A branch name,
     tag, or commit sha are good choices.
--   applied-branches: The branches that should be applied on top of the
+-   branches: The branches that should be applied on top of the
     specified revision. The branches will be applied in turn, starting at
     index 0.
 
@@ -49,9 +49,12 @@ following structure:
 A branch is made by creating a folder inside `branches/`. A branch contains
 many `.patch` files. The patches must be applyable by `git apply`.
 
-Patches will be applied in alphabetical order.
-If the patch starts with an order number IE: `0001-my-patch.patch`, the order
-number will be trimmed before being formatted into the commit name format.
+Patches will be applied in numerical order. Patches must start with a digit
+followed by a `-`, and end in the `.patch` extension.
+
+TODO: If the patch starts with an order number IE: `1-my-patch.patch`, the
+order number will be trimmed before being formatted into the commit name
+format.
 
 The commit name format is as follows: `patc(<branch-name>): <patch-name>`.
 
@@ -72,9 +75,18 @@ stack in git terms).
 
 If there is applied branch, create one with `patc branch create <branch name>`
 
-### `patc branch create <branch name>`
+### TODO: `patc branch create <branch name>`
 
 Creates an empty branch under the given name.
+
+### `patc diff`
+
+Patc diff shows the difference between the top patch and the current working
+directory.
+
+### `patc log`
+
+Patc log lists the patches applied on top of the target repository.
 
 ## What problem does Patc solve?
 
