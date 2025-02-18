@@ -124,8 +124,6 @@ sherman () {
   source $HOME/Sherman/bin/sherman
 }
 
-
-
 # NVM
 if [ -e $HOME/.nvm ]
 then
@@ -133,6 +131,3 @@ then
   [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
   [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 fi
-
-# Added by `rbenv init` on Sat 15 Feb 19:22:14 CET 2025
-eval "$(~/.rbenv/bin/rbenv init - --no-rehash bash)"
