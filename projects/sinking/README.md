@@ -37,8 +37,10 @@ type Record = {
   id: string,
   createdAt: number,
   values: {
-    <value>: <type>
-    <value>UpdatedAt: number
+    <value>: {
+      current: <type>,
+      updatedAt: number
+    }
   }
 } | {
   id: string,
