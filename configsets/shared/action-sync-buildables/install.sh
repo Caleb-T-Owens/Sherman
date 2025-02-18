@@ -9,4 +9,14 @@ export CLONER_PROFILE=$SHERMAN_ENV
 project-cloner2
 unset CLONER_PROFILE
 
+for folder in */; do
+    pushd $folder
+
+    if [ -e patc.json ]; then
+        patc reapply
+    fi
+
+    popd
+done
+
 popd
