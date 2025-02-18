@@ -87,6 +87,15 @@ pub fn copy_to_repository() {
 
     fs_extra::copy_items(&workspace_contents, repository_path, &Default::default())
         .expect("Failed to copy workspace contents");
+
+    let repo_path = base_path.join(".patc").join("repo");
+    std::process::Command::new("git")
+        .current_dir(&repo_path)
+        .args(["add", "."])
+        .spawn()
+        .expect("Failed to spawn git add .")
+        .wait_with_output()
+        .expect("git add failed");
 }
 
 pub fn git_reset_hard() {
@@ -133,12 +142,13 @@ pub fn get_patch_paths(branch_path: &std::path::Path) -> Vec<std::path::PathBuf>
                     .into_string()
                     .expect("patch name not utf8");
 
+                if !file_name.ends_with(".patch") {
+                    // Ignore things that are not patches
+                    continue;
+                }
+
                 try_extract_patch_number(&file_name)
                     .expect("Patches should start with a positive decimal number, IE `23`");
-
-                if !file_name.ends_with(".patch") {
-                    panic!("Patches should end with .patch")
-                }
 
                 paths.push(entry.path().to_owned());
             }
