@@ -178,3 +178,6 @@ vim.opt.laststatus = 1
 -- Wrap markdown and comments at ~~120~~ columns
 -- 80 is the new 120
 vim.opt.textwidth = 80
+
+-- Please go away F1 help screen
+vim.keymap.set({'v', 'n', 'i'}, '<F1>', '<Esc>')

@@ -6,6 +6,6 @@
 # Install st
 pushd $SHERMAN_DIR/buildables/st/repo
 
-sudo make install
+sudo make clean install
 
 popd
