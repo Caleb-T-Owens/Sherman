@@ -22,7 +22,7 @@ pub fn commit(message: String) {
 
     let stdout = std::process::Command::new("git")
         .current_dir(&repository_path)
-        .args(["diff"])
+        .args(["diff", "--staged"])
         .output()
         .expect("Failed to exec git diff")
         .stdout;

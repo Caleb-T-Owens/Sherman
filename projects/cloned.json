@@ -17,7 +17,7 @@
   },
   "gitbutler-web": {
     "url": "git@github.com:gitbutlerapp/web.git",
-    "profiles": ["work", "home"]
+    "profiles": ["work", "home", "anti"]
   },
   "bot-hub": {
     "url": "git@gitea.somegamecorp.com:BotHub/bot-hub.git",

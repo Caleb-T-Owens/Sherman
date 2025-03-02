@@ -10,7 +10,7 @@ pub fn diff() {
 
     std::process::Command::new("git")
         .current_dir(&repo_path)
-        .args(["diff"])
+        .args(["diff", "--staged"])
         .spawn()
         .expect("Failed to spawn git diff")
         .wait()

@@ -265,3 +265,5 @@ pamixer
 moc
 # Java
 default-jre
+# Libre office
+libreoffice

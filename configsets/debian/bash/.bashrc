@@ -124,8 +124,6 @@ sherman () {
   source $HOME/Sherman/bin/sherman
 }
 
-
-
 # NVM
 if [ -e $HOME/.nvm ]
 then

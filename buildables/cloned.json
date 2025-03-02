@@ -9,11 +9,6 @@
         "profiles": ["work", "home", "anti"],
         "checkout": "6.5"
     },
-    "st/repo": {
-        "url": "https://git.suckless.org/st",
-        "profiles": ["work", "home", "anti"],
-        "checkout": "0.9.2"
-    },
     "dmenu/repo": {
         "url": "https://git.suckless.org/dmenu",
         "profiles": ["work", "home", "anti"],
