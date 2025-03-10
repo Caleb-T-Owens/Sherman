@@ -35,6 +35,7 @@ brew "go"
 # Deployment software
 brew "aws/tap/copilot-cli"
 brew "awscli"
+brew "pscale"
 
 # Editors and terminals
 brew "neovim"
