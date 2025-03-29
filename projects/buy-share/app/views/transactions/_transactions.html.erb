@@ -1,0 +1,11 @@
+<div id="transactions" class="transactions-list">
+  <% if transactions.any? %>
+    <% transactions.each do |transaction| %>
+      <%= render "transactions/transaction", transaction: transaction %>
+    <% end %>
+  <% else %>
+    <div class="no-transactions">
+      <p>No transactions yet. Add your first transaction using the form above.</p>
+    </div>
+  <% end %>
+</div> 

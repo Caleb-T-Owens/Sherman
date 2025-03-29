@@ -14,6 +14,8 @@
   --primary-color: #1f8dd6;
   --secondary-color: #5eb95e;
   --danger-color: #ca3c3c;
+  --credit-color: #5eb95e;
+  --debit-color: #ca3c3c;
   --light-bg: #f8f8f8;
   --border-color: #ddd;
   --text-color: #333;
@@ -42,6 +44,31 @@ a {
 
 a:hover {
   text-decoration: underline;
+}
+
+/* Custom button styles */
+.pure-button {
+  border-radius: 4px;
+  padding: 0.5em 1em;
+}
+
+.pure-button-primary {
+  background-color: var(--primary-color);
+}
+
+.pure-button-success {
+  background-color: var(--secondary-color);
+  color: white;
+}
+
+.pure-button-error, .button-error {
+  background-color: var(--danger-color);
+  color: white;
+}
+
+.pure-button-small {
+  font-size: 0.8em;
+  padding: 0.4em 0.8em;
 }
 
 /* Card styles */
@@ -152,6 +179,121 @@ a:hover {
 .members-list li {
   padding: 0.5em 0;
   border-bottom: 1px solid var(--border-color);
+}
+
+/* Transaction styles */
+.transactions-list {
+  margin-top: 1em;
+}
+
+.transaction-item {
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  padding: 1em;
+  margin-bottom: 1em;
+  background-color: white;
+}
+
+.transaction-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.transaction-title h4 {
+  margin: 0 0 0.3em 0;
+}
+
+.transaction-date {
+  font-size: 0.8em;
+  color: var(--muted-text);
+}
+
+.transaction-amount {
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+.transaction-amount.credit {
+  color: var(--credit-color);
+}
+
+.transaction-amount.debit {
+  color: var(--debit-color);
+}
+
+.transaction-details {
+  margin-top: 0.8em;
+  border-top: 1px solid var(--border-color);
+  padding-top: 0.8em;
+}
+
+.transaction-reason {
+  margin-bottom: 0.5em;
+}
+
+.transaction-reason p {
+  margin: 0;
+}
+
+.transaction-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.8em;
+  color: var(--muted-text);
+}
+
+/* Balance styles */
+.fund-balance, .user-balance {
+  text-align: center;
+}
+
+.balance-amount {
+  font-size: 2em;
+  font-weight: bold;
+  margin: 0.5em 0;
+}
+
+.balance-amount.credit {
+  color: var(--credit-color);
+}
+
+.balance-amount.debit {
+  color: var(--debit-color);
+}
+
+.balance-details {
+  margin-top: 1em;
+}
+
+.balance-detail {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.3em;
+}
+
+.credit {
+  color: var(--credit-color);
+}
+
+.debit {
+  color: var(--debit-color);
+}
+
+.contribution-status {
+  margin-top: 1em;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.no-transactions {
+  text-align: center;
+  padding: 2em;
+  color: var(--muted-text);
+  border: 1px dashed var(--border-color);
+  border-radius: 4px;
 }
 
 /* Responsive styles */

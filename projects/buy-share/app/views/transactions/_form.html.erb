@@ -1,0 +1,33 @@
+<%= form_with(model: [fund, transaction], class: "pure-form pure-form-stacked", id: "transaction-form") do |form| %>
+  <% if transaction.errors.any? %>
+    <div class="pure-u-1 alert alert-error">
+      <h4><%= pluralize(transaction.errors.count, "error") %> prevented this transaction from being saved:</h4>
+      <ul>
+        <% transaction.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="pure-control-group">
+    <%= form.label :title, class: "pure-u-1" %>
+    <%= form.text_field :title, required: true, class: "pure-u-1", placeholder: "e.g., Grocery shopping, Rent payment" %>
+  </div>
+
+  <div class="pure-control-group">
+    <%= form.label :amount_dollars, "Amount ($)", class: "pure-u-1" %>
+    <%= form.number_field :amount_dollars, step: 0.01, required: true, class: "pure-u-1", 
+        placeholder: "Use negative values for expenses (e.g., -50.00)" %>
+    <span class="pure-form-message">Enter positive values for money added to the fund, negative for expenses</span>
+  </div>
+
+  <div class="pure-control-group">
+    <%= form.label :reason, class: "pure-u-1" %>
+    <%= form.text_area :reason, rows: 2, class: "pure-u-1", placeholder: "Optional: Why this transaction was made" %>
+  </div>
+
+  <div class="pure-controls" style="margin-top: 15px;">
+    <%= form.submit "Add Transaction", class: "pure-button pure-button-primary" %>
+  </div>
+<% end %> 

@@ -1,0 +1,20 @@
+<div id="user-balance" class="user-balance">
+  <h3>Your Balance</h3>
+  <div class="balance-amount <%= fund.user_balance(user) >= 0 ? 'credit' : 'debit' %>">
+    <%= fund.formatted_user_balance(user) %>
+  </div>
+  <div class="balance-details">
+    <% if fund_membership = fund.fund_memberships.find_by(user: user) %>
+      <% if fund_membership.contributing? %>
+        <div class="contribution-status">
+          <span>Monthly contribution:</span>
+          <span class="badge badge-primary"><%= fund_membership.formatted_monthly_contribution %></span>
+        </div>
+      <% else %>
+        <div class="contribution-status">
+          <span>No active monthly contribution</span>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+</div> 

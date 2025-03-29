@@ -18,25 +18,71 @@
         </div>
       </div>
       
+      <!-- Balances section (side by side) -->
       <div class="pure-g" style="margin-top: 2em;">
-        <div class="pure-u-1 pure-u-md-2-3">
+        <div class="pure-u-1 pure-u-md-1-2" style="padding-right: 1em;">
           <div class="panel">
-            <h3>Description</h3>
+            <%= render "funds/balance", fund: @fund %>
+          </div>
+        </div>
+        <div class="pure-u-1 pure-u-md-1-2">
+          <div class="panel">
+            <%= render "funds/user_balance", fund: @fund, user: current_user %>
+          </div>
+        </div>
+      </div>
+      
+      <div class="pure-g" style="margin-top: 2em;">
+        <!-- Main content - Transactions -->
+        <div class="pure-u-1 pure-u-md-8-12" style="padding-right: 1em;">
+          <div class="panel">
+            <div class="pure-g">
+              <div class="pure-u-1 pure-u-md-1-2">
+                <h2>Transactions</h2>
+              </div>
+              <div class="pure-u-1 pure-u-md-1-2" style="text-align: right;">
+                <%= link_to "Refresh", fund_transactions_path(@fund), 
+                    class: "pure-button", 
+                    data: { turbo_frame: "transactions" } %>
+              </div>
+            </div>
+            
+            <div class="pure-g" style="margin-top: 1em;">
+              <div class="pure-u-1">
+                <h3>Add New Transaction</h3>
+                <%= render "transactions/form", fund: @fund, transaction: @fund.transactions.build %>
+              </div>
+            </div>
+            
+            <div class="pure-g" style="margin-top: 2em;">
+              <div class="pure-u-1">
+                <h3>Transaction History</h3>
+                <%= turbo_frame_tag "transactions" do %>
+                  <%= render "transactions/transactions", transactions: @fund.recent_transactions(20) %>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Sidebar - Fund Info & Members -->
+        <div class="pure-u-1 pure-u-md-4-12">
+          <!-- Description & Fund Details -->
+          <div class="panel">
+            <h3>About This Fund</h3>
             <p><%= @fund.description.present? ? @fund.description : "No description provided" %></p>
             
-            <h3 style="margin-top: 1.5em;">Fund Details</h3>
+            <h4 style="margin-top: 1.5em;">Fund Details</h4>
             <p>
               <strong>Created:</strong> <%= @fund.created_at.strftime("%B %d, %Y") %><br>
               <strong>Owner:</strong> <%= @fund.owner&.name || "Unknown" %><br>
-              <strong>Members:</strong> <%= @fund.users.count %>
+              <strong>Members:</strong> <%= @fund.users.count %><br>
+              <strong>Monthly Contribution:</strong> <%= @fund.formatted_contribution_range %>
             </p>
           </div>
           
-          <!-- Future expansion: Add transactions, expenses, etc. here -->
-        </div>
-        
-        <div class="pure-u-1 pure-u-md-1-3">
-          <div class="panel members-list">
+          <!-- Members List -->
+          <div class="panel members-list" style="margin-top: 2em;">
             <h3>Members</h3>
             
             <ul>

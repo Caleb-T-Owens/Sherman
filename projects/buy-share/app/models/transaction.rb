@@ -21,6 +21,11 @@ class Transaction < ApplicationRecord
     (amount.to_f / 100).round(2)
   end
   
+  # Set amount in dollars
+  def amount_dollars=(value)
+    self.amount = (value.to_f * 100).round
+  end
+  
   # Format amount as currency string
   def formatted_amount
     format("$%.2f", amount_dollars)
@@ -44,4 +49,9 @@ class Transaction < ApplicationRecord
   
   # Scope for recent transactions
   scope :recent, -> { order(created_at: :desc) }
+  
+  # Get CSS class based on transaction type
+  def status_class
+    credit? ? "credit" : "debit"
+  end
 end

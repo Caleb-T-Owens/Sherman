@@ -1,0 +1,16 @@
+<div id="fund-balance" class="fund-balance">
+  <h3>Fund Balance</h3>
+  <div class="balance-amount <%= fund.balance >= 0 ? 'credit' : 'debit' %>">
+    <%= fund.formatted_balance %>
+  </div>
+  <div class="balance-details">
+    <div class="balance-detail">
+      <span>Total income:</span>
+      <span class="credit"><%= format("$%.2f", fund.total_credits.to_f / 100) %></span>
+    </div>
+    <div class="balance-detail">
+      <span>Total expenses:</span>
+      <span class="debit"><%= format("$%.2f", fund.total_debits.to_f / 100) %></span>
+    </div>
+  </div>
+</div> 

@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get "transactions/create"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
@@ -18,7 +19,17 @@ Rails.application.routes.draw do
   delete "logout", to: "sessions#destroy"
 
   # Fund routes
-  resources :funds
+  resources :funds do
+    resources :transactions, only: [:index, :create, :destroy]
+    
+    # Route for contributions
+    resources :contributions, only: [:create, :update, :destroy] do
+      member do
+        patch :pause
+        patch :resume
+      end
+    end
+  end
 
   # Defines the root path route ("/")
   root "pages#home"

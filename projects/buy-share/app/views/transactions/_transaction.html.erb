@@ -1,0 +1,32 @@
+<div id="<%= dom_id(transaction) %>" class="transaction-item <%= transaction.status_class %>">
+  <div class="transaction-header">
+    <div class="transaction-title">
+      <h4><%= transaction.title %></h4>
+      <span class="transaction-date"><%= transaction.created_at.strftime("%b %d, %Y at %I:%M %p") %></span>
+    </div>
+    <div class="transaction-amount <%= transaction.status_class %>">
+      <%= transaction.formatted_amount %>
+    </div>
+  </div>
+  
+  <div class="transaction-details">
+    <% if transaction.reason.present? %>
+      <div class="transaction-reason">
+        <p><strong>Reason:</strong> <%= transaction.reason %></p>
+      </div>
+    <% end %>
+    
+    <div class="transaction-meta">
+      <span class="transaction-author">By <%= transaction.user.name %></span>
+      
+      <% if transaction.user == current_user %>
+        <%= button_to fund_transaction_path(transaction.fund, transaction), 
+            method: :delete, 
+            class: "pure-button pure-button-small button-error",
+            form: { data: { turbo_confirm: "Are you sure you want to delete this transaction?" } } do %>
+          Delete
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</div> 

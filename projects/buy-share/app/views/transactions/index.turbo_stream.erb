@@ -1,0 +1,11 @@
+<%= turbo_stream.replace "transactions" do %>
+  <%= render "transactions/transactions", transactions: @transactions %>
+<% end %>
+
+<%= turbo_stream.replace "fund-balance" do %>
+  <%= render "funds/balance", fund: @fund %>
+<% end %>
+
+<%= turbo_stream.replace "user-balance" do %>
+  <%= render "funds/user_balance", fund: @fund, user: current_user %>
+<% end %> 
