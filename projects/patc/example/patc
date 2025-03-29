@@ -1,0 +1,4 @@
+#/bin/bash
+
+(cd ../ && cargo build)
+../target/debug/patc $@

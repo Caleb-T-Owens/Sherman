@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Ripgrep
+(cd $HOME/Sherman/configsets/shared/ripgrep && make)
+
 # On macos neovim is installed via brew
 if [ $SHERMAN_PLATFORM = macos ]
 then

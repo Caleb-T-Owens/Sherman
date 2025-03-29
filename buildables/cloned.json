@@ -1,0 +1,22 @@
+{
+    "dillo/repo": {
+        "url": "git@github.com:dillo-browser/dillo.git",
+        "profiles": ["work", "home", "anti"],
+        "checkout": "v3.2.0"
+    },
+    "dwm/repo": {
+        "url": "https://git.suckless.org/dwm",
+        "profiles": ["work", "home", "anti"],
+        "checkout": "6.5"
+    },
+    "dmenu/repo": {
+        "url": "https://git.suckless.org/dmenu",
+        "profiles": ["work", "home", "anti"],
+        "checkout": "0.9.2"
+    },
+    "ripgrep/repo": {
+        "url": "git@github.com:BurntSushi/ripgrep.git",
+        "profiles": ["work", "home", "anti"],
+        "checkout": "14.1.1"
+    }
+}

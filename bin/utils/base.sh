@@ -1,5 +1,6 @@
 export SHERMAN_DIR=$HOME/Sherman
 export SHERMAN_ENV="$(cat $HOME/Sherman/CURRENT_ENV)"
+export SHERMAN_THEME="$(cat $HOME/Sherman/THEME)"
 
 if [[ $SHERMAN_ENV == home || $SHERMAN_ENV == work ]]
 then

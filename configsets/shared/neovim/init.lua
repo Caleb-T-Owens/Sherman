@@ -27,7 +27,11 @@ require("lazy").setup({
 })
 
 -- Set colorscheme
-vim.cmd.colorscheme("github_light_colorblind")
+if os.getenv("SHERMAN_THEME") == "dark" then
+  vim.cmd.colorscheme("github_dark_colorblind")
+else
+  vim.cmd.colorscheme("github_light_colorblind")
+end
 
 -- Nvim Telescope
 local builtin = require('telescope.builtin')
@@ -153,7 +157,7 @@ vim.opt.list = true
 vim.keymap.set('n', '<leader>x', '<cmd>tabonly|%bd|e#<cr>')
 
 -- Show me where the lines are!
-vim.opt.colorcolumn = '120'
+vim.opt.colorcolumn = '80'
 
 -- Standardrb
 vim.opt.signcolumn = "no" -- otherwise it bounces in and out, not strictly needed though
@@ -171,5 +175,9 @@ vim.api.nvim_create_autocmd("FileType", {
 -- Making my terninal look cooler
 vim.opt.laststatus = 1
 
--- Wrap markdown and comments at 120 columns
-vim.opt.textwidth = 120
+-- Wrap markdown and comments at ~~120~~ columns
+-- 80 is the new 120
+vim.opt.textwidth = 80
+
+-- Please go away F1 help screen
+vim.keymap.set({'v', 'n', 'i'}, '<F1>', '<Esc>')

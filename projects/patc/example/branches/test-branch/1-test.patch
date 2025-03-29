@@ -1,0 +1,16 @@
+diff --git a/foo b/foo
+index 948e32b..3a6a125 100644
+--- a/foo
++++ b/foo
+@@ -1,9 +1,7 @@
+ asdf
+ asdf
+-asdf
+-asdf
+ 
+ asdf
+ 
+ asdf
+-sadf
+\ No newline at end of file
++sadf

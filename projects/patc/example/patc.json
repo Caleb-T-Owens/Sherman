@@ -1,0 +1,7 @@
+{
+    "repository": {
+        "url": "git@github.com:calebowens/testrepo.git",
+        "revision": "origin/main"
+    },
+    "branches": ["test-branch", "other-branch"]
+}

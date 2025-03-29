@@ -225,6 +225,7 @@ isc-dhcp-client
 isc-dhcp-common
 bind9-dnsutils
 bind9-host
+network-manager
 # Perl
 perl
 perl-base
@@ -240,8 +241,10 @@ zlib1g-dev
 # Danger!
 sudo
 # Building essentials
+gettext-base
 gettext
 # Build tools
+gcc-12-base
 gcc
 g++
 autoconf
@@ -254,3 +257,13 @@ dpkg
 apt
 apt-listchanges
 apt-utils
+# Browser
+firefox-esr
+# Audio
+pipewire-audio
+pamixer
+moc
+# Java
+default-jre
+# Libre office
+libreoffice

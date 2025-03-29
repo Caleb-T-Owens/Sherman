@@ -30,7 +30,7 @@ fn main() {
 }
 
 fn update_gitignore(base_path: PathBuf, config: &Config) {
-    let gitignore_path: PathBuf = base_path.join(".gitiginore");
+    let gitignore_path: PathBuf = base_path.join(".gitignore");
     let gitignore = fs::read(&gitignore_path).unwrap_or_default();
     let mut gitignore = std::str::from_utf8(&gitignore)
         .expect("gitignore not utf8")
@@ -40,7 +40,7 @@ fn update_gitignore(base_path: PathBuf, config: &Config) {
 
     for key in config.keys() {
         let key: String = format!("{}/", key);
-        if gitignore.iter().any(|entry| *entry == key) {
+        if !gitignore.iter().any(|entry| *entry == key) {
             gitignore.push(key);
         };
     }

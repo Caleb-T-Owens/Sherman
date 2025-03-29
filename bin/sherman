@@ -12,6 +12,8 @@ popd
 if [ $SHERMAN_PLATFORM = macos ]
 then
     source "$HOME/.zshrc"
+else
+    source "$HOME/.bashrc"
 fi
 
 echo "Complete!"
