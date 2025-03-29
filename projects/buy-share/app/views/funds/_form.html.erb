@@ -1,0 +1,27 @@
+<%= form_with(model: fund, class: "pure-form pure-form-stacked") do |form| %>
+  <% if fund.errors.any? %>
+    <div class="pure-u-1" style="color: #a94442; background-color: #f2dede; padding: 15px; margin-bottom: 20px; border-radius: 4px;">
+      <h3><%= pluralize(fund.errors.count, "error") %> prevented this fund from being saved:</h3>
+      <ul>
+        <% fund.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="pure-control-group">
+    <%= form.label :name, class: "pure-u-1" %>
+    <%= form.text_field :name, required: true, class: "pure-u-1 pure-u-md-2-3" %>
+  </div>
+
+  <div class="pure-control-group">
+    <%= form.label :description, class: "pure-u-1" %>
+    <%= form.text_area :description, rows: 5, class: "pure-u-1 pure-u-md-2-3" %>
+  </div>
+
+  <div class="pure-controls" style="margin-top: 20px;">
+    <%= form.submit class: "pure-button pure-button-primary" %>
+    <%= link_to "Cancel", funds_path, class: "pure-button" %>
+  </div>
+<% end %> 

@@ -1,19 +1,27 @@
-<h1>Login</h1>
+<div class="pure-g">
+  <div class="pure-u-1">
+    <section class="pure-u-1 pure-u-md-1-2 pure-u-lg-1-3" style="margin: 0 auto; padding: 2em">
+      <h1>Login</h1>
 
-<%= form_with(url: login_path, method: :post) do |form| %>
-  <div>
-    <%= form.label :email %>
-    <%= form.email_field :email, required: true %>
+      <%= form_with(url: login_path, method: :post, class: "pure-form pure-form-stacked") do |form| %>
+        <fieldset>
+          <div class="pure-control-group">
+            <%= form.label :email %>
+            <%= form.email_field :email, required: true, class: "pure-input-1" %>
+          </div>
+
+          <div class="pure-control-group">
+            <%= form.label :password %>
+            <%= form.password_field :password, required: true, class: "pure-input-1" %>
+          </div>
+
+          <div class="pure-controls">
+            <%= form.submit "Login", class: "pure-button pure-button-primary" %>
+          </div>
+        </fieldset>
+      <% end %>
+
+      <p>Don't have an account? <%= link_to "Sign up", signup_path %></p>
+    </section>
   </div>
-
-  <div>
-    <%= form.label :password %>
-    <%= form.password_field :password, required: true %>
-  </div>
-
-  <div>
-    <%= form.submit "Login" %>
-  </div>
-<% end %>
-
-<p>Don't have an account? <%= link_to "Sign up", signup_path %></p> 
+</div> 

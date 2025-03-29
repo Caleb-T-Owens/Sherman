@@ -1,0 +1,64 @@
+<% content_for :title, "#{@fund.name} - Buy Share" %>
+
+<div class="pure-g">
+  <div class="pure-u-1">
+    <section class="pure-u-1" style="padding: 2em;">
+      <div class="pure-g">
+        <div class="pure-u-1 pure-u-md-1-2">
+          <h1><%= @fund.name %></h1>
+        </div>
+        <div class="pure-u-1 pure-u-md-1-2" style="text-align: right;">
+          <%= link_to "Back to Funds", funds_path, class: "pure-button" %>
+          <% if @fund.owner == current_user %>
+            <%= link_to "Edit Fund", edit_fund_path(@fund), class: "pure-button" %>
+            <%= button_to "Delete Fund", fund_path(@fund), method: :delete, 
+                form: { data: { turbo_confirm: "Are you sure you want to delete this fund?" } }, 
+                class: "pure-button button-error" %>
+          <% end %>
+        </div>
+      </div>
+      
+      <div class="pure-g" style="margin-top: 2em;">
+        <div class="pure-u-1 pure-u-md-2-3">
+          <div class="panel">
+            <h3>Description</h3>
+            <p><%= @fund.description.present? ? @fund.description : "No description provided" %></p>
+            
+            <h3 style="margin-top: 1.5em;">Fund Details</h3>
+            <p>
+              <strong>Created:</strong> <%= @fund.created_at.strftime("%B %d, %Y") %><br>
+              <strong>Owner:</strong> <%= @fund.owner&.name || "Unknown" %><br>
+              <strong>Members:</strong> <%= @fund.users.count %>
+            </p>
+          </div>
+          
+          <!-- Future expansion: Add transactions, expenses, etc. here -->
+        </div>
+        
+        <div class="pure-u-1 pure-u-md-1-3">
+          <div class="panel members-list">
+            <h3>Members</h3>
+            
+            <ul>
+              <% @members.each do |member| %>
+                <li>
+                  <%= member.name %>
+                  <% if @fund.owner == member %>
+                    <span class="badge badge-primary">Owner</span>
+                  <% end %>
+                </li>
+              <% end %>
+            </ul>
+            
+            <% if @fund.owner == current_user %>
+              <div style="margin-top: 1.5em;">
+                <h4>Invite Members</h4>
+                <p>Coming soon: Invite other users to join this fund.</p>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>

@@ -17,32 +17,63 @@
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/icon.png">
 
+    <!-- PureCSS via CDN -->
+    <% if Rails.env.production? %>
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure.css">
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/grids-responsive.css">
+    <% else %>
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css">
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/grids-responsive-min.css">
+    <% end %>
+
     <%# Includes all stylesheet files in app/assets/stylesheets %>
     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
 
   <body>
-    <header>
-      <div>
-        <% if user_signed_in? %>
-          Logged in as <%= current_user.name %> | 
-          <%= button_to "Logout", logout_path, method: :delete %>
-        <% else %>
-          <%= link_to "Login", login_path %> | 
-          <%= link_to "Sign Up", signup_path %>
-        <% end %>
+    <div class="pure-g">
+      <div class="pure-u-1">
+        <header class="pure-menu pure-menu-horizontal navbar">
+          <a href="/" class="pure-menu-heading">Buy Share</a>
+          
+          <ul class="pure-menu-list">
+            <% if user_signed_in? %>
+              <li class="pure-menu-item">
+                <%= link_to "My Funds", funds_path, class: "pure-menu-link" %>
+              </li>
+            <% end %>
+          </ul>
+          
+          <div class="pure-menu-heading" style="float: right;">
+            <% if user_signed_in? %>
+              <span style="margin-right: 1em;">Logged in as <%= current_user.name %></span>
+              <%= button_to "Logout", logout_path, method: :delete, class: "pure-button pure-button-primary", style: "display: inline-block;" %>
+            <% else %>
+              <%= link_to "Login", login_path, class: "pure-button", style: "margin-right: 0.5em;" %>
+              <%= link_to "Sign Up", signup_path, class: "pure-button pure-button-primary" %>
+            <% end %>
+          </div>
+          
+          <div style="clear: both; padding-top: 1em;">
+            <% if flash[:notice] %>
+              <div class="alert alert-success">
+                <%= flash[:notice] %>
+              </div>
+            <% end %>
+            
+            <% if flash[:alert] %>
+              <div class="alert alert-error">
+                <%= flash[:alert] %>
+              </div>
+            <% end %>
+          </div>
+        </header>
       </div>
       
-      <% if flash[:notice] %>
-        <div class="notice"><%= flash[:notice] %></div>
-      <% end %>
-      
-      <% if flash[:alert] %>
-        <div class="alert"><%= flash[:alert] %></div>
-      <% end %>
-    </header>
-    
-    <%= yield %>
+      <div class="pure-u-1">
+        <%= yield %>
+      </div>
+    </div>
   </body>
 </html>

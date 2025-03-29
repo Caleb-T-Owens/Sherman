@@ -17,6 +17,9 @@ Rails.application.routes.draw do
   post "login", to: "sessions#create"
   delete "logout", to: "sessions#destroy"
 
+  # Fund routes
+  resources :funds
+
   # Defines the root path route ("/")
   root "pages#home"
 end
