@@ -23,6 +23,26 @@
   </head>
 
   <body>
+    <header>
+      <div>
+        <% if user_signed_in? %>
+          Logged in as <%= current_user.name %> | 
+          <%= button_to "Logout", logout_path, method: :delete %>
+        <% else %>
+          <%= link_to "Login", login_path %> | 
+          <%= link_to "Sign Up", signup_path %>
+        <% end %>
+      </div>
+      
+      <% if flash[:notice] %>
+        <div class="notice"><%= flash[:notice] %></div>
+      <% end %>
+      
+      <% if flash[:alert] %>
+        <div class="alert"><%= flash[:alert] %></div>
+      <% end %>
+    </header>
+    
     <%= yield %>
   </body>
 </html>
