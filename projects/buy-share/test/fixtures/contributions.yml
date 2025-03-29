@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  amount: 1
+  fund_membership: one
+  last_contributed_at: 2025-03-29 15:13:07
+
+two:
+  amount: 1
+  fund_membership: two
+  last_contributed_at: 2025-03-29 15:13:07

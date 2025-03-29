@@ -18,6 +18,9 @@ class FundsController < ApplicationController
   def create
     @fund = Fund.new(fund_params)
     
+    # Convert dollar values to cents for storage
+    process_dollar_values
+    
     ActiveRecord::Base.transaction do
       if @fund.save
         # Create the owner membership
@@ -35,6 +38,9 @@ class FundsController < ApplicationController
   end
   
   def update
+    # Convert dollar values to cents for storage
+    process_dollar_values
+    
     if @fund.update(fund_params)
       redirect_to @fund, notice: "Fund was successfully updated."
     else
@@ -62,6 +68,18 @@ class FundsController < ApplicationController
   end
 
   def fund_params
-    params.require(:fund).permit(:name, :description)
+    params.require(:fund).permit(:name, :description, :min_contribution, :max_contribution, 
+                                 :min_contribution_dollars, :max_contribution_dollars)
+  end
+  
+  def process_dollar_values
+    # Convert dollar parameters to cents if provided
+    if params[:fund][:min_contribution_dollars].present?
+      @fund.min_contribution = (params[:fund][:min_contribution_dollars].to_f * 100).round
+    end
+    
+    if params[:fund][:max_contribution_dollars].present?
+      @fund.max_contribution = (params[:fund][:max_contribution_dollars].to_f * 100).round
+    end
   end
 end

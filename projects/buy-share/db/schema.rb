@@ -10,7 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_03_29_135155) do
+ActiveRecord::Schema[8.0].define(version: 2025_03_29_141307) do
+  create_table "contributions", force: :cascade do |t|
+    t.integer "amount", default: 0, null: false
+    t.integer "fund_membership_id", null: false
+    t.datetime "last_contributed_at"
+    t.boolean "active", default: true, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["active"], name: "index_contributions_on_active"
+    t.index ["amount"], name: "index_contributions_on_amount"
+    t.index ["fund_membership_id"], name: "index_contributions_on_fund_membership_id"
+  end
+
   create_table "fund_memberships", force: :cascade do |t|
     t.integer "user_id", null: false
     t.integer "fund_id", null: false
@@ -27,7 +39,24 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_29_135155) do
     t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "min_contribution", default: 0, null: false
+    t.integer "max_contribution", default: 100000, null: false
     t.index ["name"], name: "index_funds_on_name"
+  end
+
+  create_table "transactions", force: :cascade do |t|
+    t.string "title", null: false
+    t.text "reason"
+    t.integer "amount", default: 0, null: false
+    t.integer "user_id", null: false
+    t.integer "fund_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["amount"], name: "index_transactions_on_amount"
+    t.index ["fund_id", "created_at"], name: "index_transactions_on_fund_id_and_created_at"
+    t.index ["fund_id"], name: "index_transactions_on_fund_id"
+    t.index ["title"], name: "index_transactions_on_title"
+    t.index ["user_id"], name: "index_transactions_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -39,6 +68,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_29_135155) do
     t.index ["email"], name: "index_users_on_email"
   end
 
+  add_foreign_key "contributions", "fund_memberships"
   add_foreign_key "fund_memberships", "funds"
   add_foreign_key "fund_memberships", "users"
+  add_foreign_key "transactions", "funds"
+  add_foreign_key "transactions", "users"
 end
