@@ -67,3 +67,6 @@ cask "gnucash"
 
 # Music companion
 cask "companion"
+
+# Ansible
+brew "pipx"
