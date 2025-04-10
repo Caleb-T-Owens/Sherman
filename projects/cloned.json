@@ -19,6 +19,10 @@
     "url": "git@github.com:gitbutlerapp/web.git",
     "profiles": ["work", "home", "anti"]
   },
+  "gitbutler-docs": {
+    "url": "git@github.com:gitbutlerapp/gitbutler-docs.git",
+    "profiles": ["work", "home"]
+  },
   "bot-hub": {
     "url": "git@gitea.somegamecorp.com:BotHub/bot-hub.git",
     "profiles": ["work", "home"]
@@ -33,6 +37,10 @@
   },
   "aphid": {
     "url": "git@github.com:Caleb-T-Owens/aphid.git",
+    "profiles": ["work", "home"]
+  },
+  "livestore": {
+    "url": "git@github.com:livestorejs/livestore.git",
     "profiles": ["work", "home"]
   }
 }
