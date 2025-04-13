@@ -1,0 +1,50 @@
+<main>
+  <section>
+    <h1><%= @source.name %></h1>
+
+    <p>
+      <strong>Git URL:</strong>
+      <%= @source.git_url %>
+    </p>
+
+    <p>
+      <strong>Last Fetched:</strong>
+      <%= @source.last_fetched_at ? time_ago_in_words(@source.last_fetched_at) + " ago" : "Never" %>
+    </p>
+
+    <div>
+      <%= link_to "Edit", edit_source_path(@source) %> |
+      <%= link_to "Back", sources_path %> |
+      <%= link_to "Refetch", refetch_source_path(@source), data: { turbo_method: :post } %>
+    </div>
+  </section>
+
+  <section>
+    <h2>Service Locations</h2>
+    <p>
+      Service locations are paths to folders inside this source's repository that contain services
+      that can be deployed.
+    </p>
+
+    <% if @source.service_locations.any? %>
+      <ul>
+        <% @source.service_locations.each do |location| %>
+          <li>
+            <%= location.name %> (<%= location.path %>) 
+            <% unless location.exist? %>
+              Not found
+            <% end %>
+            - 
+            <%= link_to "Details", source_service_location_path(@source, location) %>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p>No service locations defined yet.</p>
+    <% end %>
+
+    <p>
+      <%= link_to "Manage Service Locations", source_service_locations_path(@source) %>
+    </p>
+  </section>
+</main>

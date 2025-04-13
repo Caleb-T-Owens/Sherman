@@ -1,0 +1,40 @@
+<main>
+  <section>
+    <h1>Service Location: <%= @service_location.name %></h1>
+
+    <div>
+      <strong>Source:</strong>
+      <%= @source.name %>
+    </div>
+
+    <div>
+      <strong>Name:</strong>
+      <%= @service_location.name %>
+    </div>
+
+    <div>
+      <strong>Path:</strong>
+      <%= @service_location.path %>
+      <% unless @service_location.exist? %>
+        <strong>Not found</strong>
+      <% end %>
+    </div>
+
+    <div>
+      <h3>Services</h3>
+      <ul>
+        <% @service_location.services.each do |service| %>
+          <li>
+            <h4><%= service.name %></h4>
+            <p>Deployed to: <%= service.nodes.join(", ") %></p>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+
+    <div>
+      <%= link_to "Edit", edit_source_service_location_path(@source, @service_location) %> |
+      <%= link_to "Back to Service Locations", source_service_locations_path(@source) %>
+    </div>
+  </section>
+</main>

@@ -1,0 +1,2 @@
+module ServiceLocationsHelper
+end

@@ -1,0 +1,27 @@
+<%= form_with(model: [@source, service_location]) do |form| %>
+  <% if service_location.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(service_location.errors.count, "error") %> prevented this service location from being saved:</h2>
+      <ul>
+        <% service_location.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :name %>
+    <%= form.text_field :name, required: true %>
+  </div>
+
+  <div>
+    <%= form.label :path %>
+    <%= form.text_field :path, required: true, placeholder: "relative/path/in/repository" %>
+    <small>Path should be relative to the source repository root.</small>
+  </div>
+
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %> 

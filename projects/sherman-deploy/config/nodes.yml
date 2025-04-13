@@ -1,0 +1,4 @@
+nodes:
+    self:
+    charm:
+        url: root@charm
