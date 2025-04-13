@@ -1,20 +1,14 @@
 <main>
-  <header>
-    <h1>Dashboard</h1>
-    <p>Welcome back, <%= Current.user.email %></p>
-  </header>
-
   <section>
-    <h2>Recent Activity</h2>
-    <p>Your recent interactions will appear here.</p>
+    <h1>Dashboard</h1>
+    <p>Welcome back, <%= Current.user.email_address %></p>
   </section>
 
   <section>
     <h2>Quick Actions</h2>
     <nav>
       <ul>
-        <li><%= link_to "Profile", edit_user_registration_path %></li>
-        <li><%= link_to "Settings", "#" %></li>
+        <li><%= link_to "Sources", sources_path %></li>
       </ul>
     </nav>
   </section>

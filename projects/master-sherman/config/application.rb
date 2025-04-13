@@ -23,5 +23,8 @@ module MasterSherman
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
+
+    config.sources_directory = Rails.root.join("sources")
+    config.deployables_directory = Rails.root.join("deployables")
   end
 end

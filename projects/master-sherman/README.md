@@ -87,6 +87,21 @@ authenticated? # => Returns true if user is logged in
 -   Avoid writing JavaScript or CSS directly
 -   Use shared partials for common components
 
+#### Structuring Views
+
+```erb
+<main>
+  <section>
+    <h1>Title</h1>
+    <p>Description</p>
+  </section>
+
+  <section>
+    <h2>Topic</h2>
+  </section>
+</main>
+```
+
 ### Authentication
 
 -   Use `Authentication` concern for controller authentication

@@ -1,0 +1,32 @@
+<main>
+  <section>
+    <h1>Sources</h1>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Git URL</th>
+          <th>Last Fetched</th>
+          <th colspan="3">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @sources.each do |source| %>
+          <tr>
+            <td><%= source.name %></td>
+            <td><%= source.git_url %></td>
+            <td><%= source.last_fetched_at ? time_ago_in_words(source.last_fetched_at) + " ago" : "Never" %></td>
+            <td><%= link_to "Show", source %></td>
+            <td><%= link_to "Edit", edit_source_path(source) %></td>
+            <td><%= link_to "Delete", source, data: { turbo_method: :delete, turbo_confirm: "Are you sure?" } %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+
+    <br>
+
+    <%= link_to "New Source", new_source_path %>
+  </section>
+</main>

@@ -7,7 +7,7 @@ class RegistrationsController < ApplicationController
   end
 
   def create
-    @user = User.new(params.permit(:email_address, :password, :password_confirmation))
+    @user = User.new(params.require(:user).permit(:email_address, :password, :password_confirmation))
 
     if @user.save
       start_new_session_for @user

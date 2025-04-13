@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  git_url: MyString
+  last_fetched_at: 2025-04-13 17:24:17
+  encrypted_ssh_private_key: MyText
+  encrypted_ssh_public_key: MyText
+
+two:
+  name: MyString
+  git_url: MyString
+  last_fetched_at: 2025-04-13 17:24:17
+  encrypted_ssh_private_key: MyText
+  encrypted_ssh_public_key: MyText

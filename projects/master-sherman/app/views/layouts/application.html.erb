@@ -25,13 +25,25 @@
 
   <body>
     <header>
+      <% if authenticated? %>
+        <nav>
+          <h2>Main</h2>
+          <ul>
+            <li><%= link_to "Dashboard", dashboard_path %></li>
+            <li><%= link_to "Sources", sources_path %></li>
+          </ul>
+        </nav>
+      <% end %>
       <nav>
-        <% if authenticated? %>
-          <%= button_to "Sign out", session_path, method: :delete %>
-        <% else %>
-          <%= link_to "Sign in", new_session_path %>
-          <%= link_to "Sign up", new_registration_path %>
-        <% end %>
+        <h2>Auth</h2>
+        <ul>
+          <% if authenticated? %>
+            <li><%= link_to "Sign out", session_path, data: {turbo_method: :delete} %></li>
+          <% else %>
+            <li><%= link_to "Sign in", new_session_path %></li>
+            <li><%= link_to "Sign up", new_registration_path %></li>
+          <% end %>
+        </ul>
       </nav>
     </header>
 
