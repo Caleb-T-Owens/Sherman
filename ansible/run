@@ -1,0 +1,13 @@
+#/bin/bash
+
+# Require first argument to be the playbook name
+PLAYBOOK=$1
+
+if [ ! -e "playbooks/$PLAYBOOK" ]; then
+    echo "Playbook $PLAYBOOK not found"
+    echo "Available playbooks:"
+    ls -1 playbooks/*.yaml
+    exit 1
+fi
+
+ansible-playbook -i inventory.ini playbooks/$PLAYBOOK
