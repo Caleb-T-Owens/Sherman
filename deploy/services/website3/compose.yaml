@@ -1,0 +1,8 @@
+services:
+    web:
+        build:
+            context: source
+            dockerfile: ../Dockerfile
+        restart: unless-stopped
+        ports:
+            - "3010:4000"
