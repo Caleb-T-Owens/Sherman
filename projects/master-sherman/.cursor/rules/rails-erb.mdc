@@ -1,0 +1,10 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+
+# Rails rules
+
+- Use unstyled sematic HTML
+- Avoid writing javascript or CSS

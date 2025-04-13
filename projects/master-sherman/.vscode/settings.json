@@ -1,0 +1,4 @@
+{
+    "vscode-erb-beautify.keepBlankLines": 1,
+    "vscode-erb-beautify.useBundler": true
+}

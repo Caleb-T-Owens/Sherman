@@ -1,0 +1,10 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+
+# Rails rules
+
+- Make use of turbo for reactivity
+- Use resourceful routing
