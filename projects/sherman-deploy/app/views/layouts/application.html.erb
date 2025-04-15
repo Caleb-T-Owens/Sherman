@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= content_for(:title) || "Master Sherman" %></title>
+    <title><%= content_for(:title) || "Sherman Deploy" %></title>
 
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -24,6 +24,7 @@
   </head>
 
   <body>
+    <h1 class="title">Sherman Deploy</h1>
     <header>
       <% if authenticated? %>
         <nav>

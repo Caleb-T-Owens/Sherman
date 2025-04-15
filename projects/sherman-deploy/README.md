@@ -1,6 +1,6 @@
-# Master Sherman
+# Sherman Deploy
 
-Master Sherman is a web application for deploying and managing compose projects over multiple nodes.
+Sherman Deploy is a web application for deploying and managing compose projects over multiple nodes.
 
 ## Planned Features
 
