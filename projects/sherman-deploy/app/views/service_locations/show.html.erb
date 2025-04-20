@@ -33,6 +33,8 @@
     </div>
 
     <div>
+      <%= button_to "Upload Sources", upload_sources_source_service_location_path(@source, @service_location), method: :post %>
+      <%= button_to "Start Services", start_services_source_service_location_path(@source, @service_location), method: :post %>
       <%= link_to "Edit", edit_source_service_location_path(@source, @service_location) %> |
       <%= link_to "Back to Service Locations", source_service_locations_path(@source) %>
     </div>

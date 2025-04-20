@@ -66,6 +66,10 @@ class Git
       @git = git
     end
 
+    def directory
+      @directory
+    end
+
     def full_path
       File.join(@directory, @name)
     end

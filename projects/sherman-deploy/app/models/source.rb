@@ -15,14 +15,27 @@ class Source < ApplicationRecord
   end
 
   def fetch_source_later
-    SourceFetchJob.perform_later(self)
+    ProcessLater.perform_later(self, :fetch_source)
   end
 
   def fetch_source
-    SourceFetchJob.perform_now(self)
+    puts "Fetching source #{name}"
+
+    if git.initialized?
+      puts "Pulling source #{name}"
+      git.pull
+    else
+      puts "Cloning source #{name}"
+      git.clone
+    end
+
+    touch(:last_fetched_at)
+    puts "Source #{name} fetched at #{last_fetched_at}"
   end
 
-  private
+  def checkout_directory
+    source_directory.join("checkout")
+  end
 
   def source_directory
     sources_directory = Rails.application.config.sources_directory

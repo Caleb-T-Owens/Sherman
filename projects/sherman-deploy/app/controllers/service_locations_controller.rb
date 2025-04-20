@@ -1,6 +1,6 @@
 class ServiceLocationsController < ApplicationController
   before_action :set_source
-  before_action :set_service_location, only: [:show, :edit, :update, :destroy]
+  before_action :set_service_location, only: [:show, :edit, :update, :destroy, :upload_sources, :start_services]
   
   def index
     @service_locations = @source.service_locations
@@ -37,6 +37,16 @@ class ServiceLocationsController < ApplicationController
   def destroy
     @service_location.destroy
     redirect_to source_service_locations_path(@source), notice: "Service location was successfully destroyed."
+  end
+
+  def upload_sources
+    @service_location.upload_sources
+    redirect_to source_service_location_path(@source, @service_location), notice: "Sources uploaded successfully."
+  end
+
+  def start_services
+    @service_location.start_services
+    redirect_to source_service_location_path(@source, @service_location), notice: "Services started successfully."
   end
   
   private

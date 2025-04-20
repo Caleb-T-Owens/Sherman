@@ -17,7 +17,13 @@ Rails.application.routes.draw do
   resources :passwords, param: :token
   
   resources :sources do
-    resources :service_locations
+    resources :service_locations do
+      member do
+        post :upload_sources
+        post :start_services
+      end
+    end
+
     member do
       post :refetch
     end

@@ -1,7 +1,6 @@
 name: website3
 nodes:
     - self
-source: sherman
 resources:
     - "projects/website3:source"
 compose: compose.yaml
