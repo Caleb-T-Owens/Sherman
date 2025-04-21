@@ -1,23 +1,18 @@
 class Executor
-  def initialize(node_name:)
-    unless Rails.configuration.nodes[:nodes].key?(node_name)
-      raise "Node #{node_name} not found"
-    end
-
-    @node = Rails.configuration.nodes[:nodes][node_name]
-    @node_name = node_name
+  def initialize(node:)
+    @node = node
   end
 
   def execute(command)
-    if @node_name == :self
+    if @node.kind == :local
       `#{command}`
     else
-      `ssh #{@node[:url]} #{command}`
+      `ssh #{@node.url} #{command}`
     end
   end
 
   def execute_in_path(path, command)
-    if @node_name == :self
+    if @node.kind == :local
       `cd #{self_path(path)} && #{command}`
     else
       execute("cd #{path} && #{command}")
@@ -25,7 +20,7 @@ class Executor
   end
 
   def delete(path)
-    if @node_name == :self
+    if @node.kind == :local
       `rm -rf #{self_path(path)}`
     else
       execute("rm -rf #{path}")
@@ -33,13 +28,13 @@ class Executor
   end
 
   def copy(source, destination)
-    if @node_name == :self
+    if @node.kind == :local
       Rails.logger.info("Copying directory #{source} to #{self_path(destination)}")
       `mkdir -p #{self_path(destination).parent}`
       `cp -r #{source} #{self_path(destination)}`
     else
       execute("mkdir -p #{destination}")
-      `scp -r #{source} #{@node[:url]}:#{destination}`
+      `scp -r #{source} #{@node.url}:#{destination}`
     end
   end
 

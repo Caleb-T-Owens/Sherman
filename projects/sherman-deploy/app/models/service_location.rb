@@ -10,7 +10,6 @@ class ServiceLocation < ApplicationRecord
 
   def services
     output = []
-    nodes = Rails.configuration.nodes
 
     source.git.ls_tree(path).each do |entry|
       next unless entry.directory?
@@ -18,9 +17,8 @@ class ServiceLocation < ApplicationRecord
       next unless sherman_deploy.present? && sherman_deploy.file?
 
       parsed_config = YAML.load(sherman_deploy.read_file).deep_symbolize_keys
-      parsed_config[:nodes] = parsed_config[:nodes].map(&:to_sym)
 
-      next unless parsed_config[:nodes].all? { |node_name| nodes[:nodes].key?(node_name) }
+      next unless parsed_config[:nodes].all? { |node_name| Node.exists?(node_name) }
 
       output << Service.new(self, service_config: parsed_config, path: entry.full_path)
     end
@@ -31,7 +29,7 @@ class ServiceLocation < ApplicationRecord
   def upload_sources
     services.each do |service|
       service.nodes.each do |node|
-        exec = Executor.new(node_name: node)
+        exec = Node.find(node).executor
 
         exec.delete(service_node_path_for(service:))
 
@@ -47,7 +45,7 @@ class ServiceLocation < ApplicationRecord
   def start_services
     services.each do |service|
       service.nodes.each do |node|
-        exec = Executor.new(node_name: node)
+        exec = Node.find(node).executor
 
         exec.execute_in_path(service_node_path_for(service:), "docker compose -p #{service.name} -f #{service.compose_file_path} up -d --force-recreate --remove-orphans")
       end
@@ -57,7 +55,7 @@ class ServiceLocation < ApplicationRecord
   def service_status
     services.each do |service|
       service.nodes.each do |node|
-        exec = Executor.new(node_name: node)
+        exec = Node.find(node).executor
 
         unparsed_status = exec.execute_in_path(service_node_path_for(service:), "docker compose ps --format=json")
         parsed_status = JSON.parse(unparsed_status)

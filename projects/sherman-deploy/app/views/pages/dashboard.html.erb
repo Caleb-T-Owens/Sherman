@@ -12,4 +12,23 @@
       </ul>
     </nav>
   </section>
+
+  <section>
+    <h2>All Services</h2>
+    <ul>
+      <% ServiceLocation.all.each do |service_location| %>
+        <% service_location.services.each do |service| %>
+          <li>
+            <h3><%= service.name %></h3>
+            <p>Deployed on nodes:</p>
+            <ul>
+              <% service.nodes.each do |node| %>
+                <li><%= node.name %></li>
+              <% end %>
+            </ul>
+          </li>
+        <% end %>
+      <% end %>
+    </ul>
+  </section>
 </main> 

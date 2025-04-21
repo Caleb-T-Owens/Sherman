@@ -27,6 +27,11 @@ module MasterSherman
     config.sources_directory = Rails.root.join("sources")
     config.deployables_directory = Rails.root.join("deployables")
 
-    config.nodes = YAML.load(Rails.root.join("config/nodes.yml").read).deep_symbolize_keys
+    config.after_initialize do
+      config.nodes = YAML.load(Rails.root.join("config/nodes.yml").read).deep_symbolize_keys[:nodes].map do |name, config|
+        name = name.to_sym
+        [name, Node.new(name:, config:)]
+      end.to_h
+    end
   end
 end
