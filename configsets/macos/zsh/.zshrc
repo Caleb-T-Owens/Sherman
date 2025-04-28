@@ -25,10 +25,10 @@ then
     [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
 fi
 
-if type -a codium >&2;
-then
-    alias code="codium"
-fi
+# if type -a codium >&2;
+# then
+#     alias code="codium"
+# fi
 
 if type -a ng >&2;
 then
