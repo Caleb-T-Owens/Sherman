@@ -1,42 +1,28 @@
 <h1>Registration</h1>
-
-<%= form_with(model: @user) do |form| %>
-  <% if @user.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(@user.errors.count, "error") %> prohibited this user from being saved:</h2>
-      <ul>
-        <% @user.errors.each do |error| %>
-          <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
+<article>
+  <%= form_with(model: @user) do |form| %>
+    <%= render "shared/error_messages", model: @user %>
+    <div class="field border">
+      <%= form.label :name, style: "display: block" %>
+      <%= form.text_field :name %>
+    </div>
+    <div class="field border">
+      <%= form.label :email_address, style: "display: block" %>
+      <%= form.email_field :email_address, required: true %>
+    </div>
+    <div class="field border">
+      <%= form.label :password, style: "display: block" %>
+      <%= form.password_field :password, required: true %>
+    </div>
+    <div class="field border">
+      <%= form.label :password_confirmation, style: "display: block" %>
+      <%= form.password_field :password_confirmation, required: true %>
+    </div>
+    <div>
+      <%= form.submit "Register", class: "button" %>
     </div>
   <% end %>
-
-  <div>
-    <%= form.label :name, style: "display: block" %>
-    <%= form.text_field :name %>
-  </div>
-
-  <div>
-    <%= form.label :email_address, style: "display: block" %>
-    <%= form.email_field :email_address, required: true %>
-  </div>
-
-  <div>
-    <%= form.label :password, style: "display: block" %>
-    <%= form.password_field :password, required: true %>
-  </div>
-
-  <div>
-    <%= form.label :password_confirmation, style: "display: block" %>
-    <%= form.password_field :password_confirmation, required: true %>
-  </div>
-
-  <div>
-    <%= form.submit "Register" %>
-  </div>
-<% end %>
-
-<p>
-  Already have an account? <%= link_to "Login", new_session_path %>
-</p>
+  <p>
+    Already have an account? <%= link_to "Login", new_session_path %>
+  </p>
+</article>

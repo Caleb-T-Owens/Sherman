@@ -1,13 +1,15 @@
 <h1><%= @user.name.present? ? @user.name : "User Profile" %></h1>
 <article>
-  <p>
-    <strong>Email:</strong>
-    <%= @user.email_address %>
-  </p>
   <% if @user == Current.user %>
+    <p>
+      <strong>Email:</strong>
+      <%= @user.email_address %>
+    </p>
     <div class="flex left">
       <%= link_to "Edit Profile", edit_user_path(@user), class: "button" %>
       <%= link_to "Back", users_path, class: "button" %>
     </div>
+  <% else %>
+    <p>Nothing to show here yet!</p>
   <% end %>
 </article>
