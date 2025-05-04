@@ -6,6 +6,77 @@ A modern Rails application for conversation and discussion.
 
 The Wistful Fox is built with Ruby on Rails and follows modern web development practices. This document provides an overview of the project's architecture, authentication system, styling approach, and form handling.
 
+## Database
+
+The application uses PostgreSQL as its primary database system with a multi-database architecture for different concerns.
+
+### Database Structure
+
+The main database contains the following tables:
+
+1. **Users**
+
+    - `email_address` (string, unique)
+    - `password_digest` (string)
+    - `name` (string)
+    - Timestamps (`created_at`, `updated_at`)
+
+2. **Sessions**
+
+    - `user_id` (foreign key)
+    - `ip_address` (string)
+    - `user_agent` (string)
+    - Timestamps
+
+3. **Posts**
+
+    - `content` (string)
+    - `user_id` (foreign key)
+    - `likes_count` (integer, default: 0)
+    - Timestamps
+
+4. **Likes**
+    - `user_id` (foreign key)
+    - `post_id` (foreign key)
+    - Timestamps
+    - Unique index on `[user_id, post_id]`
+
+### Database Configuration
+
+The application uses a multi-database setup with separate databases for different concerns:
+
+1. **Primary Database**
+
+    - Main application data
+    - Configured via environment variables:
+        - `THEWISTFULFOX_DATABASE_HOST`
+        - `THEWISTFULFOX_DATABASE_USERNAME`
+        - `THEWISTFULFOX_DATABASE_PASSWORD`
+
+2. **Cache Database**
+
+    - Used for caching purposes
+    - Located at `db/cache_migrate`
+
+3. **Queue Database**
+
+    - Used for background job processing
+    - Located at `db/queue_migrate`
+
+4. **Cable Database**
+    - Used for Action Cable (WebSocket) functionality
+    - Located at `db/cable_migrate`
+
+### Database Setup
+
+To set up the database:
+
+```bash
+rails db:create db:migrate
+```
+
+For development, the database name will be `thewistfulfox_development` with separate databases for cache, queue, and cable functionality.
+
 ## Authentication System
 
 The application uses a custom authentication system built on top of Rails' session management. Key features include:
@@ -56,10 +127,6 @@ Forms follow a consistent pattern throughout the application:
     ```erb
     <%= render "shared/error_messages", model: @model %>
     ```
-
-    - Provides consistent styling and formatting for validation errors
-    - Automatically handles pluralization and model name
-    - Styled with a red background and clear visual hierarchy
 
 2. **Form Fields**
 

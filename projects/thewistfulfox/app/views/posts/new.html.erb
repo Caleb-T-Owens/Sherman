@@ -1,0 +1,14 @@
+<h1>Create a New Post</h1>
+<article>
+  <%= form_with(model: @post, class: "flow") do |form| %>
+    <%= render "shared/error_messages", model: @post %>
+    <div class="field textarea border">
+      <%= form.text_area :content, 
+          required: true,
+          maxlength: 1000,
+          rows: 4,
+          placeholder: "Share your thoughts..." %>
+    </div>
+    <%= form.submit "Create Post", class: "button primary round" %>
+  <% end %>
+</article>

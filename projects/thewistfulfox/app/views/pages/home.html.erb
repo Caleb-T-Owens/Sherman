@@ -2,3 +2,4 @@
   <h1>The Wistful Fox</h1>
   <p>A conversation board</p>
 </section>
+<%= render "shared/thread", thread: Post.all.order(created_at: :desc) %>

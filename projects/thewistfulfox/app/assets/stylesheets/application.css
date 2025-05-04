@@ -58,6 +58,14 @@
     &.space-around {
         justify-content: space-around;
     }
+
+    > .grow {
+        flex-grow: 1;
+    }
+
+    &.gap {
+        gap: 1rem;
+    }
 }
 
 .flow > * {
@@ -66,4 +74,8 @@
 
 .flow > *:last-child {
     margin-bottom: 0;
+}
+
+.article-list {
+    list-style: none;
 }

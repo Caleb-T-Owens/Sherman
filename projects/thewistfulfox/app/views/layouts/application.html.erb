@@ -38,6 +38,10 @@
         <i>home</i>
         <span>Home</span>
       <% end %>
+      <%= link_to new_post_path do %>
+        <i>add</i>
+        <span>New Post</span>
+      <% end %>
     </nav>
     <main class="responsive">
       <%= yield %>
