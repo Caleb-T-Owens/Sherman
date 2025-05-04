@@ -1,47 +1,38 @@
 <h1>Edit Profile</h1>
-
-<%= form_with(model: @user) do |form| %>
-  <% if @user.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(@user.errors.count, "error") %> prohibited this user from being saved:</h2>
-      <ul>
-        <% @user.errors.each do |error| %>
-          <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
+<article>
+  <%= form_with(model: @user) do |form| %>
+    <% if @user.errors.any? %>
+      <div style="color: red">
+        <h2><%= pluralize(@user.errors.count, "error") %> prohibited this user from being saved:</h2>
+        <ul>
+          <% @user.errors.each do |error| %>
+            <li><%= error.full_message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+    <div class="field border">
+      <%= form.label :name, style: "display: block" %>
+      <%= form.text_field :name %>
     </div>
+    <div class="field border">
+      <%= form.label :email_address, style: "display: block" %>
+      <%= form.email_field :email_address, required: true %>
+    </div>
+    <div class="field border">
+      <%= form.label :password, "New password (leave blank if you don't want to change it)", style: "display: block" %>
+      <%= form.password_field :password %>
+    </div>
+    <div class="field border">
+      <%= form.label :password_confirmation, style: "display: block" %>
+      <%= form.password_field :password_confirmation %>
+    </div>
+    <%= form.submit "Update Profile", class: "button" %>
   <% end %>
-
-  <div>
-    <%= form.label :name, style: "display: block" %>
-    <%= form.text_field :name %>
+</article>
+<section>
+  <div class="flex left">
+    <%= button_to "Delete Account", @user, method: :delete, data: { confirm: "Are you sure? This cannot be undone." }, class: "fill" %>
+    <%= link_to "Back", @user, class: "button" %>
   </div>
-
-  <div>
-    <%= form.label :email_address, style: "display: block" %>
-    <%= form.email_field :email_address, required: true %>
-  </div>
-
-  <div>
-    <%= form.label :password, "New password (leave blank if you don't want to change it)", style: "display: block" %>
-    <%= form.password_field :password %>
-  </div>
-
-  <div>
-    <%= form.label :password_confirmation, style: "display: block" %>
-    <%= form.password_field :password_confirmation %>
-  </div>
-
-  <div>
-    <%= form.submit "Update Profile" %>
-  </div>
-<% end %>
-
-<p>
-  <%= link_to "View Profile", @user %> |
-  <%= link_to "Back", users_path %>
-</p>
-
-<p>
-  <%= button_to "Delete Account", @user, method: :delete, data: { confirm: "Are you sure? This cannot be undone." }, style: "color: red;" %>
-</p>
+</section>

@@ -8,3 +8,62 @@
  *
  * Consider organizing styles into separate files for maintainability.
  */
+
+.flex {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+
+    &.left {
+        justify-content: flex-start;
+    }
+
+    &.right {
+        justify-content: flex-end;
+    }
+
+    &.up {
+        align-items: flex-start;
+    }
+
+    &.down {
+        align-items: flex-end;
+    }
+
+    &.column {
+        flex-direction: column;
+
+        &.left {
+            align-items: flex-start;
+        }
+
+        &.right {
+            align-items: flex-end;
+        }
+
+        &.up {
+            justify-content: flex-start;
+        }
+
+        &.down {
+            justify-content: flex-end;
+        }
+    }
+
+    &.space-between {
+        justify-content: space-between;
+    }
+
+    &.space-around {
+        justify-content: space-around;
+    }
+}
+
+.flow > * {
+    margin-bottom: 1rem;
+}
+
+.flow > *:last-child {
+    margin-bottom: 0;
+}
