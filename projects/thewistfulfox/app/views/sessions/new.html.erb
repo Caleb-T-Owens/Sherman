@@ -1,0 +1,20 @@
+<%= tag.div(flash[:alert], style: "color:red") if flash[:alert] %>
+<%= tag.div(flash[:notice], style: "color:green") if flash[:notice] %>
+<article>
+  <h2>Sign in</h2>
+  <%= form_with url: session_path do |form| %>
+    <div class="field border">
+      <%= form.label :email_address, "Email address" %>
+      <%= form.email_field :email_address, required: true, autofocus: true, autocomplete: "username", value: params[:email_address] %><br>
+    </div>
+    <div class="field border">
+      <%= form.label :password, "Password" %>
+      <%= form.password_field :password, required: true, autocomplete: "current-password", maxlength: 72 %><br>
+    </div>
+    <div class="flex space-between">
+      <%= form.submit "Sign in", class: "button" %>
+      <%= link_to "Forgot password?", new_password_path, class: "link" %>
+    </div>
+  <% end %>
+</article>
+<br>

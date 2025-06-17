@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= content_for(:title) || "Thewistfulfox" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= yield :head %>
+    <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
+    <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
+    <link rel="icon" href="/icon.png" type="image/png">
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/icon.png">
+    <link href="https://cdn.jsdelivr.net/npm/beercss@3.10.8/dist/cdn/beer.min.css" rel="stylesheet" />
+    <script type="module" src="https://cdn.jsdelivr.net/npm/beercss@3.10.8/dist/cdn/beer.min.js"></script>
+    <script type="module" src="https://cdn.jsdelivr.net/npm/material-dynamic-colors@1.1.2/dist/cdn/material-dynamic-colors.min.js"></script>
+    <%# Includes all stylesheet files in app/assets/stylesheets %>
+    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module" %>
+  </head>
+  <body>
+    <nav class="top right-align">
+      <% if authenticated? %>
+        <%= link_to "My Profile", user_path(Current.user), class: "button" %>
+        <%= button_to "Logout", session_path, method: :delete, class: "button" %>
+      <% else %>
+        <%= link_to "Login", new_session_path, class: "button" %>
+        <%= link_to "Register", new_user_path, class: "button" %>
+      <% end %>
+    </nav>
+    <nav class="m l left">
+      <header>
+        <img class="circle" src="/favicon.png">
+      </header>
+      <%= link_to root_path do %>
+        <i>home</i>
+        <span>Home</span>
+      <% end %>
+    </nav>
+    <main class="responsive">
+      <%= yield %>
+    </main>
+  </body>
+</html>
