@@ -23,7 +23,14 @@
             <p>
               <%= post.content %>
             </p>
-            <%= button_to "Like #{post.likes_count}", "#", method: :post, class: "fill small" %>
+            <% if authenticated? %>
+              <%= button_to (post.liked_by?(Current.user) ? "Unlike #{post.likes_count}" : "Like #{post.likes_count}"),
+                        (post.liked_by?(Current.user) ? unlike_post_path(post) : like_post_path(post)),
+                        class: "fill small",
+                        id: dom_id(post, :like_button) %>
+            <% else %>
+              <button class="fill small" disabled>Like <%= post.likes_count %></button>
+            <% end %>
           </article>
         </li>
       <% end %>

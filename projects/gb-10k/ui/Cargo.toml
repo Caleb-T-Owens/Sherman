@@ -1,0 +1,20 @@
+[package]
+name = "ui"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+libbut2.workspace = true
+
+gix.workspace = true
+anyhow.workspace = true
+
+eframe = { version = "0.31", features = ["default"] }
+
+# For image support:
+egui_extras = { version = "0.31", features = ["default", "image"] }
+
+env_logger = { version = "0.10", default-features = false, features = [
+    "auto-color",
+    "humantime",
+] }

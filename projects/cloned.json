@@ -42,5 +42,13 @@
   "livestore": {
     "url": "git@github.com:livestorejs/livestore.git",
     "profiles": ["work", "home"]
+  },
+  "svelte": {
+    "url": "git@github.com:sveltejs/svelte.git",
+    "profiles": ["work", "home"]
+  },
+  "git2": {
+    "url": "git@github.com:rust-lang/git2-rs.git",
+    "profiles": ["work", "home"]
   }
 }

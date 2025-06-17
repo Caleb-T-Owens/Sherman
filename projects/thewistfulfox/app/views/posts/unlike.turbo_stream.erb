@@ -1,0 +1,3 @@
+<%= turbo_stream.replace dom_id(@post, :like_button) do %>
+  <%= button_to "Like #{@post.likes_count}", like_post_path(@post), class: "fill small" %>
+<% end %> 

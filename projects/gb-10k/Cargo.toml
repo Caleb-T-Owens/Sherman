@@ -1,0 +1,10 @@
+[workspace]
+resolver = "2"
+members = ["libbut2", "ui"]
+
+[workspace.dependencies]
+libbut2 = { path = "libbut2" }
+
+anyhow = "1.0"
+gix = { version = "0.72.1", features = ["tree-editor", "merge"] }
+tempdir = "0.3.7"
