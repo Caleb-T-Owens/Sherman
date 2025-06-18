@@ -1,5 +1,5 @@
 use std::{
-    cell::{Ref, RefCell},
+    cell::{Cell, Ref, RefCell},
     sync::{
         Arc, Mutex,
         mpsc::{Receiver, Sender, TryRecvError, channel},
@@ -7,7 +7,12 @@ use std::{
     time::Duration,
 };
 
+use anyhow::Result;
 use eframe::egui::{self, Context, Ui};
+use libbut2::{
+    But,
+    log::{Line, Log},
+};
 // use libbut2::But;
 
 fn main() -> eframe::Result {
@@ -25,7 +30,17 @@ fn main() -> eframe::Result {
             egui_extras::install_image_loaders(&cc.egui_ctx);
 
             // let ctx = cc.egui_ctx.clone();
-            let app = App::initalize(State { counter: 66 }, cc.egui_ctx.clone());
+            let app = App::initalize(
+                State {
+                    counter: 66,
+                    commit_list: CommitList {
+                        logger: None,
+                        logs: vec![],
+                    },
+                    but: But::open("/Users/calebowens/Sherman/projects/gitbutler-client").unwrap(),
+                },
+                cc.egui_ctx.clone(),
+            );
             Ok(Box::new(app))
         }),
     )
@@ -40,6 +55,35 @@ fn main() -> eframe::Result {
 #[derive(Clone)]
 struct State {
     counter: u32,
+    commit_list: CommitList,
+    but: But,
+}
+
+#[derive(Clone)]
+struct CommitList {
+    logger: Option<Arc<Mutex<Log>>>,
+    logs: Vec<Line>,
+}
+
+fn log_more(state: &mut State) {
+    let logger = if let Some(logger) = state.commit_list.logger.clone() {
+        logger
+    } else {
+        let logger = state
+            .but
+            .log(state.but.head().unwrap().id().unwrap().detach());
+        let logger = Arc::new(Mutex::new(logger));
+        state.commit_list.logger = Some(logger.clone());
+        logger
+    };
+
+    for _ in 0..10 {
+        let value = logger.lock().unwrap().next();
+        let Some(Ok(value)) = value else {
+            break;
+        };
+        state.commit_list.logs.push(value);
+    }
 }
 
 type Action = fn(&mut State) -> ();
@@ -127,9 +171,13 @@ impl Main {
         let state = app.current_state.get();
         println!("Frame");
         ui.heading("Hello world!");
-        if ui.button("Click me!").clicked() {
-            app.perform_later(|state| my_action(state, "it's clicked".into()));
+
+        if ui.button("Log more").clicked() {
+            app.perform_later(log_more);
         }
-        ui.heading(format!("Counter: {}", state.counter));
+
+        for log in &state.commit_list.logs {
+            ui.label(log.to_string());
+        }
     }
 }

@@ -1,5 +1,3 @@
-mod log;
-
 use std::{
     ops::{Deref, DerefMut},
     path::PathBuf,
@@ -7,6 +5,9 @@ use std::{
 
 use anyhow::Result;
 
+pub mod log;
+
+#[derive(Clone)]
 pub struct But {
     repo: gix::Repository,
 }

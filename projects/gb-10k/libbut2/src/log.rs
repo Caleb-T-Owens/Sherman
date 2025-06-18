@@ -1,4 +1,4 @@
-use std::collections::HashSet;
+use std::{collections::HashSet, sync::Arc};
 
 use crate::But;
 
@@ -23,26 +23,51 @@ pub struct Line {
     entries: Vec<Entry>,
 }
 
-pub struct Log<'a> {
-    current: Result<Line>,
-    repo: &'a gix::Repository,
+impl ToString for Line {
+    fn to_string(&self) -> String {
+        let mut out = String::new();
+        for entry in &self.entries {
+            match entry {
+                Entry::Commit { id, .. } => {
+                    out.push_str(&format!(
+                        " {} ",
+                        id.to_string().chars().take(3).collect::<String>()
+                    ));
+                }
+                Entry::Wire { .. } => out.push_str("  *  "),
+            }
+        }
+        out
+    }
 }
 
-impl<'a> Iterator for Log<'a> {
+#[derive(Clone)]
+pub struct Log {
+    first: Option<Line>,
+    current: Arc<Result<Line>>,
+    repo: gix::Repository,
+}
+
+impl Iterator for Log {
     type Item = Result<Line>;
 
     fn next(&mut self) -> Option<Self::Item> {
-        let Ok(current) = &self.current else {
+        if let Some(first) = self.first.take() {
+            self.current = Arc::new(Ok(first.clone()));
+            return Some(Ok(first));
+        }
+
+        let Ok(current) = &*self.current else {
             return None;
         };
-        let next = next_line(self.repo, current).transpose();
+        let next = next_line(&self.repo, current).transpose();
 
         if let Some(next) = next {
             if let Ok(next) = next {
-                self.current = Ok(next.clone());
+                self.current = Arc::new(Ok(next.clone()));
                 Some(Ok(next))
             } else {
-                self.current = next;
+                self.current = Arc::new(next);
                 None
             }
         } else {
@@ -52,7 +77,7 @@ impl<'a> Iterator for Log<'a> {
 }
 
 impl But {
-    fn log(&self, start: gix::ObjectId) -> impl Iterator<Item = Result<Line>> {
+    pub fn log(&self, start: gix::ObjectId) -> Log {
         let initial = Line {
             entries: vec![Entry::Commit {
                 id: start,
@@ -60,10 +85,11 @@ impl But {
             }],
         };
 
-        vec![Ok(initial.clone())].into_iter().chain(Log {
-            current: Ok(initial),
-            repo: self,
-        })
+        Log {
+            first: Some(initial.clone()),
+            current: Arc::new(Ok(initial)),
+            repo: self.repo.clone(),
+        }
     }
 }
 
@@ -235,7 +261,7 @@ mod tests {
             let c = write_commit(&but, 2, &[a.detach()])?;
             let d = write_commit(&but, 3, &[c.detach(), b.detach()])?;
 
-            let lines = but.log(c.detach()).collect::<Result<Vec<_>>>()?;
+            let lines = but.log(d.detach()).collect::<Result<Vec<_>>>()?;
 
             assert_eq!(
                 test_inspect(&lines),
