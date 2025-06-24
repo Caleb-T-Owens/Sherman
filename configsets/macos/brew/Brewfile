@@ -70,3 +70,12 @@ cask "companion"
 
 # Ansible
 brew "pipx"
+
+# Gitbutler
+brew "mysql@8.0"
+brew "vips"
+brew "imagemagick"
+brew "protobuf" # Client itself
+
+# Music
+cask "spotify"
