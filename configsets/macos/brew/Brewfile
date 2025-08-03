@@ -1,5 +1,4 @@
 tap "aws/tap"
-tap "homebrew/bundle"
 tap "music-assistant/tap"
 # tap "sdkman/tap"
 
@@ -66,7 +65,7 @@ cask "MonitorControl"
 cask "gnucash"
 
 # Music companion
-cask "companion"
+cask "music-assistant/tap/companion"
 
 # Ansible
 brew "pipx"
