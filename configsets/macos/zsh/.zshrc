@@ -19,12 +19,6 @@ then
     eval "$(rbenv init - zsh)"
 fi
 
-if [ -e $HOME/.sdkman ]
-then
-    export SDKMAN_DIR="$HOME/.sdkman"
-    [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
-fi
-
 # if type -a codium >&2;
 # then
 #     alias code="codium"
@@ -53,3 +47,10 @@ function pp {
 
 # Disable some of the worst TUI bullshit I've ever seen
 export COMPOSE_MENU=0
+
+
+if [ -e /opt/homebrew/opt/sdkman-cli/libexec ]
+then
+    export SDKMAN_DIR="/opt/homebrew/opt/sdkman-cli/libexec"
+    [[ -s "/opt/homebrew/opt/sdkman-cli/libexec/bin/sdkman-init.sh" ]] && source "/opt/homebrew/opt/sdkman-cli/libexec/bin/sdkman-init.sh"
+fi
