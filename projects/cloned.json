@@ -11,6 +11,10 @@
     "url": "git@github.com:learningproject/empower-learn-monorepo.git",
     "profiles": ["work", "home", "electron"]
   },
+  "empower-learn-backend": {
+    "url": "git@github.com:learningproject/empower-learn.git",
+    "profiles": ["work", "home"]
+  },
   "gitbutler-client": {
     "url": "git@github.com:gitbutlerapp/gitbutler.git",
     "profiles": ["work", "home"]
@@ -49,6 +53,22 @@
   },
   "git2": {
     "url": "git@github.com:rust-lang/git2-rs.git",
+    "profiles": ["work", "home"]
+  },
+  "ai-experiment": {
+    "url": "git@github.com:Caleb-T-Owens/ai-experiment.git",
+    "profiles": ["work", "home"]
+  },
+  "worktree-ai": {
+    "url": "git@github.com:Caleb-T-Owens/worktree-ai.git",
+    "profiles": ["work", "home"]
+  },
+  "alan-empower-learn": {
+    "url": "git@github.com:learningproject/ManimCode.git",
+    "profiles": ["work", "home"]
+  },
+  "sync-discord": {
+    "url": "git@github.com:Caleb-T-Owens/sync-discord.git",
     "profiles": ["work", "home"]
   }
 }

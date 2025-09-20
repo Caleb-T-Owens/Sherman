@@ -5,3 +5,4 @@ font-feature = -liga
 font-feature = -dlig
 theme = GhBlind
 window-padding-balance = true
+keybind = shift+enter=text:\n

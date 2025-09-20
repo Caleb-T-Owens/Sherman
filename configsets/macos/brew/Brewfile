@@ -11,6 +11,7 @@ brew "nvm"
 # Version control
 brew "gh"
 brew "mercurial"
+brew "git"
 
 # Compression Tools
 brew "zlib"
@@ -46,6 +47,7 @@ cask "wezterm"
 cask "emacs"
 cask "vscodium"
 cask "eloston-chromium"
+cask "google-chrome"
 cask "tableplus"
 
 # IRC
