@@ -11,5 +11,13 @@ module ActiveSupport
     fixtures :all
 
     # Add more helper methods to be used by all tests here...
+
+    # Helper method to create a user for testing
+    def create_test_user(email: "test@example.com", password: "password123")
+      User.create!(
+        email_address: email,
+        password: password
+      )
+    end
   end
 end
