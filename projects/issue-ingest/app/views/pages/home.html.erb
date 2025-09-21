@@ -1,0 +1,17 @@
+<header class="text-center mb-3">
+  <h1>Issue Ingest</h1>
+  <p class="text-muted">Welcome to your issue tracking system</p>
+</header>
+
+<div class="card">
+  <% if authenticated? %>
+    <h2>Welcome back!</h2>
+    <p>You're logged in as <strong><%= Current.user.email_address %></strong></p>
+    <%= link_to "Sign Out", session_path, data: { turbo_method: :delete }, class: "button button-danger" %>
+  <% else %>
+    <h2>Get Started</h2>
+    <p>Please sign in or create an account to continue.</p>
+    <%= link_to "Sign In", new_session_path, class: "button" %>
+    <%= link_to "Reset Password", new_password_path, class: "button button-secondary" %>
+  <% end %>
+</div>
