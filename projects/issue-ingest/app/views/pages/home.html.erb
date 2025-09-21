@@ -11,7 +11,8 @@
   <% else %>
     <h2>Get Started</h2>
     <p>Please sign in or create an account to continue.</p>
-    <%= link_to "Sign In", new_session_path, class: "button" %>
+    <%= link_to "Sign Up", new_registration_path, class: "button" %>
+    <%= link_to "Sign In", new_session_path, class: "button button-secondary" %>
     <%= link_to "Reset Password", new_password_path, class: "button button-secondary" %>
   <% end %>
 </div>

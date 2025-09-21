@@ -1,0 +1,46 @@
+<header class="text-center mb-2">
+  <h1>Sign Up</h1>
+  <p class="text-muted">Create your account to get started</p>
+</header>
+
+<div class="card">
+  <%= form_with model: @user, url: registration_path do |form| %>
+    <% if @user.errors.any? %>
+      <div class="flash alert">
+        <h3>Please fix the following errors:</h3>
+        <ul>
+          <% @user.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div>
+      <%= form.label :email_address %>
+      <%= form.email_field :email_address, autofocus: true, autocomplete: "email", required: true %>
+    </div>
+
+    <div>
+      <%= form.label :password %>
+      <%= form.password_field :password, autocomplete: "new-password", required: true %>
+      <small class="text-muted">Minimum 6 characters</small>
+    </div>
+
+    <div>
+      <%= form.label :password_confirmation %>
+      <%= form.password_field :password_confirmation, autocomplete: "new-password", required: true %>
+    </div>
+
+    <div class="mt-2">
+      <%= form.submit "Sign Up", class: "button" %>
+    </div>
+  <% end %>
+</div>
+
+<div class="text-center mt-2">
+  <p>
+    Already have an account?
+    <%= link_to "Sign In", new_session_path %>
+  </p>
+</div>
