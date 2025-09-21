@@ -1,0 +1,46 @@
+<header class="mb-2">
+  <h1>Edit Repository</h1>
+  <p class="text-muted">Update repository settings for <%= @repository.full_name %></p>
+</header>
+
+<div class="card">
+  <%= form_with model: @repository do |form| %>
+    <% if @repository.errors.any? %>
+      <div class="flash alert">
+        <h3>Please fix the following errors:</h3>
+        <ul>
+          <% @repository.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div>
+      <%= form.label :owner, "Repository Owner" %>
+      <%= form.text_field :owner, placeholder: "e.g., octocat", required: true %>
+      <small class="text-muted">The GitHub username or organization that owns the repository</small>
+    </div>
+
+    <div>
+      <%= form.label :repo, "Repository Name" %>
+      <%= form.text_field :repo, placeholder: "e.g., hello-world", required: true %>
+      <small class="text-muted">The name of the repository</small>
+    </div>
+
+    <div>
+      <%= form.label :gh_token, "GitHub Personal Access Token" %>
+      <%= form.password_field :gh_token, placeholder: "Leave blank to keep current token" %>
+      <small class="text-muted">
+        Your GitHub token for API access. Leave blank to keep the existing token.
+        <a href="https://github.com/settings/tokens" target="_blank">Generate a token</a>
+        with repo scope.
+      </small>
+    </div>
+
+    <div class="mt-2">
+      <%= form.submit "Update Repository", class: "button" %>
+      <%= link_to "Cancel", @repository, class: "button button-secondary" %>
+    </div>
+  <% end %>
+</div>

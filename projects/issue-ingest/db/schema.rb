@@ -10,7 +10,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_09_21_170601) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_21_222133) do
+  create_table "repositories", force: :cascade do |t|
+    t.text "gh_token"
+    t.string "owner"
+    t.string "repo"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "sessions", force: :cascade do |t|
     t.integer "user_id", null: false
     t.string "ip_address"
@@ -18,6 +26,15 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_21_170601) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_sessions_on_user_id"
+  end
+
+  create_table "user_repositories", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "repository_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["repository_id"], name: "index_user_repositories_on_repository_id"
+    t.index ["user_id"], name: "index_user_repositories_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -29,4 +46,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_21_170601) do
   end
 
   add_foreign_key "sessions", "users"
+  add_foreign_key "user_repositories", "repositories"
+  add_foreign_key "user_repositories", "users"
 end

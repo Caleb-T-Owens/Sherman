@@ -7,6 +7,7 @@
   <% if authenticated? %>
     <h2>Welcome back!</h2>
     <p>You're logged in as <strong><%= Current.user.email_address %></strong></p>
+    <%= link_to "My Repositories", repositories_path, class: "button" %>
     <%= link_to "Sign Out", session_path, data: { turbo_method: :delete }, class: "button button-danger" %>
   <% else %>
     <h2>Get Started</h2>

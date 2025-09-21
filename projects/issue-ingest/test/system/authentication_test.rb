@@ -20,7 +20,11 @@ class AuthenticationTest < ApplicationSystemTestCase
 
     # Sign out
     click_link "Sign Out"
-    assert_selector "h1", text: "Sign In"
+    assert_selector "h1", text: "Issue Ingest"
+    assert_text "Please sign in or create an account to continue"
+
+    # Navigate to sign in page
+    click_link "Sign In"
 
     # Sign back in with wrong password
     fill_in "Email address", with: email
@@ -36,7 +40,8 @@ class AuthenticationTest < ApplicationSystemTestCase
 
     # Sign out again
     click_link "Sign Out"
-    assert_selector "h1", text: "Sign In"
+    assert_selector "h1", text: "Issue Ingest"
+    assert_text "Please sign in or create an account to continue"
   end
 
   test "registration validation errors" do
