@@ -1,0 +1,31 @@
+<header class="mb-3">
+  <h1>My Repositories</h1>
+  <%= link_to "Add Repository", new_repository_path, class: "button" %>
+</header>
+
+<% if @repositories.any? %>
+  <div class="repositories-list">
+    <% @repositories.each do |repository| %>
+      <div class="card">
+        <h3><%= link_to repository.full_name, repository %></h3>
+        <p class="text-muted">
+          Owner: <%= repository.owner %><br>
+          Repository: <%= repository.repo %>
+        </p>
+        <div class="mt-1">
+          <%= link_to "View", repository, class: "button button-secondary" %>
+          <%= link_to "Edit", edit_repository_path(repository), class: "button button-secondary" %>
+          <%= link_to "Delete", repository,
+              data: { turbo_method: :delete,
+                      turbo_confirm: "Are you sure?" },
+              class: "button button-danger" %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+<% else %>
+  <div class="card">
+    <p>You haven't added any repositories yet.</p>
+    <p><%= link_to "Add your first repository", new_repository_path, class: "button" %></p>
+  </div>
+<% end %>

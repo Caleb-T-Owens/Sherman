@@ -1,0 +1,59 @@
+<header class="mb-2">
+  <h1><%= @repository.full_name %></h1>
+  <p class="text-muted">Repository Details</p>
+</header>
+
+<div class="card">
+  <h3>Repository Information</h3>
+  <p>
+    <strong>Owner:</strong> <%= @repository.owner %><br>
+    <strong>Repository:</strong> <%= @repository.repo %><br>
+    <strong>GitHub URL:</strong>
+    <a href="https://github.com/<%= @repository.full_name %>" target="_blank">
+      https://github.com/<%= @repository.full_name %>
+    </a><br>
+    <strong>Token Status:</strong>
+    <% if @repository.gh_token.present? %>
+      <span style="color: green;">✓ Configured</span>
+    <% else %>
+      <span style="color: red;">✗ Not configured</span>
+    <% end %>
+  </p>
+
+  <div class="mt-2">
+    <%= link_to "Edit", edit_repository_path(@repository), class: "button" %>
+    <%= link_to "Back to Repositories", repositories_path, class: "button button-secondary" %>
+    <%= link_to "Delete", @repository,
+        data: { turbo_method: :delete,
+                turbo_confirm: "Are you sure you want to delete this repository?" },
+        class: "button button-danger" %>
+  </div>
+</div>
+
+<div class="card mt-2">
+  <h3>Issues</h3>
+  <p class="text-muted">
+    <% if @repository.issues.any? %>
+      <%= @repository.issues.opened.count %> open, <%= @repository.issues.closed.count %> closed
+    <% else %>
+      No issues synced yet
+    <% end %>
+  </p>
+  <div>
+    <%= link_to "View Issues", repository_issues_path(@repository), class: "button" %>
+    <%= button_to "Sync Issues from GitHub", sync_repository_issues_path(@repository),
+                  method: :post,
+                  class: "button button-secondary",
+                  form: { style: "display: inline;" } %>
+  </div>
+</div>
+
+<div class="card mt-2">
+  <h3>Associated Users</h3>
+  <p class="text-muted">Users with access to this repository</p>
+  <ul>
+    <% @repository.users.each do |user| %>
+      <li><%= user.email_address %></li>
+    <% end %>
+  </ul>
+</div>

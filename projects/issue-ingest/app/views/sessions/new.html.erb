@@ -1,0 +1,44 @@
+<header class="text-center mb-2">
+  <h1>Sign In</h1>
+  <p class="text-muted">Welcome back! Please sign in to continue.</p>
+</header>
+
+<% if flash[:alert] %>
+  <div class="flash alert">
+    <%= flash[:alert] %>
+  </div>
+<% end %>
+
+<% if flash[:notice] %>
+  <div class="flash notice">
+    <%= flash[:notice] %>
+  </div>
+<% end %>
+
+<div class="card">
+  <%= form_with url: session_path do |form| %>
+    <div>
+      <%= form.label :email_address %>
+      <%= form.text_field :email_address, autofocus: true, autocomplete: "username", value: params[:email_address] %>
+    </div>
+
+    <div>
+      <%= form.label :password %>
+      <%= form.password_field :password, autocomplete: "current-password", maxlength: 72 %>
+    </div>
+
+    <div class="mt-2">
+      <%= form.submit "Sign In", class: "button" %>
+    </div>
+  <% end %>
+</div>
+
+<div class="text-center mt-2">
+  <p>
+    <%= link_to "Forgot password?", new_password_path %>
+  </p>
+  <p>
+    Don't have an account?
+    <%= link_to "Sign Up", new_registration_path %>
+  </p>
+</div>

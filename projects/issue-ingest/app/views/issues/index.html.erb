@@ -1,0 +1,79 @@
+<header class="mb-3">
+  <h1><%= @repository.full_name %> - Issues</h1>
+  <div>
+    <%= link_to "Back to Repository", repository_path(@repository), class: "button button-secondary" %>
+    <%= button_to "Sync Issues from GitHub", sync_repository_issues_path(@repository),
+                  method: :post,
+                  class: "button",
+                  form: { style: "display: inline;" } %>
+  </div>
+</header>
+
+<div class="issues-stats mb-2">
+  <span class="badge"><%= @opened_issues.count %> Open</span>
+  <span class="badge"><%= @closed_issues.count %> Closed</span>
+  <span class="badge"><%= @issues.count %> Total</span>
+</div>
+
+<% if @issues.any? %>
+  <div class="issues-list">
+    <h2>Open Issues</h2>
+    <% if @opened_issues.any? %>
+      <% @opened_issues.each do |issue| %>
+        <div class="card mb-2">
+          <div class="issue-header">
+            <strong>#<%= issue.number %> - <%= issue.title %></strong>
+            <span class="badge badge-success">Open</span>
+          </div>
+          <% if issue.description.present? %>
+            <div class="issue-description text-muted">
+              <%= truncate(issue.description, length: 200) %>
+            </div>
+          <% end %>
+          <% if issue.tags.any? %>
+            <div class="issue-tags mt-1">
+              <% issue.tags.each do |tag| %>
+                <span class="tag"><%= tag %></span>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+    <% else %>
+      <p class="text-muted">No open issues</p>
+    <% end %>
+
+    <h2 class="mt-3">Closed Issues</h2>
+    <% if @closed_issues.any? %>
+      <% @closed_issues.each do |issue| %>
+        <div class="card mb-2">
+          <div class="issue-header">
+            <strong>#<%= issue.number %> - <%= issue.title %></strong>
+            <span class="badge badge-secondary">Closed</span>
+          </div>
+          <% if issue.description.present? %>
+            <div class="issue-description text-muted">
+              <%= truncate(issue.description, length: 200) %>
+            </div>
+          <% end %>
+          <% if issue.tags.any? %>
+            <div class="issue-tags mt-1">
+              <% issue.tags.each do |tag| %>
+                <span class="tag"><%= tag %></span>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+    <% else %>
+      <p class="text-muted">No closed issues</p>
+    <% end %>
+  </div>
+<% else %>
+  <div class="card">
+    <p>No issues synced yet for this repository.</p>
+    <p><%= button_to "Sync Issues from GitHub", sync_repository_issues_path(@repository),
+                      method: :post,
+                      class: "button" %></p>
+  </div>
+<% end %>

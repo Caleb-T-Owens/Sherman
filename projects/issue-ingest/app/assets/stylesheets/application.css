@@ -1,0 +1,166 @@
+/*
+ * This is a manifest file that'll be compiled into application.css.
+ *
+ * With Propshaft, assets are served efficiently without preprocessing steps. You can still include
+ * application-wide styles in this file, but keep in mind that CSS precedence will follow the standard
+ * cascading order, meaning styles declared later in the document or manifest will override earlier ones,
+ * depending on specificity.
+ *
+ * Consider organizing styles into separate files for maintainability.
+ */
+
+/* Better Motherfucking Website inspired styles - clean, minimal, readable */
+
+body {
+  margin: 40px auto;
+  max-width: 650px;
+  line-height: 1.6;
+  font-size: 18px;
+  color: #444;
+  padding: 0 10px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+h1, h2, h3 {
+  line-height: 1.2;
+}
+
+h1, h2, h3, h4, h5 {
+  margin-top: 0;
+}
+
+h1 {
+  font-size: 2em;
+  margin-top: 0;
+}
+
+h2 {
+  font-size: 1.5em;
+}
+
+a {
+  color: #07c;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+p {
+  margin: 1em 0;
+}
+
+ul {
+  padding-left: 20px;
+}
+
+li {
+  margin: 0.5em 0;
+}
+
+/* Forms */
+input[type="email"],
+input[type="password"],
+input[type="text"],
+textarea {
+  width: 100%;
+  padding: 8px;
+  margin: 8px 0;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+button,
+input[type="submit"],
+.button {
+  background: #07c;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: inline-block;
+  margin-right: 10px;
+  margin-bottom: 10px;
+}
+
+button:hover,
+input[type="submit"]:hover,
+.button:hover {
+  background: #005a9e;
+  text-decoration: none;
+}
+
+.button-secondary {
+  background: #6c757d;
+}
+
+.button-secondary:hover {
+  background: #5a6268;
+}
+
+.button-danger {
+  background: #dc3545;
+}
+
+.button-danger:hover {
+  background: #c82333;
+}
+
+/* Utility classes */
+.text-center {
+  text-align: center;
+}
+
+.text-muted {
+  color: #6c757d;
+}
+
+.mt-1 { margin-top: 1em; }
+.mt-2 { margin-top: 2em; }
+.mt-3 { margin-top: 3em; }
+.mb-1 { margin-bottom: 1em; }
+.mb-2 { margin-bottom: 2em; }
+.mb-3 { margin-bottom: 3em; }
+
+/* Flash messages */
+.flash {
+  padding: 15px;
+  margin-bottom: 20px;
+  border-radius: 4px;
+}
+
+.flash.notice {
+  background: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.flash.alert {
+  background: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+/* Simple card style */
+.card {
+  background: #f8f9fa;
+  padding: 1.5em;
+  border-radius: 8px;
+  margin: 2em 0;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  body {
+    font-size: 16px;
+  }
+
+  h1 {
+    font-size: 1.8em;
+  }
+}
