@@ -3,6 +3,7 @@ class Repository < ApplicationRecord
 
   has_many :user_repositories, dependent: :destroy
   has_many :users, through: :user_repositories
+  has_many :issues, dependent: :destroy
 
   validates :owner, presence: true
   validates :repo, presence: true

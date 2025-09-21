@@ -31,6 +31,24 @@
 </div>
 
 <div class="card mt-2">
+  <h3>Issues</h3>
+  <p class="text-muted">
+    <% if @repository.issues.any? %>
+      <%= @repository.issues.opened.count %> open, <%= @repository.issues.closed.count %> closed
+    <% else %>
+      No issues synced yet
+    <% end %>
+  </p>
+  <div>
+    <%= link_to "View Issues", repository_issues_path(@repository), class: "button" %>
+    <%= button_to "Sync Issues from GitHub", sync_repository_issues_path(@repository),
+                  method: :post,
+                  class: "button button-secondary",
+                  form: { style: "display: inline;" } %>
+  </div>
+</div>
+
+<div class="card mt-2">
   <h3>Associated Users</h3>
   <p class="text-muted">Users with access to this repository</p>
   <ul>

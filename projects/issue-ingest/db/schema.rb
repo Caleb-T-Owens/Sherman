@@ -10,7 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_09_21_222133) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_21_224845) do
+  create_table "issues", force: :cascade do |t|
+    t.integer "repository_id", null: false
+    t.integer "number", null: false
+    t.string "title", null: false
+    t.text "description"
+    t.integer "status", default: 0, null: false
+    t.json "tags", default: []
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["repository_id", "number"], name: "index_issues_on_repository_id_and_number", unique: true
+    t.index ["repository_id"], name: "index_issues_on_repository_id"
+  end
+
   create_table "repositories", force: :cascade do |t|
     t.text "gh_token"
     t.string "owner"
@@ -45,6 +58,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_21_222133) do
     t.index ["email_address"], name: "index_users_on_email_address", unique: true
   end
 
+  add_foreign_key "issues", "repositories"
   add_foreign_key "sessions", "users"
   add_foreign_key "user_repositories", "repositories"
   add_foreign_key "user_repositories", "users"
