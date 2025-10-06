@@ -1,0 +1,11 @@
+[package]
+name = "gix-confusion"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+gix = { version = "0.73.0", git = "https://github.com/GitoxideLabs/gitoxide", branch = "main", default-features = false, features = [
+    "tree-editor",
+    "merge",
+] }
+tempdir = "0.3"
