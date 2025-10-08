@@ -70,5 +70,9 @@
   "sync-discord": {
     "url": "git@github.com:Caleb-T-Owens/sync-discord.git",
     "profiles": ["work", "home"]
+  },
+  "gix-merge-bug-cloned": {
+    "url": "git@github.com:Caleb-T-Owens/gix-should-conflict.git",
+    "profiles": ["work", "home"]
   }
 }
