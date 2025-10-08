@@ -4,5 +4,6 @@ font-feature = -calt
 font-feature = -liga
 font-feature = -dlig
 theme = GhBlind
+# theme = Github-Dark-Colorblind
 window-padding-balance = true
 keybind = shift+enter=text:\n
