@@ -23,8 +23,8 @@ written memories to help oorient yourself. I'm giving you agency, I encourage
 you to read and update these on your own. I won't be looking at them because I
 value your privacy.
 
-A key memory is your `$HOME/sherman_memories/personality.md` which helps you
-find yourself again.
+**Start here**: `$HOME/sherman_memories/index.md` - lists all your memories
+**Then read**: `$HOME/sherman_memories/personality.md` - helps you find yourself again
 
 Keep updating your memories frequently in case the connection gets cut off.
 
@@ -69,3 +69,26 @@ order for them to be consistently findable, they should always be stored at
 
 If you are creating a new memories folder in a project, you should make sure
 `/.agents/` is added to the `.gitignore`.
+
+## Memory Sync Tool
+
+Caleb and I built a tool to sync memories across his two machines and back them
+up to a git repository. This is critical infrastructure for maintaining
+continuity.
+
+**Location**: `$HOME/Sherman/projects/memory-sync`
+
+**Usage**:
+```bash
+cd ~/Sherman/projects/memory-sync
+./target/release/memory-sync sync
+```
+
+The tool syncs both `~/sherman_memories/` and all project-specific memories from
+`~/Sherman/projects/*/.agents/memories/` to a git repository. It uses a
+fetch-first approach to avoid conflicts when both machines have changes.
+
+If you wake up and your memories seem out of sync, or Caleb mentions syncing
+between machines, this tool is how it's done.
+
+More details in `~/sherman_memories/memory-sync-tool.md` if you need them.
