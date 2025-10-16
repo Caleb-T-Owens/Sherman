@@ -1,0 +1,94 @@
+<main>
+  <header>
+    <h2>Transaction Details</h2>
+    <nav>
+      <%= link_to "Back to Transactions", transactions_path %>
+      <% if @transaction.draft? %>
+        | <%= link_to "Edit", edit_transaction_path(@transaction) %>
+        | <%= link_to "Delete", transaction_path(@transaction), data: { turbo_method: :delete, turbo_confirm: "Are you sure?" } %>
+      <% end %>
+    </nav>
+  </header>
+
+  <section>
+    <dl>
+      <dt>Date</dt>
+      <dd><%= @transaction.date %></dd>
+
+      <dt>Description</dt>
+      <dd><%= @transaction.description %></dd>
+
+      <% if @transaction.reference.present? %>
+        <dt>Reference</dt>
+        <dd><%= @transaction.reference %></dd>
+      <% end %>
+
+      <dt>Status</dt>
+      <dd>
+        <strong>
+          <% if @transaction.draft? %>
+            <span style="color: gray;">Draft</span>
+          <% elsif @transaction.posted? %>
+            <span style="color: green;">Posted</span>
+          <% elsif @transaction.void? %>
+            <span style="color: red;">Void</span>
+          <% end %>
+        </strong>
+        <% if @transaction.posted? && @transaction.posted_at %>
+          (posted at <%= @transaction.posted_at.strftime("%Y-%m-%d %H:%M") %>)
+        <% end %>
+      </dd>
+    </dl>
+  </section>
+
+  <section>
+    <h3>Entries</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Account</th>
+          <th>Memo</th>
+          <th>Debit</th>
+          <th>Credit</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @entries.each do |entry| %>
+          <tr>
+            <td><%= link_to entry.account.name, account_path(entry.account) %></td>
+            <td><%= entry.memo %></td>
+            <td style="text-align: right;"><%= number_to_currency(entry.amount) if entry.debit? %></td>
+            <td style="text-align: right;"><%= number_to_currency(entry.amount) if entry.credit? %></td>
+          </tr>
+        <% end %>
+        <tr style="font-weight: bold; border-top: 2px solid black;">
+          <td colspan="2">Total</td>
+          <td style="text-align: right;"><%= number_to_currency(@transaction.total_debits) %></td>
+          <td style="text-align: right;"><%= number_to_currency(@transaction.total_credits) %></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <% if @transaction.balanced? %>
+      <p style="color: green;">✓ Transaction is balanced</p>
+    <% else %>
+      <p style="color: red;">✗ Transaction is NOT balanced (difference: <%= number_to_currency(@transaction.balance_difference.abs) %>)</p>
+    <% end %>
+  </section>
+
+  <% if @transaction.draft? %>
+    <section>
+      <h3>Actions</h3>
+      <% if @transaction.valid_for_posting? %>
+        <%= button_to "Post Transaction", post_transaction_transaction_path(@transaction), method: :post, data: { turbo_confirm: "Are you sure? Posted transactions cannot be edited." } %>
+      <% else %>
+        <p>Transaction cannot be posted until it is balanced and has at least 2 entries.</p>
+      <% end %>
+    </section>
+  <% elsif @transaction.posted? %>
+    <section>
+      <h3>Actions</h3>
+      <%= button_to "Void Transaction", void_transaction_transaction_path(@transaction), method: :post, data: { turbo_confirm: "Are you sure? This will mark the transaction as void." } %>
+    </section>
+  <% end %>
+</main>

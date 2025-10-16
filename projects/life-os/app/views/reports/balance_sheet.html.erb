@@ -1,0 +1,76 @@
+<main>
+  <header>
+    <h2>Balance Sheet</h2>
+    <p>As of <%= @as_of_date %></p>
+  </header>
+
+  <%= form_with url: reports_balance_sheet_path, method: :get do |form| %>
+    <p>
+      <%= form.label :as_of_date, "As of Date" %>
+      <%= form.date_field :as_of_date, value: @as_of_date %>
+      <%= form.submit "Update" %>
+    </p>
+  <% end %>
+
+  <section>
+    <h3>Assets</h3>
+    <table>
+      <% @assets.each do |account, balance| %>
+        <tr>
+          <td><%= link_to account.name, account_path(account) %></td>
+          <td style="text-align: right;"><%= number_to_currency(balance) %></td>
+        </tr>
+      <% end %>
+      <tr style="font-weight: bold; border-top: 1px solid black;">
+        <td>Total Assets</td>
+        <td style="text-align: right;"><%= number_to_currency(@total_assets) %></td>
+      </tr>
+    </table>
+  </section>
+
+  <section>
+    <h3>Liabilities</h3>
+    <table>
+      <% @liabilities.each do |account, balance| %>
+        <tr>
+          <td><%= link_to account.name, account_path(account) %></td>
+          <td style="text-align: right;"><%= number_to_currency(balance) %></td>
+        </tr>
+      <% end %>
+      <tr style="font-weight: bold; border-top: 1px solid black;">
+        <td>Total Liabilities</td>
+        <td style="text-align: right;"><%= number_to_currency(@total_liabilities) %></td>
+      </tr>
+    </table>
+  </section>
+
+  <section>
+    <h3>Equity</h3>
+    <table>
+      <% @equity.each do |account, balance| %>
+        <tr>
+          <td><%= link_to account.name, account_path(account) %></td>
+          <td style="text-align: right;"><%= number_to_currency(balance) %></td>
+        </tr>
+      <% end %>
+      <tr style="font-weight: bold; border-top: 1px solid black;">
+        <td>Total Equity</td>
+        <td style="text-align: right;"><%= number_to_currency(@total_equity) %></td>
+      </tr>
+    </table>
+  </section>
+
+  <section style="margin-top: 2em; padding-top: 1em; border-top: 2px solid black;">
+    <table>
+      <tr style="font-weight: bold;">
+        <td>Total Liabilities + Equity</td>
+        <td style="text-align: right;"><%= number_to_currency(@total_liabilities + @total_equity) %></td>
+      </tr>
+    </table>
+    <% if (@total_assets - (@total_liabilities + @total_equity)).abs < 0.01 %>
+      <p style="color: green;">✓ Balance sheet balances</p>
+    <% else %>
+      <p style="color: red;">✗ Balance sheet does NOT balance!</p>
+    <% end %>
+  </section>
+</main>

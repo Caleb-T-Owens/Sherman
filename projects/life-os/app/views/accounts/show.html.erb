@@ -1,0 +1,75 @@
+<main>
+  <header>
+    <h2><%= @account.name %></h2>
+    <nav>
+      <%= link_to "Back to Accounts", accounts_path %> |
+      <%= link_to "Edit Account", edit_account_path(@account) %>
+    </nav>
+  </header>
+
+  <section>
+    <dl>
+      <dt>Code</dt>
+      <dd><%= @account.code %></dd>
+
+      <dt>Type</dt>
+      <dd><%= @account.account_type.titleize %></dd>
+
+      <% if @account.parent %>
+        <dt>Parent Account</dt>
+        <dd><%= link_to @account.parent.name, account_path(@account.parent) %></dd>
+      <% end %>
+
+      <% if @account.description.present? %>
+        <dt>Description</dt>
+        <dd><%= @account.description %></dd>
+      <% end %>
+
+      <dt>Current Balance</dt>
+      <dd><strong><%= number_to_currency(@account.normal_balance) %></strong></dd>
+
+      <dt>Status</dt>
+      <dd><%= @account.active? ? "Active" : "Inactive" %></dd>
+    </dl>
+  </section>
+
+  <section>
+    <h3>Recent Transactions</h3>
+    <% if @entries.empty? %>
+      <p>No transactions yet.</p>
+    <% else %>
+      <table>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Description</th>
+            <th>Debit</th>
+            <th>Credit</th>
+            <th>Balance</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% running_balance = 0 %>
+          <% @entries.reverse_each do |entry| %>
+            <% running_balance += entry.signed_amount %>
+            <tr>
+              <td><%= entry.date %></td>
+              <td>
+                <%= link_to entry.description, transaction_path(entry.accounting_transaction) %>
+                <% if entry.memo.present? %>
+                  <br><small><%= entry.memo %></small>
+                <% end %>
+              </td>
+              <td style="text-align: right;"><%= number_to_currency(entry.amount) if entry.debit? %></td>
+              <td style="text-align: right;"><%= number_to_currency(entry.amount) if entry.credit? %></td>
+              <td style="text-align: right;"><%= number_to_currency(running_balance) %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+      <% if @entries.count == 100 %>
+        <p><small>Showing most recent 100 transactions.</small></p>
+      <% end %>
+    <% end %>
+  </section>
+</main>

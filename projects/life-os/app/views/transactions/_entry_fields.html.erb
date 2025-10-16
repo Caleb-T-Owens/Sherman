@@ -1,0 +1,34 @@
+<div style="border: 1px solid #ccc; padding: 1em; margin: 1em 0;" data-transaction-form-target="entry">
+  <%= form.hidden_field :_destroy %>
+
+  <p>
+    <%= form.label :account_id, "Account" %>
+    <%= form.select :account_id,
+        options_for_select(accounts.map { |a| ["#{a.code} - #{a.name}", a.id] }, form.object.account_id),
+        { prompt: "Select account" },
+        { required: true, data: { action: "change->transaction-form#updateTotals" } } %>
+  </p>
+
+  <p>
+    <%= form.label :entry_type, "Type" %>
+    <%= form.select :entry_type,
+        options_for_select([["Debit", "debit"], ["Credit", "credit"]], form.object.entry_type),
+        { prompt: "Select type" },
+        { required: true, data: { action: "change->transaction-form#updateTotals" } } %>
+  </p>
+
+  <p>
+    <%= form.label :amount %>
+    <%= form.number_field :amount, step: 0.01, min: 0.01, required: true,
+        data: { action: "input->transaction-form#updateTotals" } %>
+  </p>
+
+  <p>
+    <%= form.label :memo, "Memo (optional)" %>
+    <%= form.text_field :memo %>
+  </p>
+
+  <p>
+    <button type="button" data-action="click->transaction-form#removeEntry">Remove Entry</button>
+  </p>
+</div>

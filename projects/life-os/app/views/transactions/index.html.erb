@@ -1,0 +1,56 @@
+<main>
+  <header>
+    <h2>Transactions</h2>
+    <%= link_to "New Transaction", new_transaction_path %>
+  </header>
+
+  <% if @transactions.empty? %>
+    <p>No transactions yet. <%= link_to "Create your first transaction", new_transaction_path %>.</p>
+  <% else %>
+    <table>
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Description</th>
+          <th>Status</th>
+          <th>Balance</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @transactions.each do |transaction| %>
+          <tr>
+            <td><%= transaction.date %></td>
+            <td><%= link_to transaction.description, transaction_path(transaction) %></td>
+            <td>
+              <% if transaction.draft? %>
+                <span style="color: gray;">Draft</span>
+              <% elsif transaction.posted? %>
+                <span style="color: green;">Posted</span>
+              <% elsif transaction.void? %>
+                <span style="color: red;">Void</span>
+              <% end %>
+            </td>
+            <td style="text-align: right;">
+              <% if transaction.balanced? %>
+                <%= number_to_currency(transaction.total_debits) %>
+              <% else %>
+                <span style="color: red;">Unbalanced!</span>
+              <% end %>
+            </td>
+            <td>
+              <%= link_to "View", transaction_path(transaction) %>
+              <% if transaction.draft? %>
+                | <%= link_to "Edit", edit_transaction_path(transaction) %>
+                | <%= link_to "Delete", transaction_path(transaction), data: { turbo_method: :delete, turbo_confirm: "Are you sure?" } %>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+    <% if @transactions.count == 100 %>
+      <p><small>Showing most recent 100 transactions.</small></p>
+    <% end %>
+  <% end %>
+</main>
