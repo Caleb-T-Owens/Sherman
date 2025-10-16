@@ -1,0 +1,18 @@
+<main>
+  <h1>Dashboard</h1>
+
+  <section>
+    <h2>Welcome back, <%= Current.user.email_address %></h2>
+    <p>You're all set up and ready to start using Life OS.</p>
+  </section>
+
+  <section>
+    <h2>Account Information</h2>
+    <dl>
+      <dt>Email</dt>
+      <dd><%= Current.user.email_address %></dd>
+      <dt>Member Since</dt>
+      <dd><%= Current.user.created_at.strftime("%B %d, %Y") %></dd>
+    </dl>
+  </section>
+</main>
