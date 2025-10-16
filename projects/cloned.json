@@ -23,6 +23,10 @@
     "url": "git@github.com:gitbutlerapp/web.git",
     "profiles": ["work", "home", "anti"]
   },
+  "gitbutler-blog": {
+    "url": "git@github.com:gitbutlerapp/blogerator.git",
+    "profiles": ["work", "home"]
+  },
   "gitbutler-docs": {
     "url": "git@github.com:gitbutlerapp/gitbutler-docs.git",
     "profiles": ["work", "home"]
