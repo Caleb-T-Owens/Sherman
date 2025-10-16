@@ -1,0 +1,65 @@
+<%= form_with model: @account do |form| %>
+  <% if @account.errors.any? %>
+    <section style="color: red; border: 1px solid red; padding: 1em; margin: 1em 0;">
+      <h3><%= pluralize(@account.errors.count, "error") %> prohibited this account from being saved:</h3>
+      <ul>
+        <% @account.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </section>
+  <% end %>
+
+  <p>
+    <%= form.label :code %>
+    <%= form.text_field :code, required: true, disabled: @account.persisted? && @account.has_posted_entries? %>
+    <% if @account.persisted? && @account.has_posted_entries? %>
+      <small>Cannot change code for accounts with posted transactions</small>
+    <% end %>
+  </p>
+
+  <p>
+    <%= form.label :name %>
+    <%= form.text_field :name, required: true %>
+  </p>
+
+  <p>
+    <%= form.label :account_type %>
+    <%= form.select :account_type,
+        options_for_select(Account::TYPES.keys.map { |t| [t.titleize, t] }, @account.account_type),
+        { prompt: "Select account type" },
+        { required: true, disabled: @account.persisted? && @account.has_posted_entries? } %>
+    <% if @account.persisted? && @account.has_posted_entries? %>
+      <small>Cannot change type for accounts with posted transactions</small>
+    <% end %>
+  </p>
+
+  <p>
+    <%= form.label :parent_id, "Parent Account (optional)" %>
+    <%= form.select :parent_id,
+        options_for_select(@parent_accounts.map { |a| ["#{a.code} - #{a.name}", a.id] }, @account.parent_id),
+        { prompt: "None (root account)" },
+        { disabled: @account.persisted? && @account.has_posted_entries? } %>
+    <% if @account.persisted? && @account.has_posted_entries? %>
+      <small>Cannot change parent for accounts with posted transactions</small>
+    <% end %>
+  </p>
+
+  <p>
+    <%= form.label :description %>
+    <%= form.text_area :description, rows: 3 %>
+  </p>
+
+  <% if @account.persisted? %>
+    <p>
+      <%= form.label :active %>
+      <%= form.check_box :active %>
+      <small>Uncheck to deactivate this account (it will still appear in reports for historical data)</small>
+    </p>
+  <% end %>
+
+  <p>
+    <%= form.submit(@account.persisted? ? "Update Account" : "Create Account") %>
+    <%= link_to "Cancel", @account.persisted? ? account_path(@account) : accounts_path %>
+  </p>
+<% end %>

@@ -6,6 +6,20 @@ Rails.application.routes.draw do
   root "pages#home"
   get "dashboard", to: "pages#dashboard"
 
+  # Accounting
+  resources :accounts, only: [ :index, :show, :new, :create, :edit, :update ]
+  resources :transactions do
+    member do
+      post :post_transaction
+      post :void_transaction
+    end
+  end
+  namespace :reports do
+    get :trial_balance
+    get :balance_sheet
+    get :income_statement
+  end
+
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.

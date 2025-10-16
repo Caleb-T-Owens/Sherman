@@ -1,0 +1,48 @@
+<main>
+  <header>
+    <h2>Chart of Accounts</h2>
+    <%= link_to "New Account", new_account_path %>
+  </header>
+
+  <% if @accounts.empty? %>
+    <p>No accounts yet. <%= link_to "Create your first account", new_account_path %>.</p>
+  <% else %>
+    <% Account::TYPES.keys.each do |account_type| %>
+      <% accounts_of_type = @accounts_by_type[account_type] || [] %>
+      <% next if accounts_of_type.empty? %>
+
+      <section>
+        <h3><%= account_type.titleize %></h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Code</th>
+              <th>Name</th>
+              <th>Balance</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% accounts_of_type.each do |account| %>
+              <tr>
+                <td><%= account.code %></td>
+                <td>
+                  <%= link_to account.name, account_path(account) %>
+                  <% if account.parent %>
+                    <small>(under <%= account.parent.name %>)</small>
+                  <% end %>
+                </td>
+                <td style="text-align: right;">
+                  <%= number_to_currency(account.normal_balance) %>
+                </td>
+                <td>
+                  <%= link_to "Edit", edit_account_path(account) %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </section>
+    <% end %>
+  <% end %>
+</main>

@@ -1,0 +1,69 @@
+<%= form_with model: @transaction, data: { controller: "transaction-form" } do |form| %>
+  <% if @transaction.errors.any? %>
+    <section style="color: red; border: 1px solid red; padding: 1em; margin: 1em 0;">
+      <h3><%= pluralize(@transaction.errors.count, "error") %> prohibited this transaction from being saved:</h3>
+      <ul>
+        <% @transaction.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </section>
+  <% end %>
+
+  <p>
+    <%= form.label :date %>
+    <%= form.date_field :date, required: true %>
+  </p>
+
+  <p>
+    <%= form.label :description %>
+    <%= form.text_field :description, required: true, size: 50 %>
+  </p>
+
+  <p>
+    <%= form.label :reference, "Reference (optional)" %>
+    <%= form.text_field :reference, placeholder: "Check number, invoice, etc." %>
+  </p>
+
+  <fieldset>
+    <legend>Entries</legend>
+
+    <div data-transaction-form-target="entries">
+      <%= form.fields_for :entries do |entry_form| %>
+        <%= render "entry_fields", form: entry_form, accounts: @accounts %>
+      <% end %>
+    </div>
+
+    <p>
+      <button type="button" data-action="click->transaction-form#addEntry">Add Entry</button>
+    </p>
+
+    <div data-transaction-form-target="totals">
+      <table>
+        <tr>
+          <td>Total Debits:</td>
+          <td style="text-align: right;" data-transaction-form-target="totalDebits">$0.00</td>
+        </tr>
+        <tr>
+          <td>Total Credits:</td>
+          <td style="text-align: right;" data-transaction-form-target="totalCredits">$0.00</td>
+        </tr>
+        <tr style="font-weight: bold;">
+          <td>Difference:</td>
+          <td style="text-align: right;" data-transaction-form-target="difference">$0.00</td>
+        </tr>
+      </table>
+    </div>
+  </fieldset>
+
+  <p>
+    <%= form.submit(@transaction.persisted? ? "Update Transaction" : "Create Transaction") %>
+    <%= link_to "Cancel", @transaction.persisted? ? transaction_path(@transaction) : transactions_path %>
+  </p>
+
+  <template data-transaction-form-target="entryTemplate">
+    <%= form.fields_for :entries, Entry.new, child_index: "NEW_RECORD" do |entry_form| %>
+      <%= render "entry_fields", form: entry_form, accounts: @accounts %>
+    <% end %>
+  </template>
+<% end %>

@@ -1,0 +1,61 @@
+<main>
+  <header>
+    <h2>Trial Balance</h2>
+    <p>As of <%= @as_of_date %></p>
+  </header>
+
+  <%= form_with url: reports_trial_balance_path, method: :get do |form| %>
+    <p>
+      <%= form.label :as_of_date, "As of Date" %>
+      <%= form.date_field :as_of_date, value: @as_of_date %>
+      <%= form.submit "Update" %>
+    </p>
+  <% end %>
+
+  <% if @accounts_with_balances.empty? %>
+    <p>No account balances to display.</p>
+  <% else %>
+    <table>
+      <thead>
+        <tr>
+          <th>Code</th>
+          <th>Account</th>
+          <th style="text-align: right;">Debit</th>
+          <th style="text-align: right;">Credit</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% current_type = nil %>
+        <% @accounts_with_balances.each do |data| %>
+          <% if current_type != data[:account].account_type %>
+            <% current_type = data[:account].account_type %>
+            <tr style="font-weight: bold; background-color: #f0f0f0;">
+              <td colspan="4"><%= current_type.titleize %></td>
+            </tr>
+          <% end %>
+          <tr>
+            <td><%= data[:account].code %></td>
+            <td><%= link_to data[:account].name, account_path(data[:account]) %></td>
+            <td style="text-align: right;">
+              <%= number_to_currency(data[:debit_balance]) if data[:debit_balance] > 0 %>
+            </td>
+            <td style="text-align: right;">
+              <%= number_to_currency(data[:credit_balance]) if data[:credit_balance] > 0 %>
+            </td>
+          </tr>
+        <% end %>
+        <tr style="font-weight: bold; border-top: 2px solid black;">
+          <td colspan="2">Total</td>
+          <td style="text-align: right;"><%= number_to_currency(@total_debits) %></td>
+          <td style="text-align: right;"><%= number_to_currency(@total_credits) %></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <% if (@total_debits - @total_credits).abs < 0.01 %>
+      <p style="color: green;">✓ Trial balance is balanced</p>
+    <% else %>
+      <p style="color: red;">✗ Trial balance is NOT balanced (difference: <%= number_to_currency((@total_debits - @total_credits).abs) %>)</p>
+    <% end %>
+  <% end %>
+</main>

@@ -1,0 +1,59 @@
+<main>
+  <header>
+    <h2>Income Statement</h2>
+    <p><%= @start_date %> to <%= @end_date %></p>
+  </header>
+
+  <%= form_with url: reports_income_statement_path, method: :get do |form| %>
+    <p>
+      <%= form.label :start_date, "From" %>
+      <%= form.date_field :start_date, value: @start_date %>
+      <%= form.label :end_date, "To" %>
+      <%= form.date_field :end_date, value: @end_date %>
+      <%= form.submit "Update" %>
+    </p>
+  <% end %>
+
+  <section>
+    <h3>Income</h3>
+    <table>
+      <% @income_accounts.each do |account, balance| %>
+        <tr>
+          <td><%= link_to account.name, account_path(account) %></td>
+          <td style="text-align: right;"><%= number_to_currency(balance) %></td>
+        </tr>
+      <% end %>
+      <tr style="font-weight: bold; border-top: 1px solid black;">
+        <td>Total Income</td>
+        <td style="text-align: right;"><%= number_to_currency(@total_income) %></td>
+      </tr>
+    </table>
+  </section>
+
+  <section>
+    <h3>Expenses</h3>
+    <table>
+      <% @expense_accounts.each do |account, balance| %>
+        <tr>
+          <td><%= link_to account.name, account_path(account) %></td>
+          <td style="text-align: right;"><%= number_to_currency(balance) %></td>
+        </tr>
+      <% end %>
+      <tr style="font-weight: bold; border-top: 1px solid black;">
+        <td>Total Expenses</td>
+        <td style="text-align: right;"><%= number_to_currency(@total_expenses) %></td>
+      </tr>
+    </table>
+  </section>
+
+  <section style="margin-top: 2em; padding-top: 1em; border-top: 2px solid black;">
+    <table>
+      <tr style="font-weight: bold; font-size: 1.2em;">
+        <td>Net Income</td>
+        <td style="text-align: right; <%= @net_income >= 0 ? 'color: green;' : 'color: red;' %>">
+          <%= number_to_currency(@net_income) %>
+        </td>
+      </tr>
+    </table>
+  </section>
+</main>
