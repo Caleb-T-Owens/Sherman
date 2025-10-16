@@ -1,4 +1,4 @@
-CONFIGS = shared/git shared/neovim shared/rustup debian/bash debian/dmenu debian/dwm debian/xorg debian/xinit-config debian/st shared/ripgrep shared/patc
+CONFIGS = shared/git shared/neovim shared/rustup debian/bash debian/dmenu debian/dwm debian/xorg debian/xinit-config debian/st shared/ripgrep shared/patc shared/claude-code
 ACTIONS = shared/action-clone-projects shared/action-sync-buildables debian/action-aptfile-sync
 
 .PHONY: all
