@@ -1,0 +1,46 @@
+# Transactions fixture for testing
+
+# Draft transaction (editable)
+draft_transaction:
+  date: <%= Date.today %>
+  description: "Draft transaction for testing"
+  status: "draft"
+  posted_at: null
+  reference: "DRAFT001"
+  user: one
+
+# Posted transaction (immutable)
+posted_salary:
+  date: <%= 1.week.ago.to_date %>
+  description: "Salary payment"
+  status: "posted"
+  posted_at: <%= 1.week.ago %>
+  reference: "SAL001"
+  user: one
+
+# Another posted transaction
+posted_groceries:
+  date: <%= 3.days.ago.to_date %>
+  description: "Grocery shopping"
+  status: "posted"
+  posted_at: <%= 3.days.ago %>
+  reference: "GRO001"
+  user: one
+
+# Void transaction (no longer affects balances)
+void_transaction:
+  date: <%= 1.month.ago.to_date %>
+  description: "Voided transaction"
+  status: "void"
+  posted_at: <%= 1.month.ago %>
+  reference: "VOID001"
+  user: one
+
+# Transaction for user two (testing isolation)
+user_two_transaction:
+  date: <%= Date.today %>
+  description: "User two's transaction"
+  status: "posted"
+  posted_at: <%= Date.today %>
+  reference: "U2001"
+  user: two

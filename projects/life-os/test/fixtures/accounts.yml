@@ -1,0 +1,96 @@
+# Accounts fixture for testing
+# Following the double-entry bookkeeping structure
+
+# Asset accounts
+cash:
+  code: "1000"
+  name: "Cash"
+  account_type: "asset"
+  parent_id: null
+  description: "Cash on hand and in bank"
+  active: true
+
+checking:
+  code: "1100"
+  name: "Checking Account"
+  account_type: "asset"
+  parent_id: null
+  description: "Bank checking account"
+  active: true
+
+savings:
+  code: "1200"
+  name: "Savings Account"
+  account_type: "asset"
+  parent_id: null
+  description: "Bank savings account"
+  active: true
+
+# Liability accounts
+credit_card:
+  code: "2000"
+  name: "Credit Card"
+  account_type: "liability"
+  parent_id: null
+  description: "Credit card liability"
+  active: true
+
+# Equity accounts
+opening_balance:
+  code: "3000"
+  name: "Opening Balance Equity"
+  account_type: "equity"
+  parent_id: null
+  description: "Opening balance equity account"
+  active: true
+
+# Income accounts
+salary:
+  code: "4000"
+  name: "Salary Income"
+  account_type: "income"
+  parent_id: null
+  description: "Salary and wages"
+  active: true
+
+interest_income:
+  code: "4100"
+  name: "Interest Income"
+  account_type: "income"
+  parent_id: null
+  description: "Interest earned"
+  active: true
+
+# Expense accounts
+groceries:
+  code: "5000"
+  name: "Groceries"
+  account_type: "expense"
+  parent_id: null
+  description: "Grocery expenses"
+  active: true
+
+rent:
+  code: "5100"
+  name: "Rent"
+  account_type: "expense"
+  parent_id: null
+  description: "Rent expense"
+  active: true
+
+utilities:
+  code: "5200"
+  name: "Utilities"
+  account_type: "expense"
+  parent_id: null
+  description: "Utility expenses"
+  active: true
+
+# Inactive account for testing
+inactive_account:
+  code: "9999"
+  name: "Inactive Account"
+  account_type: "expense"
+  parent_id: null
+  description: "Deactivated account for testing"
+  active: false

@@ -1,0 +1,76 @@
+# Entries fixture for testing
+
+# Draft transaction entries (2 entries, balanced)
+draft_debit:
+  transaction: draft_transaction
+  account: checking
+  amount: 100.00
+  entry_type: "debit"
+  memo: "Draft debit entry"
+
+draft_credit:
+  transaction: draft_transaction
+  account: cash
+  amount: 100.00
+  entry_type: "credit"
+  memo: "Draft credit entry"
+
+# Posted salary transaction entries (salary income -> checking)
+salary_checking_debit:
+  transaction: posted_salary
+  account: checking
+  amount: 3000.00
+  entry_type: "debit"
+  memo: "Salary deposit"
+
+salary_income_credit:
+  transaction: posted_salary
+  account: salary
+  amount: 3000.00
+  entry_type: "credit"
+  memo: "Salary earned"
+
+# Posted groceries transaction entries (checking -> groceries expense)
+groceries_expense_debit:
+  transaction: posted_groceries
+  account: groceries
+  amount: 150.50
+  entry_type: "debit"
+  memo: "Grocery expense"
+
+groceries_checking_credit:
+  transaction: posted_groceries
+  account: checking
+  amount: 150.50
+  entry_type: "credit"
+  memo: "Paid from checking"
+
+# Void transaction entries (won't affect balances)
+void_debit:
+  transaction: void_transaction
+  account: cash
+  amount: 500.00
+  entry_type: "debit"
+  memo: "Void debit"
+
+void_credit:
+  transaction: void_transaction
+  account: credit_card
+  amount: 500.00
+  entry_type: "credit"
+  memo: "Void credit"
+
+# User two transaction entries (testing isolation)
+user_two_debit:
+  transaction: user_two_transaction
+  account: checking
+  amount: 200.00
+  entry_type: "debit"
+  memo: "User two debit"
+
+user_two_credit:
+  transaction: user_two_transaction
+  account: cash
+  amount: 200.00
+  entry_type: "credit"
+  memo: "User two credit"
