@@ -7,6 +7,27 @@ use chrono::Local;
 use crate::config::Config;
 use crate::git_ops;
 
+fn is_directory_empty(path: &Path) -> Result<bool> {
+    if !path.exists() {
+        return Ok(true);
+    }
+
+    let entries = fs::read_dir(path)
+        .context("Failed to read directory")?
+        .filter_map(|e| e.ok())
+        .filter(|e| {
+            // Ignore sync-config.json and hidden files
+            if let Some(name) = e.file_name().to_str() {
+                name != "sync-config.json" && !name.starts_with('.')
+            } else {
+                true
+            }
+        })
+        .count();
+
+    Ok(entries == 0)
+}
+
 pub fn sync(config: &Config) -> Result<()> {
     // Full bidirectional sync with fetch-first approach
     let repo = git_ops::ensure_workspace(config)?;
@@ -16,7 +37,10 @@ pub fn sync(config: &Config) -> Result<()> {
     println!("Pulling remote changes...");
     let has_remote_changes = git_ops::pull(&repo)?;
 
-    if has_remote_changes {
+    // Check if local memories directory is empty (first run scenario)
+    let local_is_empty = is_directory_empty(&config.main_memories_path)?;
+
+    if has_remote_changes || local_is_empty {
         println!("Copying remote changes to local folders...");
         copy_workspace_to_local(config, workspace)?;
     }

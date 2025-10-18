@@ -1,0 +1,7 @@
+{
+  "remote_repo": "git@github.com:Caleb-T-Owens/thx-fr-th-mmrs.git",
+  "workspace_path": "~/.memory-sync-workspace",
+  "main_memories_path": "~/sherman_memories",
+  "sherman_root": "~/Sherman",
+  "auto_commit_message": "Memory sync from {hostname} at {timestamp}"
+}
