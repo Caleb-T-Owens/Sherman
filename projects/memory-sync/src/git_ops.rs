@@ -193,15 +193,26 @@ pub fn pull(repo: &Repository) -> Result<bool> {
 }
 
 fn fast_forward(repo: &Repository, target_commit: &git2::Commit) -> Result<()> {
-    let mut reference = repo.head()
-        .context("Failed to get HEAD")?;
+    // Get the current branch name
+    let branch_name = get_default_branch(repo)?;
 
-    reference.set_target(target_commit.id(), "Fast-forward")
-        .context("Failed to set HEAD target")?;
+    // Update the branch reference to point to the new commit
+    let refname = format!("refs/heads/{}", branch_name);
+    repo.reference(&refname, target_commit.id(), true, "Fast-forward")
+        .context("Failed to update branch reference")?;
 
-    repo.checkout_head(Some(git2::build::CheckoutBuilder::default().force()))
-        .context("Failed to checkout HEAD")?;
+    // Set HEAD to point to the branch (in case it was detached)
+    repo.set_head(&refname)
+        .context("Failed to set HEAD")?;
 
+    // Checkout the new HEAD, updating the working directory
+    repo.checkout_head(Some(
+        git2::build::CheckoutBuilder::default()
+            .force()
+            .remove_untracked(false)
+    )).context("Failed to checkout HEAD")?;
+
+    println!("Fast-forward successful");
     Ok(())
 }
 
