@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "bun run --watch index.ts",
     "build": "bun build index.ts --compile --outfile tiny-butler",
-    "check": "prettier --check ."
+    "check": "prettier --check .",
+    "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
     "@types/bun": "latest",
