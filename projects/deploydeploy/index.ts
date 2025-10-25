@@ -32,10 +32,12 @@ program
 program.parse();
 
 async function getServicesPath(options: any): Promise<string> {
-    if (!('services' in options)) throw new Error("Services path not provided");
-    if (typeof options.services !== "string") throw new Error("Services path must be a string");
-    const p = options.services.trim();
-    if ((await $`test -d ${p}`.quiet()).exitCode !== 0) throw new Error("Services path not found");
-    const pwd = (await $`pwd`.text()).trim();
-    return await path.resolve(pwd, options.services)
+  if (!("services" in options)) throw new Error("Services path not provided");
+  if (typeof options.services !== "string")
+    throw new Error("Services path must be a string");
+  const p = options.services.trim();
+  if ((await $`test -d ${p}`.quiet()).exitCode !== 0)
+    throw new Error("Services path not found");
+  const pwd = (await $`pwd`.text()).trim();
+  return await path.resolve(pwd, options.services);
 }

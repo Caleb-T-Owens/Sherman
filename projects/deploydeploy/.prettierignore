@@ -1,0 +1,15 @@
+# Dependencies
+node_modules
+
+# Build outputs
+dist
+*.tsbuildinfo
+deploydeploy
+
+# Logs
+*.log
+
+# Lock files
+bun.lock
+package-lock.json
+yarn.lock
