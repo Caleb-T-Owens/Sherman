@@ -1,8 +1,0 @@
-name: website3
-nodes:
-    - self
-resources:
-    - "projects/website3:source"
-compose: compose.yaml
-ports:
-    - 3010
