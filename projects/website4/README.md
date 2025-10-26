@@ -19,13 +19,13 @@ Website4 is a complete port of website3 from Angular to Astro. This migration pr
 
 ## Features
 
-All features from website3 have been preserved:
+Core features from website3:
 
 - Font size selector with localStorage persistence
 - Navigation with multiple sections (Main, Tech, External)
 - SEO support with canonical URLs
 - Responsive design with readable width constraints
-- API integration for devlog entries (PocketBase)
+- Content written in MDX for easy authoring
 
 ## Pages
 
@@ -33,7 +33,6 @@ All features from website3 have been preserved:
 - **Phrases** (`/phrases`) - Collection of interesting terms and phrases
   - **Magpie's Nest** (`/phrases/magpies-nest`) - Detailed explanation of the term
 - **Projects** (`/projects`) - List of personal projects
-- **Devlog** (`/devlog`) - Development logs fetched from PocketBase API
 
 ## Development
 
@@ -62,13 +61,12 @@ website4/
 │   │   └── Navigation.astro
 │   ├── layouts/         # Page layouts
 │   │   └── MainLayout.astro
-│   ├── pages/           # Route pages (MDX for content, Astro for logic)
+│   ├── pages/           # Route pages (MDX for content)
 │   │   ├── index.mdx
 │   │   ├── phrases/
 │   │   │   ├── index.mdx
 │   │   │   └── magpies-nest.mdx
-│   │   ├── projects.mdx
-│   │   └── devlog.astro         # Uses Astro for API fetching
+│   │   └── projects.mdx
 │   └── styles/          # Global styles
 │       └── global.css
 └── astro.config.mjs     # Astro configuration
@@ -85,9 +83,7 @@ Website3 was built with Angular SSR. Website4 replaces this with Astro, which pr
 
 The font selector component maintains the same localStorage-based persistence logic, reimplemented with vanilla JavaScript in an Astro component script.
 
-The devlog page uses Astro's server-side data fetching to call the PocketBase API at build time, eliminating the need for client-side HTTP calls and RxJS observables.
-
-Content pages (home, phrases, projects) are written in MDX for clean, maintainable Markdown-based authoring. The devlog page remains as .astro to handle API fetching logic.
+All content pages (home, phrases, projects) are written in MDX for clean, maintainable Markdown-based authoring.
 
 ## Design Philosophy
 

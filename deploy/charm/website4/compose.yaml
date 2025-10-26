@@ -1,0 +1,8 @@
+services:
+  web:
+    build:
+      context: artifacts/website4
+      dockerfile: ../../Dockerfile
+    restart: unless-stopped
+    ports:
+      - "3011:80"
