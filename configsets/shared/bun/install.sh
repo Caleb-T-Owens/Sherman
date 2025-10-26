@@ -15,7 +15,7 @@ fi
 if [ $SHERMAN_PLATFORM = debian ]
 then
     wget https://github.com/oven-sh/bun/releases/latest/download/bun-linux-x64-baseline.zip -O bun.zip
-    unzip bun.zip
+    unzip -o bun.zip
     cp bun-linux-x64-baseline/bun $SHERMAN_DIR/bin/bun
     rm bun.zip
     rm -r bun-linux-x64

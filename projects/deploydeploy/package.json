@@ -1,0 +1,24 @@
+{
+  "name": "deploydeploy",
+  "module": "index.ts",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "bun run index.ts",
+    "dev:watch": "bun run --watch index.ts",
+    "build": "bun build index.ts --compile --outfile deploydeploy",
+    "check": "prettier --check .",
+    "format": "prettier --write .",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "prettier": "^3.6.2"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "commander": "^14.0.1"
+  }
+}

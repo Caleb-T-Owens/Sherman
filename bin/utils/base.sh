@@ -6,7 +6,7 @@ if [[ $SHERMAN_ENV == home || $SHERMAN_ENV == work ]]
 then
     export SHERMAN_PLATFORM=macos
 fi
-if [[ $SHERMAN_ENV == anti ]]
+if [[ $SHERMAN_ENV == anti || $SHERMAN_ENV == charm ]]
 then
     export SHERMAN_PLATFORM=debian
 fi
