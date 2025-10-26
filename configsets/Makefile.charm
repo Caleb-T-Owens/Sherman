@@ -1,5 +1,5 @@
 CONFIGS = shared/bun shared/deploydeploy
-ACTIONS =
+ACTIONS = shared/action-charm-deploy
 
 .PHONY: all
 all:
