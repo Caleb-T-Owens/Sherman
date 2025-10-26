@@ -1,0 +1,132 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+
+// Types matching the PocketBase API
+type PocketBase = {
+  collectionId: string;
+  collectionName: string;
+  created: string;
+  updated: string;
+  id: string;
+};
+
+type ApiProject = PocketBase & {
+  name: string;
+  referenceUrl: string;
+};
+
+type ApiDevlog = PocketBase & {
+  entry: string;
+  referenceUrl: string;
+  occuredAt: string;
+  projectId: string;
+};
+
+type Project = {
+  name: string;
+  referenceUrl?: string;
+};
+
+type Devlog = {
+  entry: string;
+  referenceUrl?: string;
+  occuredAt: Date;
+  project: Project;
+};
+
+type CollectionResponse<T extends PocketBase> = {
+  page: number;
+  pageSize: number;
+  totalItems: number;
+  totalPages: number;
+  items: T[];
+};
+
+// Fetch projects from API
+const projectsResponse = await fetch(
+  'https://serverless.cto.je/api/collections/projects/records?perPage=999'
+);
+const projectsData: CollectionResponse<ApiProject> = await projectsResponse.json();
+
+// Create projects map
+const projectsById = new Map<string, Project>(
+  projectsData.items.map((item) => [
+    item.id,
+    {
+      name: item.name,
+      referenceUrl: item.referenceUrl || undefined,
+    },
+  ])
+);
+
+// Fetch devlogs from API
+const devlogsResponse = await fetch(
+  'https://serverless.cto.je/api/collections/devlogs/records?perPage=999'
+);
+const devlogsData: CollectionResponse<ApiDevlog> = await devlogsResponse.json();
+
+// Map and sort devlogs
+const devlogs: Devlog[] = devlogsData.items
+  .map((item) => ({
+    entry: item.entry,
+    referenceUrl: item.referenceUrl || undefined,
+    occuredAt: new Date(item.occuredAt),
+    project: projectsById.get(item.projectId)!,
+  }))
+  .sort((a, b) => b.occuredAt.getTime() - a.occuredAt.getTime());
+---
+
+<MainLayout>
+  <article>
+    <h1>Devlogs</h1>
+
+    <p>
+      Some mini-updates for some of the things that I've been working. Clicking on
+      a project name links you to where you can learn more about it. This is
+      typically an
+      <a href="https://en.wikipedia.org/wiki/Internal_and_external_links"
+        >external link</a
+      >
+      to a
+      <a href="https://github.com">GitHub</a>&nbsp;<a
+        href="https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository"
+        >repository</a
+      >, or <a href="https://en.wikipedia.org/wiki/Landing_page">landing page</a>.
+      Clicking "(ref)" at the end of an entry links to where you can read more
+      about a particular entry. This is typically an external link to a GitHub
+      <a
+        href="https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-pull-requests"
+        >pull request</a
+      >
+      or <a href="https://git-scm.com">git</a>&nbsp;<a
+        href="https://git-scm.com/book/en/v2/Git-Basics-Recording-Changes-to-the-Repository"
+        >commit</a
+      >
+    </p>
+
+    <section>
+      <ul>
+        {
+          devlogs.map((devlog) => (
+            <li>
+              {devlog.occuredAt.toLocaleDateString()}
+              {devlog.project.referenceUrl ? (
+                <a href={devlog.project.referenceUrl} target="_blank">
+                  <b>{devlog.project.name}</b>
+                </a>
+              ) : (
+                <b>{devlog.project.name}</b>
+              )}
+              : {devlog.entry}
+              {devlog.referenceUrl && (
+                <a href={devlog.referenceUrl} target="_blank">
+                  (ref)
+                </a>
+              )}
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+  </article>
+</MainLayout>
