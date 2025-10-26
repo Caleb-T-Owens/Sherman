@@ -4,9 +4,11 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "dev": "bun run --watch index.ts",
+    "dev": "bun run index.ts",
+    "dev:watch": "bun run --watch index.ts",
     "build": "bun build index.ts --compile --outfile deploydeploy",
     "check": "prettier --check .",
+    "format": "prettier --write .",
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {

@@ -1,8 +1,8 @@
 services:
-    web:
-        build:
-            context: artifacts/website3
-            dockerfile: ../../Dockerfile
-        restart: unless-stopped
-        ports:
-            - "3010:4000"
+  web:
+    build:
+      context: artifacts/website3
+      dockerfile: ../../Dockerfile
+    restart: unless-stopped
+    ports:
+      - "3010:4000"
