@@ -1,0 +1,93 @@
+:root {
+  --color-text: black;
+  --color-border: black;
+  --color-background: white;
+  --readable-width: 1000px;
+}
+
+* {
+  box-sizing: border-box;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+p,
+a,
+legend,
+label,
+time,
+i,
+li {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Don't style links inside headers */
+h1 a,
+h2 a,
+h3 a,
+h4 a,
+h5 a,
+h6 a {
+  font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+html {
+  background-color: var(--color-background);
+  color: var(--color-text);
+  font-size: 18px;
+}
+
+html.font-large {
+  font-size: 20px;
+}
+
+html.font-small {
+  font-size: 15px;
+}
+
+input[type='radio'] {
+  width: 1.05rem; /* Oh Apple oh Apple */
+  height: 1rem;
+  margin: 0.5rem;
+}
+
+.page-header {
+  border-bottom: 2px solid var(--color-border);
+  border-top: 2px solid var(--color-border);
+}
+
+.page-header > nav {
+  display: inline-block;
+  vertical-align: top;
+
+  padding-right: 1rem;
+  padding-left: 1rem;
+  padding-bottom: 1rem;
+}
+
+.page-header > nav > ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.page-header > nav > ul > li {
+  margin-bottom: 0.5rem;
+}
+
+.page-header > nav > ul > li:last-child {
+  margin-bottom: 0;
+}
+
+article,
+section,
+.readable-width {
+  max-width: var(--readable-width);
+  margin: 0 auto;
+}
+
+.title {
+  font-size: 3em;
+}
+
+h1 {
+  font-size: 2em;
+}
