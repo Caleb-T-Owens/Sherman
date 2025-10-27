@@ -6,5 +6,6 @@ import mdx from '@astrojs/mdx';
 // https://astro.build/config
 export default defineConfig({
   integrations: [mdx()],
-  prefetch: true
+  prefetch: true,
+  site: 'https://cto.je'
 });

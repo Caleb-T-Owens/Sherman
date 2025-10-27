@@ -1,0 +1,20 @@
+---
+import { recent } from "../recent";
+---
+
+<ul>
+    {
+        recent.slice(0, 3).map((recent) => {
+            return (
+                <li>
+                    <p>
+                        <a href={recent.link}>
+                            <b>{recent.title}</b>
+                        </a>{" "}
+                        - {recent.description}
+                    </p>
+                </li>
+            );
+        })
+    }
+</ul>
