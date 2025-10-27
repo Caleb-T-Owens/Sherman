@@ -1,6 +1,7 @@
 :root {
   --color-text: black;
   --color-border: black;
+  --color-code-bg: rgb(240, 239, 239);
   --color-background: white;
   --readable-width: 1000px;
 }
@@ -90,4 +91,8 @@ section,
 
 h1 {
   font-size: 2em;
+}
+
+code {
+  background-color: var(--color-code-bg);
 }

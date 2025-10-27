@@ -1,0 +1,141 @@
+---
+/**
+ * LastUpdated Component
+ *
+ * Displays the last updated date for a file based on git history.
+ * Formats dates in the style: "27th October 2024"
+ *
+ * Usage in MDX files:
+ * ```mdx
+ * ---
+ * layout: ../layouts/MainLayout.astro
+ * ---
+ *
+ * import LastUpdated from '../components/LastUpdated.astro';
+ *
+ * <LastUpdated filePath="src/pages/index.mdx" />
+ * ```
+ *
+ * Note: The filePath should be relative to the project directory (projects/website4).
+ * The component automatically determines the path from repo root to project.
+ */
+
+import { execSync } from 'child_process';
+import path from 'path';
+
+interface Props {
+  /**
+   * File path to check git history for.
+   * Should be relative to the project root (projects/website4).
+   * Example: "src/pages/index.mdx"
+   */
+  filePath: string;
+}
+
+const { filePath } = Astro.props;
+
+/**
+ * Get the relative path from git repo root to current working directory
+ * @returns Relative path string (e.g., "projects/website4") or empty string if at root
+ */
+function getProjectPrefix(): string {
+  try {
+    // Get the git repository root
+    const repoRoot = execSync('git rev-parse --show-toplevel', { encoding: 'utf-8' }).trim();
+
+    // Get the current working directory (project directory)
+    const cwd = process.cwd();
+
+    // Calculate relative path from repo root to project
+    const relativePath = path.relative(repoRoot, cwd);
+
+    return relativePath;
+  } catch (error) {
+    console.error('Failed to determine project prefix:', error);
+    return '';
+  }
+}
+
+/**
+ * Get the last commit date for a file from git history
+ * @param filePath - The file path relative to project root
+ * @param prefix - The prefix to prepend (path from repo root to project)
+ * @returns ISO date string or null if not found
+ */
+function getLastCommitDate(filePath: string, prefix: string): string | null {
+  try {
+    // Construct full path from repo root
+    const fullPath = prefix ? path.join(prefix, filePath) : filePath;
+
+    // Get the last commit date for this file
+    // %aI gives the author date in ISO 8601 format
+    // We need to run git from the repo root to ensure paths work correctly
+    const command = `git -C "$(git rev-parse --show-toplevel)" log -1 --format=%aI -- "${fullPath}"`;
+    const result = execSync(command, { encoding: 'utf-8' }).trim();
+    return result || null;
+  } catch (error) {
+    console.error(`Failed to get git history for ${filePath}:`, error);
+    return null;
+  }
+}
+
+/**
+ * Format a date in the style: "27th October 2024"
+ * @param dateString - ISO date string
+ * @returns Formatted date string
+ */
+function formatDate(dateString: string): string {
+  const date = new Date(dateString);
+
+  // Get day with ordinal suffix (1st, 2nd, 3rd, etc.)
+  const day = date.getDate();
+  const ordinal = getOrdinal(day);
+
+  // Get month name
+  const monthNames = [
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'
+  ];
+  const month = monthNames[date.getMonth()];
+
+  // Get year
+  const year = date.getFullYear();
+
+  return `${day}${ordinal} ${month} ${year}`;
+}
+
+/**
+ * Get the ordinal suffix for a day number
+ * @param day - Day of the month (1-31)
+ * @returns Ordinal suffix (st, nd, rd, th)
+ */
+function getOrdinal(day: number): string {
+  if (day > 3 && day < 21) return 'th';
+  switch (day % 10) {
+    case 1: return 'st';
+    case 2: return 'nd';
+    case 3: return 'rd';
+    default: return 'th';
+  }
+}
+
+// Get the project prefix (e.g., "projects/website4")
+const projectPrefix = getProjectPrefix();
+
+// Get git commit date using the file path relative to project root
+const gitDate = getLastCommitDate(filePath, projectPrefix);
+
+// Format for display
+const isoDate = gitDate ? gitDate.split('T')[0] : new Date().toISOString().split('T')[0];
+const displayDate = gitDate ? formatDate(gitDate) : null;
+---
+
+{displayDate ? (
+  <p>
+    Last updated <time datetime={isoDate}>{displayDate}</time>
+  </p>
+) : (
+  <p>
+    <em>Last updated date unavailable</em>
+  </p>
+)}
