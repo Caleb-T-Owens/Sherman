@@ -1,5 +1,5 @@
-import rss from '@astrojs/rss';
-import { recent } from '../recent';
+import rss from "@astrojs/rss";
+import { recent } from "../recent";
 
 export function GET(context: any) {
   return rss({

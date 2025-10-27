@@ -19,8 +19,8 @@
  * Note: The filePath should be relative to the project directory (projects/website4).
  */
 
-import fs from 'fs';
-import path from 'path';
+import fs from "fs";
+import path from "path";
 
 interface Props {
   /**
@@ -68,8 +68,18 @@ function formatDate(dateString: string): string {
 
   // Get month name
   const monthNames = [
-    'January', 'February', 'March', 'April', 'May', 'June',
-    'July', 'August', 'September', 'October', 'November', 'December'
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
   ];
   const month = monthNames[date.getMonth()];
 
@@ -85,12 +95,16 @@ function formatDate(dateString: string): string {
  * @returns Ordinal suffix (st, nd, rd, th)
  */
 function getOrdinal(day: number): string {
-  if (day > 3 && day < 21) return 'th';
+  if (day > 3 && day < 21) return "th";
   switch (day % 10) {
-    case 1: return 'st';
-    case 2: return 'nd';
-    case 3: return 'rd';
-    default: return 'th';
+    case 1:
+      return "st";
+    case 2:
+      return "nd";
+    case 3:
+      return "rd";
+    default:
+      return "th";
   }
 }
 
@@ -98,16 +112,20 @@ function getOrdinal(day: number): string {
 const modifiedDate = getLastModifiedDate(filePath);
 
 // Format for display
-const isoDate = modifiedDate ? modifiedDate.split('T')[0] : new Date().toISOString().split('T')[0];
+const isoDate = modifiedDate
+  ? modifiedDate.split("T")[0]
+  : new Date().toISOString().split("T")[0];
 const displayDate = modifiedDate ? formatDate(modifiedDate) : null;
 ---
 
-{displayDate ? (
-  <p>
-    Last updated <time datetime={isoDate}>{displayDate}</time>
-  </p>
-) : (
-  <p>
-    <em>Last updated date unavailable</em>
-  </p>
-)}
+{
+  displayDate ? (
+    <p>
+      Last updated <time datetime={isoDate}>{displayDate}</time>
+    </p>
+  ) : (
+    <p>
+      <em>Last updated date unavailable</em>
+    </p>
+  )
+}

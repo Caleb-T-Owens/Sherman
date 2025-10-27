@@ -8,7 +8,7 @@
 
 * {
   box-sizing: border-box;
-  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-family: Georgia, "Times New Roman", Times, serif;
 }
 
 p,
@@ -28,7 +28,7 @@ h3 a,
 h4 a,
 h5 a,
 h6 a {
-  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-family: Georgia, "Times New Roman", Times, serif;
 }
 
 html {
@@ -45,7 +45,7 @@ html.font-small {
   font-size: 15px;
 }
 
-input[type='radio'] {
+input[type="radio"] {
   width: 1.05rem; /* Oh Apple oh Apple */
   height: 1rem;
   margin: 0.5rem;

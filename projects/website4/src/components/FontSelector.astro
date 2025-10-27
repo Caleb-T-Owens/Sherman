@@ -5,12 +5,7 @@
 <fieldset class="font-size-selector">
   <legend>Font size</legend>
   <div>
-    <input
-      type="radio"
-      name="font-size"
-      id="font-small"
-      value="small"
-    />
+    <input type="radio" name="font-size" id="font-small" value="small" />
     <label for="font-small">Small</label>
   </div>
   <div>
@@ -24,12 +19,7 @@
     <label for="font-medium">Medium</label>
   </div>
   <div>
-    <input
-      type="radio"
-      name="font-size"
-      id="font-large"
-      value="large"
-    />
+    <input type="radio" name="font-size" id="font-large" value="large" />
     <label for="font-large">Large</label>
   </div>
 </fieldset>
@@ -54,21 +44,24 @@
 <script>
   // Initialize font size from localStorage
   function initializeFontSize() {
-    const initialFontSize = localStorage.getItem('selected-font-size') || 'medium';
+    const initialFontSize =
+      localStorage.getItem("selected-font-size") || "medium";
     updateHtmlStyles(initialFontSize);
   }
 
   // Update HTML styles based on selected font size
   function updateHtmlStyles(size: string) {
-    localStorage.setItem('selected-font-size', size);
+    localStorage.setItem("selected-font-size", size);
 
-    const html = document.querySelector('html')!;
-    html.classList.remove('font-small', 'font-medium', 'font-large');
+    const html = document.querySelector("html")!;
+    html.classList.remove("font-small", "font-medium", "font-large");
     html.classList.add(`font-${size}`);
 
     // Update radio buttons
-    const radios = document.querySelectorAll('input[name="font-size"]') as NodeListOf<HTMLInputElement>;
-    radios.forEach(radio => {
+    const radios = document.querySelectorAll(
+      'input[name="font-size"]'
+    ) as NodeListOf<HTMLInputElement>;
+    radios.forEach((radio) => {
       radio.checked = radio.value === size;
     });
   }
@@ -76,8 +69,8 @@
   // Set up event listeners
   function setupEventListeners() {
     const radios = document.querySelectorAll('input[name="font-size"]');
-    radios.forEach(radio => {
-      radio.addEventListener('change', (event) => {
+    radios.forEach((radio) => {
+      radio.addEventListener("change", (event) => {
         const value = (event.target as HTMLInputElement).value;
         updateHtmlStyles(value);
       });
@@ -85,13 +78,13 @@
   }
 
   // Initialize on page load
-  if (typeof window !== 'undefined') {
+  if (typeof window !== "undefined") {
     initializeFontSize();
     setupEventListeners();
   }
 
   // Re-initialize on navigation (for Astro view transitions)
-  document.addEventListener('astro:page-load', () => {
+  document.addEventListener("astro:page-load", () => {
     initializeFontSize();
     setupEventListeners();
   });
