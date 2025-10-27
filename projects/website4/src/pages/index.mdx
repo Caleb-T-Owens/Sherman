@@ -3,9 +3,9 @@ layout: ../layouts/MainLayout.astro
 canonicalUrl: https://cto.je
 ---
 
-<p>
-    Last updated <time datetime="2024-10-27">27th October 2024</time>
-</p>
+import LastUpdated from '../components/LastUpdated.astro';
+
+<LastUpdated filePath="src/pages/index.mdx" />
 
 <article>
 

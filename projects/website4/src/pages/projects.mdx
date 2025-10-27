@@ -2,7 +2,9 @@
 layout: ../layouts/MainLayout.astro
 ---
 
-<p>Last updated <time datetime="2024-08-04">4th August 2024</time></p>
+import LastUpdated from '../components/LastUpdated.astro';
+
+<LastUpdated filePath="src/pages/projects.mdx" />
 
 <article>
 
