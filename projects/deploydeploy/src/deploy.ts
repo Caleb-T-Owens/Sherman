@@ -70,14 +70,17 @@ async function copyArtifacts(projectPath: string, project: Project) {
     await $`mkdir ${artifactsPath}`.quiet();
 
     for (const [name, source] of Object.entries(project.config!.artifacts)) {
-      if ((await $`test -f ${{ raw: source }}`.quiet().nothrow()).exitCode === 0) {
-        await $`cp ${{ raw: source }} ${path.join(artifactsPath, name)}`.quiet();
-      } else if ((await $`test -d ${{ raw: source }}`.quiet().nothrow()).exitCode === 0) {
-        await $`cp -R ${{ raw: source }} ${path.join(artifactsPath, name)}`.quiet();
+      if (
+        (await $`test -f ${{ raw: source }}`.quiet().nothrow()).exitCode === 0
+      ) {
+        await $`cp -p ${{ raw: source }} ${path.join(artifactsPath, name)}`.quiet();
+      } else if (
+        (await $`test -d ${{ raw: source }}`.quiet().nothrow()).exitCode === 0
+      ) {
+        await $`cp -p -R ${{ raw: source }} ${path.join(artifactsPath, name)}`.quiet();
       } else {
         console.log(`Warning: artifact ${name} not found at ${source}`);
       }
     }
   }
 }
-
