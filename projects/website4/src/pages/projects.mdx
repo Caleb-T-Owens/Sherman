@@ -1,5 +1,6 @@
 ---
 layout: ../layouts/MainLayout.astro
+title: "Caleb Owens - Projects"
 ---
 
 import LastUpdated from "../components/LastUpdated.astro";
@@ -10,76 +11,131 @@ import LastUpdated from "../components/LastUpdated.astro";
 
 # Projects
 
-A list of stuff I've worked on. Often they're not particularly useful or really production ready, but I enjoy solving small quality of life problems.
+A list of stuff I've worked on. Often they're not particularly useful or really
+production ready, but I enjoy solving small quality of life problems.
 
 ## [Patc](https://github.com/Caleb-T-Owens/Sherman/tree/main/projects/patc)
 
 Status: Useful
 
-Patc is a little CLI tool for cloning and applying patches to a given git repository.
+Patc is a little CLI tool for cloning and applying patches to a given git
+repository.
 
-The reason I built this was to manage the [suckless](https://suckless.org) tools that I use in debian. Namely [dwm](https://dwm.suckless.org) and [st](https://st.suckless.org). These tools are typically configured by applying `.patch` files on top of their git repository which make code changes to the project.
+The reason I built this was to manage the [suckless](https://suckless.org) tools
+that I use in debian. Namely [dwm](https://dwm.suckless.org) and
+[st](https://st.suckless.org). These tools are typically configured by applying
+`.patch` files on top of their git repository which make code changes to the
+project.
 
-Often people will fork and commit these changes, but I'm quite fond of using a monorepo, so I built `patc` to clone and apply patches stored in a given configuration. `patc` also has tooling for generating patches from code changes you've made.
+Often people will fork and commit these changes, but I'm quite fond of using a
+monorepo, so I built `patc` to clone and apply patches stored in a given
+configuration. `patc` also has tooling for generating patches from code changes
+you've made.
 
 ## Empower learn
 
 Status: Work in progress
 
-This is a mathematics learning application that I'm working on. I'm building it as an [ionic](https://ionicframework.com) [react](https://react.dev) application with [redux toolkit](https://redux-toolkit.js.org), with a [rails](https://en.wikipedia.org/wiki/Ruby_on_Rails) backend.
+This is a mathematics learning application that I'm working on. I'm building it
+as an [ionic](https://ionicframework.com) [react](https://react.dev) application
+with [redux toolkit](https://redux-toolkit.js.org), with a
+[rails](https://en.wikipedia.org/wiki/Ruby_on_Rails) backend.
 
 ## [Aptfile](https://github.com/Caleb-T-Owens/Sherman/tree/main/projects/aptfile)
 
 Status: Useful, but without guardrails
 
-This is a little tool that functions similar to [`Brewfile`s](https://docs.brew.sh/Brew-Bundle-and-Brewfile) which I use to manage the packages installed in my debian laptop.
+This is a little tool that functions similar to
+[`Brewfile`s](https://docs.brew.sh/Brew-Bundle-and-Brewfile) which I use to
+manage the packages installed in my debian laptop.
 
-It's a bit more primitive. Currently the `Aptfile` itself is just a long list of packages, but I would like to expand it to support meta-packages.
+It's a bit more primitive. Currently the `Aptfile` itself is just a long list of
+packages, but I would like to expand it to support meta-packages.
 
 ## [Project Cloner 2](https://github.com/Caleb-T-Owens/Sherman/tree/main/projects/project-cloner2)
 
 Status: Useful
 
-This is a little rust program which I use to clone external projects into my monorepo's `projects` folder.
+This is a little rust program which I use to clone external projects into my
+monorepo's `projects` folder.
 
-It reads from a [`cloned.json`](https://github.com/Caleb-T-Owens/Sherman/blob/main/projects/cloned.json) which it iterates over, cloning and adding the projects to the `.gitignore`.
+It reads from a
+[`cloned.json`](https://github.com/Caleb-T-Owens/Sherman/blob/main/projects/cloned.json)
+which it iterates over, cloning and adding the projects to the `.gitignore`.
 
-I find this works nicely because I can expect that both my machines will have the same projects cloned, but I don't have to deal with [submodules](https://git-scm.com/book/en/v2/Git-Tools-Submodules) or [subtrees](https://www.atlassian.com/git/tutorials/git-subtree).
+I find this works nicely because I can expect that both my machines will have
+the same projects cloned, but I don't have to deal with
+[submodules](https://git-scm.com/book/en/v2/Git-Tools-Submodules) or
+[subtrees](https://www.atlassian.com/git/tutorials/git-subtree).
 
 ## [Deploy deploy](https://github.com/Caleb-T-Owens/Sherman/tree/main/projects/deploydeploy)
 
 Status: Useful & in need of a better name
 
-I like to deploy my projects on a miniPC as [docker compose](https://docs.docker.com/compose/) services. This way my deployed services can have their own databases or whatever other dependencies they may need.
+I like to deploy my projects on a miniPC as
+[docker compose](https://docs.docker.com/compose/) services. This way my
+deployed services can have their own databases or whatever other dependencies
+they may need.
 
-I _am_ aware of tools like [portainer](https://www.portainer.io), but I do like the simplicity of having my own deploy scripts that I understand fully.
+I _am_ aware of tools like [portainer](https://www.portainer.io), but I do like
+the simplicity of having my own deploy scripts that I understand fully.
 
-`deploydeploy` aims to simplify the management of docker compose by having a folder that contains many sub-folders which represent services. Each service is defined by a [`compose.yaml`](https://github.com/Caleb-T-Owens/Sherman/blob/main/deploy/charm/website4/compose.yaml), optionally a [`config.json`](https://github.com/Caleb-T-Owens/Sherman/blob/main/deploy/charm/website4/config.json) which lets you define other artifacts relevant to building the project, and [any other misc files](https://github.com/Caleb-T-Owens/Sherman/blob/main/deploy/charm/website4/nginx.conf).
+`deploydeploy` aims to simplify the management of docker compose by having a
+folder that contains many sub-folders which represent services. Each service is
+defined by a
+[`compose.yaml`](https://github.com/Caleb-T-Owens/Sherman/blob/main/deploy/charm/website4/compose.yaml),
+optionally a
+[`config.json`](https://github.com/Caleb-T-Owens/Sherman/blob/main/deploy/charm/website4/config.json)
+which lets you define other artifacts relevant to building the project, and
+[any other misc files](https://github.com/Caleb-T-Owens/Sherman/blob/main/deploy/charm/website4/nginx.conf).
 
 It currently has just `up`, `down`, and `status` sub-commands.
 
-I wrote this with the [bun](https://bun.com/docs) ECMAScript runtime making use of the [shell API](https://bun.com/docs/runtime/shell) which was inspired by Google's [`zx`](https://google.github.io/zx/) project. It was a good [devex](https://en.wikipedia.org/wiki/Developer_Experience), though, I would want [`.quiet()`](https://bun.com/reference/bun/$/ShellPromise/quiet) to be applied by default. My [configset](https://github.com/Caleb-T-Owens/Sherman/tree/main/configsets/shared/deploydeploy) for installing `deploydeploy` uses bun's [standalone executable](https://bun.com/docs/bundler/executables) tooling which worked well out of the box.
+I wrote this with the [bun](https://bun.com/docs) ECMAScript runtime making use
+of the [shell API](https://bun.com/docs/runtime/shell) which was inspired by
+Google's [`zx`](https://google.github.io/zx/) project. It was a good
+[devex](https://en.wikipedia.org/wiki/Developer_Experience), though, I would
+want [`.quiet()`](https://bun.com/reference/bun/$/ShellPromise/quiet) to be
+applied by default. My
+[configset](https://github.com/Caleb-T-Owens/Sherman/tree/main/configsets/shared/deploydeploy)
+for installing `deploydeploy` uses bun's
+[standalone executable](https://bun.com/docs/bundler/executables) tooling which
+worked well out of the box.
 
 ## [Puzzle Planner](https://github.com/Caleb-T-Owens/Sherman/tree/main/projects/puzzle-planner)
 
 Status: Work in progress
 
-Puzzle Planner is a private leaderboard project written in [rails](https://en.wikipedia.org/wiki/Ruby_on_Rails). The main functionality is in place, but just lacks some scoring mechanisms.
+Puzzle Planner is a private leaderboard project written in
+[rails](https://en.wikipedia.org/wiki/Ruby_on_Rails). The main functionality is
+in place, but just lacks some scoring mechanisms.
 
-The idea is to create a leaderboard for friends and family which lets you manually enter your start and finish times - allowing competition to be asynchronous.
+The idea is to create a leaderboard for friends and family which lets you
+manually enter your start and finish times - allowing competition to be
+asynchronous.
 
 ## [Website 4](https://github.com/Caleb-T-Owens/Sherman/tree/main/projects/project-cloner2)
 
 Status: Useful
 
-My website is often a bit of an experimentation ground that I like to play around with. I was previously using [Angular](https://angular.dev) to get a feel for the framework. I really liked Angular, but I wanted to move to something that let me use [MDX](https://mdxjs.com), and [Astro](https://astro.build) looked nice with its component setup and idea of ["islands of interactivity"](https://docs.astro.build/en/concepts/islands/).
+My website is often a bit of an experimentation ground that I like to play
+around with. I was previously using [Angular](https://angular.dev) to get a feel
+for the framework. I really liked Angular, but I wanted to move to something
+that let me use [MDX](https://mdxjs.com), and [Astro](https://astro.build)
+looked nice with its component setup and idea of
+["islands of interactivity"](https://docs.astro.build/en/concepts/islands/).
 
-Previous versions can be found [here](https://github.com/Caleb-T-Owens/Sherman/tree/main/projects/website3) and [here](https://github.com/Caleb-T-Owens/website).
+Previous versions can be found
+[here](https://github.com/Caleb-T-Owens/Sherman/tree/main/projects/website3) and
+[here](https://github.com/Caleb-T-Owens/website).
 
 ## [And much more!](https://github.com/Caleb-T-Owens/Sherman)
 
-I never want to lose code, so I always commit my stuff to [my monorepo](https://github.com/Caleb-T-Owens/Sherman) which you can check out.
+I never want to lose code, so I always commit my stuff to
+[my monorepo](https://github.com/Caleb-T-Owens/Sherman) which you can check out.
 
-You can also check out my slightly crazy set of [makefiles](<https://en.wikipedia.org/wiki/Make_(software)>) that I use to sync [my computer's configurations](https://github.com/Caleb-T-Owens/Sherman/tree/main/configsets).
+You can also check out my slightly crazy set of
+[makefiles](<https://en.wikipedia.org/wiki/Make_(software)>) that I use to sync
+[my computer's configurations](https://github.com/Caleb-T-Owens/Sherman/tree/main/configsets).
 
 </article>

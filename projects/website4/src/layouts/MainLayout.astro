@@ -4,25 +4,41 @@ import Navigation from "../components/Navigation.astro";
 import "../styles/global.css";
 
 interface Props {
+  frontmatter?: {
+    title?: string;
+    canonicalUrl?: string;
+  };
   title?: string;
   canonicalUrl?: string;
 }
 
-const { title = "Caleb Owens", canonicalUrl } = Astro.props;
+const {
+  frontmatter,
+  title: astroTitle,
+  canonicalUrl: astroCanonicalUrl,
+} = Astro.props;
+const { title, canonicalUrl } = frontmatter ?? {
+  title: astroTitle,
+  canonicalUrl: astroCanonicalUrl,
+};
 ---
 
 <!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>{title}</title>
+    <title>{title ?? "Caleb Owens"}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
     <link rel="manifest" href="/site.webmanifest" />
     {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
-    <script async is:inline src="https://u.cto.je/script.js" data-website-id="c22a908a-6801-4765-a697-e9f2a307298b"></script>
+    <script
+      async
+      is:inline
+      src="https://u.cto.je/script.js"
+      data-website-id="c22a908a-6801-4765-a697-e9f2a307298b"></script>
   </head>
   <body>
     <h1 class="title">Caleb Owens' Website</h1>
