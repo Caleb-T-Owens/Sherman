@@ -10,7 +10,8 @@ A complete 1:1 remake of website3, rebuilt with Astro and MDX support.
 
 ## What's New
 
-Website4 is a complete port of website3 from Angular to Astro. This migration provides:
+Website4 is a complete port of website3 from Angular to Astro. This migration
+provides:
 
 - **MDX Support**: Write content in Markdown with embedded components
 - **Better Performance**: Static site generation by default
@@ -31,7 +32,8 @@ Core features from website3:
 
 - **Home** (`/`) - About Caleb with biographical information
 - **Phrases** (`/phrases`) - Collection of interesting terms and phrases
-  - **Magpie's Nest** (`/phrases/magpies-nest`) - Detailed explanation of the term
+  - **Magpie's Nest** (`/phrases/magpies-nest`) - Detailed explanation of the
+    term
 - **Projects** (`/projects`) - List of personal projects
 
 ## Development
@@ -74,16 +76,19 @@ website4/
 
 ## Migration from Website3
 
-Website3 was built with Angular SSR. Website4 replaces this with Astro, which provides:
+Website3 was built with Angular SSR. Website4 replaces this with Astro, which
+provides:
 
 1. **Static Generation**: Pages are pre-rendered at build time
 2. **No Client-Side Framework**: Pure HTML/CSS/JS for better performance
 3. **MDX Support**: Enhanced content authoring capabilities
 4. **Simpler Deployment**: Just static files, no Node.js server needed
 
-The font selector component maintains the same localStorage-based persistence logic, reimplemented with vanilla JavaScript in an Astro component script.
+The font selector component maintains the same localStorage-based persistence
+logic, reimplemented with vanilla JavaScript in an Astro component script.
 
-All content pages (home, phrases, projects) are written in MDX for clean, maintainable Markdown-based authoring.
+All content pages (home, phrases, projects) are written in MDX for clean,
+maintainable Markdown-based authoring.
 
 ## Design Philosophy
 

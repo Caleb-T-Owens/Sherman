@@ -8,7 +8,15 @@ export default {
         parser: "astro",
       },
     },
+    {
+      files: "*.mdx",
+      options: {
+        parser: "mdx",
+      },
+    },
   ],
+  printWidth: 80,
+  proseWrap: "always",
   semi: true,
   singleQuote: false,
   tabWidth: 2,
