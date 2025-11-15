@@ -20,7 +20,7 @@ export async function upOne({
   console.log(`Deploying ${project.name}...`);
 
   const projectPath = path.join(servicesPath, project.name);
-  await copyArtifacts(projectPath, project);
+  await linkArtifacts(projectPath, project);
 
   console.log("Building and starting service...");
   const lines = $`cd ${projectPath} && docker compose up -d --build`.lines();
@@ -47,7 +47,7 @@ export async function downOne({
   console.log(`Shutting down ${project.name}...`);
 
   const projectPath = path.join(servicesPath, project.name);
-  await copyArtifacts(projectPath, project);
+  await linkArtifacts(projectPath, project);
 
   console.log("Building and starting service...");
   const lines = $`cd ${projectPath} && docker compose up -d --build`.lines();
@@ -56,7 +56,7 @@ export async function downOne({
   }
 }
 
-async function copyArtifacts(projectPath: string, project: Project) {
+async function linkArtifacts(projectPath: string, project: Project) {
   const artifactsPath = path.join(projectPath, "artifacts");
 
   if ((await $`test -e ${artifactsPath}`.quiet().nothrow()).exitCode === 0) {
@@ -65,19 +65,15 @@ async function copyArtifacts(projectPath: string, project: Project) {
   }
 
   if (Object.entries(project.config?.artifacts || {}).length > 0) {
-    console.log(`Copying artifacts...`);
+    console.log(`Linking artifacts...`);
 
     await $`mkdir ${artifactsPath}`.quiet();
 
     for (const [name, source] of Object.entries(project.config!.artifacts)) {
       if (
-        (await $`test -f ${{ raw: source }}`.quiet().nothrow()).exitCode === 0
+        (await $`test -e ${{ raw: source }}`.quiet().nothrow()).exitCode === 0
       ) {
-        await $`cp -p ${{ raw: source }} ${path.join(artifactsPath, name)}`.quiet();
-      } else if (
-        (await $`test -d ${{ raw: source }}`.quiet().nothrow()).exitCode === 0
-      ) {
-        await $`cp -p -R ${{ raw: source }} ${path.join(artifactsPath, name)}`.quiet();
+        await $`ln -s ${{ raw: source }} ${path.join(artifactsPath, name)}`.quiet();
       } else {
         console.log(`Warning: artifact ${name} not found at ${source}`);
       }
