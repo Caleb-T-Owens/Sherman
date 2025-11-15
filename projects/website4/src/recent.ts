@@ -5,7 +5,7 @@ export const recent: RSSFeedItem[] = [
     title: "Reasonable LLM Usage - LLMs as an editor",
     description: "Added some brief thoughts around LLMs as as an editorial process.",
     pubDate: new Date("Nov 16 2025"),
-    link: "/thoughts/the-anti-blog",
+    link: "/thoughts/reasonable-llm-usage",
   },
   {
     title: "The Anti Blog - What is a blog?",
