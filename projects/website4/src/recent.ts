@@ -2,6 +2,12 @@ import type { RSSFeedItem } from "@astrojs/rss";
 
 export const recent: RSSFeedItem[] = [
   {
+    title: "Do Three Way Merges Care About Linebreaks",
+    description: "I make a case that merges are not linebreak sensitive.",
+    pubDate: new Date("Nov 18 2025"),
+    link: "/tech/do-3wm-care-about-linebreaks"
+  },
+  {
     title: "Reasonable LLM Usage - LLMs as an editor",
     description:
       "Added some brief thoughts around LLMs as as an editorial process.",
