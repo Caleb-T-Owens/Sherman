@@ -76,3 +76,6 @@ brew "protobuf" # Client itself
 
 # Music
 cask "spotify"
+
+# Rust alternatives because...
+brew "zoxide"
