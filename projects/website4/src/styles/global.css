@@ -96,3 +96,12 @@ h1 {
 code {
   background-color: var(--color-code-bg);
 }
+
+.astro-code code {
+  background-color: transparent;
+}
+
+.astro-code {
+  background-color: var(--color-code-bg) !important;
+  padding: 8px;
+}

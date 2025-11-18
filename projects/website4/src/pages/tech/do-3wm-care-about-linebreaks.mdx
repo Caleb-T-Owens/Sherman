@@ -1,0 +1,355 @@
+---
+layout: ../../layouts/MainLayout.astro
+title: "Caleb Owens - Do Three Way Merges Care About Linebreaks"
+---
+
+import LastUpdated from "../../components/LastUpdated.astro";
+
+<LastUpdated filePath="src/pages/tech/do-3wm-care-about-linebreaks.mdx" />
+
+<article>
+
+# Do three way merges care about linebreaks?
+
+TLDR: no, but your diff engine might.
+
+I made a small bet with someone I met at a bar regarding whether linebreaks make
+a difference in three way merges. I'd like to make the case that they are not
+significant to a three way merge.
+
+## A small intro to three way merges
+
+I'm going to start off with an example where two people might be sharing a
+directory where they can either add or remove files.
+
+If me and a friend have this folder, my local copy might look like:
+
+```
+- company-secrets
+- accounts
+- competitor-analysis
+- inventory
+```
+
+And my friend's local copy might look like
+
+```
+- company-secrets
+- books
+- inventory
+```
+
+If we were to look at the difference between my copy and theirs, you could say
+they removed `accounts` and `competitor-analysis`, and added `books`.
+
+This however doesn't give us enough information if we wanted to try and figure
+out what the final set of files should be. In order to figure out what the final
+set of files should be, we need to compare them to a common ancestor.
+
+If we imagine the following to be the common ancestor:
+
+```
+- company-secrets
+- accounts
+- inventory
+```
+
+We can see that I added `competitor-analysis`, and my friend removed `accounts`
+and added `books`.
+
+By applying all of these operations to the original set of files - we can get
+the final set of files:
+
+<details>
+    <summary>The full steps</summary>
+
+    <ol>
+        <li>
+            Set of instructions to perform: `[add "competitor-analysis", remove "accounts", add "books"]`
+
+            Current instruction: `add "competitor-analysis"`
+
+            Applying instruction results in:
+
+            ```
+            - company-secrets
+            - accounts
+            - competitor-analysis
+            - inventory
+            ```
+        </li>
+        <li>
+            Set of instructions to perform: `[remove "accounts", add "books"]`
+
+            Current instruction: `remove "accounts"`
+
+            Applying instruction results in:
+
+            ```
+            - company-secrets
+            - competitor-analysis
+            - inventory
+            ```
+        </li>
+        <li>
+            Set of instructions to perform: `[add "books"]`
+
+            Current instruction: `add "books"`
+
+            Applying instruction results in:
+
+            ```
+            - company-secrets
+            - books
+            - competitor-analysis
+            - inventory
+            ```
+        </li>
+    </ol>
+
+</details>
+
+```
+- company-secrets
+- books
+- competitor-analysis
+- inventory
+```
+
+## Merging text
+
+Now let's apply this same principle to what most developers actually care about:
+merging text files.
+
+If my copy of a text file is like:
+
+```
+carrot
+potato
+broccoli
+eggplant
+```
+
+And my friend's looks like:
+
+```
+carrot
+sweet potato
+pumpkin
+eggplant
+```
+
+And the original looks like:
+
+```
+carrot
+sweet potato
+broccoli
+eggplant
+```
+
+All we really need to do is to figure out the steps both of us took to get our
+states and apply them all to the original copy.
+
+### Diffing text
+
+As it turns out, comparing two text files is actually quite a difficult thing to
+do. `git` has
+[four diff algorithms](https://git-scm.com/docs/diff-config#Documentation/diff-config.txt-diffalgorithm)
+built in that make use of different heuristics in order to try and find either
+the smallest possible difference between two text files _or_ the most human
+readable. If you've never played with the `diff.algorithm` setting before, I
+would recommend you try setting it to `histogram` for the best built-in
+experience.
+
+Using a tool like `diff -U 0 original mine`, it creates an instruction that
+looks like the following:
+
+```diff
+@@ -2 +2 @@
+-sweet potato
++potato
+```
+
+This says that there is a removal on line 2, and an addition on line 2, and then
+specifies the contents of the removed line, and the contents of the added line.
+
+Doing the same command against my friend's file, it creates this instruction:
+
+```diff
+@@ -3 +3 @@
+-broccoli
++pumpkin
+```
+
+When performing three way merges, git by default does line-based diffs like
+this.
+
+This isn't the only way however. We could diff individual characters with a
+command like `git diff --word-diff -U0` which for my change would result in an
+instruction as follows:
+
+```diff
+@@ -2 +2 @@ carrot
+[-sweet-]potato
+```
+
+For structured text like programming languages, advanced merge-tools like
+[mergiraf](https://mergiraf.org) have been made to do syntax-aware text diffing.
+One of the benefits a merge-tool like mergiraf brings to the table, is the fact
+that it's more intelligent comparison of text results in fewer instruction
+overlaps or conflicts.
+
+An example from the
+[mergiraf docs](https://mergiraf.org/conflicts.html#neighbouring-insertions-and-deletions-of-elements-whose-order-does-not-matter)
+is as follows:
+
+I have this copy of the code locally:
+
+```java
+class Bird {
+    String species;
+    int weight;
+}
+```
+
+And my friend has:
+
+```java
+class Bird {
+    String species;
+    double wingspan;
+}
+```
+
+And the common ancestor was:
+
+```java
+class Bird {
+    String species;
+}
+```
+
+A line based diff engine would create two instructions as follows:
+
+```diff
+@@ -2,0 +3 @@
++    int weight;
+```
+
+```diff
+@@ -2,0 +3 @@
++    double wingspan;
+```
+
+Which we would consider conflicting because both instructions say to add a new
+line at the same place and it doesn't know if mine or theirs should be used - or
+both. With a more intelligent diffing algorithm like mergiraf, its instructions
+in this scenario won't be conflicting because "Add a field to a class" doesn't
+have any strict ordering requirements, so it can simply apply both instructions,
+resulting in the final output of:
+
+```java
+class Bird {
+    String species;
+    int weight;
+    double wingspan;
+}
+```
+
+<details>
+    <summary>Specifically the JSON case that started this whole thing</summary>
+
+    The person I was talking with was dealing with files that contained a JSON array which had an entry on each line as follows:
+
+    ```json
+    [
+        {"foo": 2},
+        {"bar": 3}
+    ]
+    ```
+
+    Except, they were running into unexpected conflicts when two users were
+    changing possibly independent entries in that list.
+
+    I think that this was likely because the diff engine that they were using
+    was off for this format of data.
+
+    In an easily diff-able scenario IE:
+
+    **ours:**
+
+    ```json
+    [
+        {"foo": 5},
+        {"bar": 3}
+    ]
+    ```
+
+    **theirs:**
+
+    ```json
+    [
+        {"foo": 2},
+        {"bar": 4}
+    ]
+    ```
+
+    **base:**
+
+    ```json
+    [
+        {"foo": 2},
+        {"bar": 3}
+    ]
+    ```
+
+    Your diffs would be:
+
+    ```diff
+    @@ -2, +2 @@
+    -    {"foo": 2},
+    +    {"foo": 5},
+    ```
+
+    and
+
+    ```diff
+    @@ -3, +3 @@
+    -    {"bar": 3}
+    +    {"bar": 4}
+    ```
+
+    Which could both be applied cleanly - resulting in a successful merge.
+
+    It seems like their scenario wasn't producing diffs with the semantics they
+    were looking resulting in "incorrect" conflicts. They opted to have three
+    extra linebreaks between each of their array's entries which coerced their
+    particular diff engine's heuristics to behave how they desired.
+
+    With a different diff engine, they could very well get different results in
+    both the single linebreak and 4 linebreak scenarios.
+
+    For this person's particular project, I would either recommend making [your
+    own merge driver](https://www.julianburr.de/til/custom-git-merge-drivers)
+    which git calls whenever it encounters a conflicted scenario, or to even
+    consider writing their own git compatible merge command and three-way-merge
+    so they have full control over the merging behavior, instead of relying on
+    git's default heuristics at all.
+
+</details>
+
+## So - does a merge care about linebreaks?
+
+I feel justified in saying no.
+
+A three-way merge operates on a set of instructions that describe how to get
+from a common ancestor to my copy, and from that same ancestor to another
+person's copy. The merge algorithm itself doesn't care whether those
+instructions involve linebreaks or not.
+
+Some diff engines _might_ have heuristics around linebreaks which might make
+more or less favorable instructions, but the actual three way merge operation
+doesn't care about linebreaks.
+
+</article>

@@ -3,7 +3,8 @@ import type { RSSFeedItem } from "@astrojs/rss";
 export const recent: RSSFeedItem[] = [
   {
     title: "Reasonable LLM Usage - LLMs as an editor",
-    description: "Added some brief thoughts around LLMs as as an editorial process.",
+    description:
+      "Added some brief thoughts around LLMs as as an editorial process.",
     pubDate: new Date("Nov 16 2025"),
     link: "/thoughts/reasonable-llm-usage",
   },

@@ -8,4 +8,11 @@ export default defineConfig({
   integrations: [mdx()],
   prefetch: true,
   site: "https://cto.je",
+  markdown: {
+    shikiConfig: {
+      themes: {
+        light: "github-light",
+      },
+    },
+  },
 });
