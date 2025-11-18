@@ -57,3 +57,6 @@ fi
 
 # Local bin seems like a good idea.
 export PATH="$HOME/.local/bin:$PATH"
+
+# Setup zoxide
+eval "$(zoxide init zsh)"
