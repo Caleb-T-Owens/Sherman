@@ -8,6 +8,7 @@ gitbutler-client/
 gitbutler-web/
 bot-hub/
 gitlab/
+gitbutler client/
 
 bun/
 aphid/
@@ -22,3 +23,4 @@ alan-empower-learn/
 sync-discord/
 gix-merge-bug-cloned/
 gitbutler-blog/
+diesel/
