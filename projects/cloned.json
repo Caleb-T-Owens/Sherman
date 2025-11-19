@@ -78,5 +78,9 @@
   "gix-merge-bug-cloned": {
     "url": "git@github.com:Caleb-T-Owens/gix-should-conflict.git",
     "profiles": ["work", "home"]
+  },
+  "diesel": {
+    "url": "git@github.com:diesel-rs/diesel.git",
+    "profiles": ["work", "home"]
   }
 }
