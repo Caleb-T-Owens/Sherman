@@ -1,0 +1,128 @@
+<article>
+
+# Three way merges
+
+When I started work at [GitButler](https://gitbutler.com), I thought I was "well
+versed" in git - I could do fancy interactive rebases and cherry picks. What I
+didn't know was the underlying powerhouse that is the three-way-merge that
+powers software development as we know it.
+
+Version control is often something that perplexes developers - junior and senior
+alike. Without sounding too pretentious, I think that getting an understanding
+of how three way merges work really helped me visualise the effect different git
+operations would have.
+
+If there is anything that doesn't make sense or if you want some help, feel free
+to send an email to [merges@intherain.cloud](mailto:merges@intherain.cloud). I'd
+be more than happy to hop on a call and talk about this stuff.
+
+## Comparing text with diffs
+
+If I'm writing a JS file on my own, I might save `project_v1.js` and then follow
+up with `project_v2.js` and so on as I make checkpoints in my software that I
+might want to check back on.
+
+If we wanted to check on the progress I've made between `v1` and `v2`, we can
+use the `diff` command.
+
+For example, if `project_v1.js` looked like:
+
+```js
+function foo() {
+  console.log("Hello world");
+
+  const data = getDataFromRemote();
+
+  let sum = 0;
+
+  for (const datum of data) {
+    sum += datum.value;
+  }
+
+  return sum;
+}
+```
+
+and `project_v2.js` looked like:
+
+```js
+function foo() {
+  const data = getDataFromRemote();
+
+  let sum = 0;
+
+  for (const datum of data) {
+    sum += datum.value;
+  }
+
+  return sum;
+}
+```
+
+I could run `diff --unified project_v1.js project_v2.js` which gives us the
+following output:
+
+```
+--- project_v1.js       2025-10-30 16:19:14
++++ project_v2.js       2025-10-30 16:19:29
+@@ -1,6 +1,4 @@
+ function foo() {
+-  console.log("Hello world");
+-
+   const data = getDataFromRemote();
+
+   let sum = 0;
+```
+
+This output can be a little bit intimidating, so let's break it down.
+
+The output starts with `--- <filename> <timestamp>` followed by
+`+++ <filename> <timestamp>` which tells us that the following "hunks" show the
+difference from one file to the next.
+
+When we compare to files, there are often a series of removed lines and added
+lines. To make this easy to digest, the `diff` output breaks this into "hunks".
+A hunk will specify a portion of the file where some changes have been made.
+
+In our case, we see the header `@@ -1,6 +1,4 @@`. This translates to "lines `1`
+through `6` of the source file coorespond to lines `1` through `4` of the
+destination file".
+
+The lines after the header tell us what to remove and what to add back in in
+order to reach the final result.
+
+Each line in the `diff` output has an extra space front of it which will either
+be `+`, `-`, or ` `. If there is a `+`, it means a line has been added. If there
+is a `-`, it means a line has been removed, and if there is an empty ` `, it
+means that the line is just there to provide context to the reader.
+
+In our case, we see a line that start with a ` ` which help us oorient our
+selves so we know we are in fuction `foo`, followed by two lines that start with
+`-` which tell us that two debugging lines that existed in the file origional
+have now been removed.
+
+If two people change the same file, what should be considered the latest
+changes?
+
+## Using a common ancestor: Enter - the three way merges
+
+Walk through how we might manually figgure out what should be considered the
+latest changes
+
+Walk through how that _is_ a three way merge
+
+## The nemisis - conflicts
+
+Talk about how conflicts arise
+
+## `git merge` _is_ a three way merge
+
+## `git cherry-pick`... what is that?
+
+## `git rebase` - a series of cherry picks
+
+## Adding a negative number is subtraction? - Exploring `git revert`
+
+## Three way merges as an algebra?
+
+</article>
