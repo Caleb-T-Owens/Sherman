@@ -12,6 +12,7 @@ brew "nvm"
 brew "gh"
 brew "mercurial"
 brew "git"
+brew "sapling"
 
 # Compression Tools
 brew "zlib"
