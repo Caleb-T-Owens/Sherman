@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  get "list/my", to: "lists#my"
+  post "list/sites", to: "lists#create"
+
   # Authentication routes
   get "login", to: "sessions#new"
   post "login", to: "sessions#create"

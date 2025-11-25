@@ -20,6 +20,7 @@ export default function Home({ app_name, current_user }: HomeProps) {
         <nav>
           {current_user ? (
             <>
+              <a href="/list/my">My List</a>
               <span>Logged in as: {current_user.email}</span>
               <button onClick={handleLogout}>Logout</button>
             </>
@@ -31,7 +32,7 @@ export default function Home({ app_name, current_user }: HomeProps) {
           )}
         </nav>
       </header>
-      <p>Inertia.js with React and TypeScript is working!</p>
+      {current_user && <p>Inertia.js with React and TypeScript is working!</p>}
     </main>
   );
 }
