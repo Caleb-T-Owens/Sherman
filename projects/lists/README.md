@@ -11,3 +11,8 @@ A Rails 8 app using Inertia.js for building server-driven SPAs.
 - **Stimulus** available for lightweight interactivity
 - SQLite, Puma, Propshaft for the Rails bits
 - Kamal + Thruster for deployment
+
+## Development Notes
+
+- Components use semantic HTML without styling—designer will handle CSS later
+- Session-based authentication with bcrypt (login/register/logout flows implemented)
