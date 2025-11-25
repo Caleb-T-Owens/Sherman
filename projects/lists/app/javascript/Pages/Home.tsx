@@ -1,38 +1,20 @@
-import { router } from "@inertiajs/react";
+import Layout from "@/components/Layout";
 
 interface HomeProps {
-  app_name: string;
   current_user?: {
     id: number;
     email: string;
   };
 }
 
-export default function Home({ app_name, current_user }: HomeProps) {
-  const handleLogout = () => {
-    router.delete("/logout");
-  };
-
+function Home({ current_user }: HomeProps) {
   return (
-    <main>
-      <header>
-        <h1>Welcome to {app_name}!</h1>
-        <nav>
-          {current_user ? (
-            <>
-              <a href="/list/my">My List</a>
-              <span>Logged in as: {current_user.email}</span>
-              <button onClick={handleLogout}>Logout</button>
-            </>
-          ) : (
-            <>
-              <a href="/login">Login</a>
-              <a href="/register">Register</a>
-            </>
-          )}
-        </nav>
-      </header>
+    <>
       {current_user && <p>Inertia.js with React and TypeScript is working!</p>}
-    </main>
+    </>
   );
 }
+
+Home.layout = (page: React.ReactElement<HomeProps>) => <Layout children={page} />;
+
+export default Home;

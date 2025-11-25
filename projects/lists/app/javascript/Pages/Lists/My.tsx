@@ -1,65 +1,73 @@
-import { router } from "@inertiajs/react";
-import SiteForm from "~/components/SiteForm";
-
-interface Site {
-  id: number;
-  url: string;
-  title: string;
-  description: string;
-  created_at: string;
-}
+import Layout from "@/components/Layout";
+import SiteForm from "@/components/SiteForm";
+import SitesList from "@/components/SitesList";
+import { Site } from "@/types";
+import { useEffect, useRef } from "react";
 
 interface MyProps {
-  app_name: string;
-  current_user?: {
+  current_user: {
     id: number;
     email: string;
   };
   sites: Site[];
 }
 
-export default function My({ app_name, current_user, sites }: MyProps) {
-  const handleLogout = () => {
-    router.delete("/logout");
+function AddSiteDialog() {
+  const dialogRef = useRef<HTMLDialogElement>(null);
+
+  const openDialog = () => {
+    dialogRef.current?.showModal();
   };
 
+  const closeDialog = () => {
+    dialogRef.current?.close();
+  };
+
+  useEffect(() => {
+    function handler(e: KeyboardEvent) {
+      if (e.ctrlKey && e.key === "n") {
+        openDialog()
+      }
+    }
+
+    document.addEventListener("keypress", handler);
+
+    return () => {
+      document.removeEventListener("keypress", handler);
+    }
+  }, [])
+
   return (
-    <main>
-      <header>
-        <h1>Welcome to {app_name}!</h1>
-        <nav>
-          {current_user ? (
-            <>
-              <span>Logged in as: {current_user.email}</span>
-              <button onClick={handleLogout}>Logout</button>
-            </>
-          ) : (
-            <>
-              <a href="/login">Login</a>
-              <a href="/register">Register</a>
-            </>
-          )}
-        </nav>
-      </header>
+    <>
+      <button type="button" onClick={openDialog}>
+        Add New Site (ctrl + n)
+      </button>
 
-      <SiteForm />
+      <dialog ref={dialogRef}>
+        <h2>Add a Site</h2>
+        <SiteForm onSuccess={closeDialog} onCancel={closeDialog} />
+      </dialog>
+    </>
+  );
+}
 
+function My({ sites }: MyProps) {
+  return (
+    <>
       <section>
         <h2>Your Sites</h2>
+        <AddSiteDialog />
+
         {sites.length === 0 ? (
           <p>No sites yet.</p>
         ) : (
-          <ul>
-            {sites.map((site) => (
-              <li key={site.id}>
-                <h3>{site.title}</h3>
-                <a href={site.url}>{site.url}</a>
-                <p>{site.description}</p>
-              </li>
-            ))}
-          </ul>
+          <SitesList sites={sites} />
         )}
       </section>
-    </main>
+    </>
   );
 }
+
+My.layout = (page: React.ReactElement<MyProps>) => <Layout children={page} />;
+
+export default My;
