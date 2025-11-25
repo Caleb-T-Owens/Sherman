@@ -7,33 +7,57 @@ interface Props {
   frontmatter?: {
     title?: string;
     canonicalUrl?: string;
+    description?: string;
   };
   title?: string;
   canonicalUrl?: string;
+  description?: string;
 }
 
 const {
   frontmatter,
   title: astroTitle,
   canonicalUrl: astroCanonicalUrl,
+  description: astroDescription,
 } = Astro.props;
-const { title, canonicalUrl } = frontmatter ?? {
+const { title, canonicalUrl, description } = frontmatter ?? {
   title: astroTitle,
   canonicalUrl: astroCanonicalUrl,
+  description: astroDescription,
 };
+
+const pageTitle = title ?? "Caleb Owens";
+const pageDescription =
+  description ??
+  "Software engineer at GitButler, building developer tools. Thoughts on Git, programming, and interesting problems.";
+const fullUrl = canonicalUrl ?? `https://cto.je${Astro.url.pathname}`;
 ---
 
 <!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>{title ?? "Caleb Owens"}</title>
+    <title>{pageTitle}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={pageDescription} />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={fullUrl} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={pageDescription} />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary" />
+    <meta property="twitter:url" content={fullUrl} />
+    <meta property="twitter:title" content={pageTitle} />
+    <meta property="twitter:description" content={pageDescription} />
+
+    <link rel="canonical" href={fullUrl} />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
     <link rel="manifest" href="/site.webmanifest" />
-    {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
     <script
       async
       is:inline
