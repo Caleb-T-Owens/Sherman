@@ -1,0 +1,41 @@
+---
+import { recent } from "../recent";
+---
+
+<ul>
+  {
+    recent.map((article) => {
+      function date() {
+        if (!article.pubDate) return;
+
+        const formattedDate = article.pubDate?.toLocaleDateString("en-GB", {
+          day: "numeric",
+          month: "long",
+          year: "numeric",
+        });
+        return (
+          <>
+            <br />
+            <small>
+              <time datetime={article.pubDate.toISOString()}>
+                {formattedDate}
+              </time>
+            </small>
+          </>
+        );
+      }
+
+      return (
+        <li>
+          <p>
+            <a href={article.link}>
+              <b>{article.title}</b>
+            </a>{" "}
+            - {article.description}
+            {date()}
+          </p>
+        </li>
+      );
+    })
+  }
+</ul>

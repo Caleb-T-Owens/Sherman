@@ -62,50 +62,11 @@ function getLastModifiedDate(filePath: string): string | null {
 function formatDate(dateString: string): string {
   const date = new Date(dateString);
 
-  // Get day with ordinal suffix (1st, 2nd, 3rd, etc.)
-  const day = date.getDate();
-  const ordinal = getOrdinal(day);
-
-  // Get month name
-  const monthNames = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ];
-  const month = monthNames[date.getMonth()];
-
-  // Get year
-  const year = date.getFullYear();
-
-  return `${day}${ordinal} ${month} ${year}`;
-}
-
-/**
- * Get the ordinal suffix for a day number
- * @param day - Day of the month (1-31)
- * @returns Ordinal suffix (st, nd, rd, th)
- */
-function getOrdinal(day: number): string {
-  if (day > 3 && day < 21) return "th";
-  switch (day % 10) {
-    case 1:
-      return "st";
-    case 2:
-      return "nd";
-    case 3:
-      return "rd";
-    default:
-      return "th";
-  }
+  return date.toLocaleDateString("en-GB", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
 }
 
 // Get filesystem modification date using the file path relative to project root
