@@ -1,24 +1,13 @@
-# README
+# Lists
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+A Rails 8 app using Inertia.js for building server-driven SPAs.
 
-Things you may want to cover:
+## Stack
 
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+- **Rails 8.1** (Ruby 3.4.1) with the new Solid* stack (Cache/Queue/Cable)
+- **Inertia.js** bridging Rails to React—no API layer needed
+- **React 19** + TypeScript for the frontend
+- **Bun** for JS bundling and running the page registry generator
+- **Stimulus** available for lightweight interactivity
+- SQLite, Puma, Propshaft for the Rails bits
+- Kamal + Thruster for deployment
