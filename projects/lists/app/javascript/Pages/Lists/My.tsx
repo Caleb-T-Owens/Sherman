@@ -26,7 +26,7 @@ function AddSiteDialog() {
   useEffect(() => {
     function handler(e: KeyboardEvent) {
       if (e.ctrlKey && e.key === "n") {
-        openDialog()
+        openDialog();
       }
     }
 
@@ -34,8 +34,8 @@ function AddSiteDialog() {
 
     return () => {
       document.removeEventListener("keypress", handler);
-    }
-  }, [])
+    };
+  }, []);
 
   return (
     <>

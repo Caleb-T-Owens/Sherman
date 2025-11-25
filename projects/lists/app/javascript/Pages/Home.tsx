@@ -15,6 +15,8 @@ function Home({ current_user }: HomeProps) {
   );
 }
 
-Home.layout = (page: React.ReactElement<HomeProps>) => <Layout children={page} />;
+Home.layout = (page: React.ReactElement<HomeProps>) => (
+  <Layout children={page} />
+);
 
 export default Home;

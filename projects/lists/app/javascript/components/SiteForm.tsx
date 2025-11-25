@@ -32,13 +32,13 @@ export default function SiteForm({ onSuccess, onCancel }: SiteFormProps) {
 
   useEffect(() => {
     function handler(e: KeyboardEvent) {
-      console.log(e.ctrlKey, e.key)
+      console.log(e.ctrlKey, e.key);
       if (e.ctrlKey && e.key === "s") {
-        formRef.current?.submit()
+        formRef.current?.submit();
       }
 
       if (e.ctrlKey && e.key === "c") {
-        handleCancel()
+        handleCancel();
       }
     }
 
@@ -46,8 +46,8 @@ export default function SiteForm({ onSuccess, onCancel }: SiteFormProps) {
 
     return () => {
       document.removeEventListener("keypress", handler);
-    }
-  }, [])
+    };
+  }, []);
 
   return (
     <form onSubmit={handleSubmit}>

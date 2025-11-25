@@ -2,7 +2,9 @@
   "name": "app",
   "private": true,
   "scripts": {
-    "build": "bun bun.config.js"
+    "build": "bun bun.config.js",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "dependencies": {
     "@hotwired/stimulus": "^3.2.2",
@@ -14,6 +16,7 @@
   "devDependencies": {
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
+    "prettier": "^3.6.2",
     "typescript": "^5.9.3"
   }
 }

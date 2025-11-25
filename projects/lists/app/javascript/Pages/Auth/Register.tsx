@@ -19,7 +19,12 @@ export default function Register({ errors }: RegisterProps) {
     <main>
       <h1>Register</h1>
 
-      <form onSubmit={(e) => { e.preventDefault(); post("/register"); }}>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          post("/register");
+        }}
+      >
         <div>
           <label htmlFor="email">Email</label>
           <input
