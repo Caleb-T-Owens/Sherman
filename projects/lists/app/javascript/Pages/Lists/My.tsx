@@ -2,7 +2,7 @@ import Layout from "@/components/Layout";
 import SiteForm from "@/components/SiteForm";
 import SitesList from "@/components/SitesList";
 import { Site } from "@/types";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface MyProps {
   current_user: {
@@ -14,19 +14,20 @@ interface MyProps {
 
 function AddSiteDialog() {
   const dialogRef = useRef<HTMLDialogElement>(null);
+  const [modalOpen, setModalOpen] = useState(false);
 
-  const openDialog = () => {
-    dialogRef.current?.showModal();
-  };
-
-  const closeDialog = () => {
-    dialogRef.current?.close();
-  };
+  useEffect(() => {
+    if (modalOpen) {
+      dialogRef.current?.showModal();
+    } else {
+      dialogRef.current?.close();
+    }
+  }, [modalOpen, dialogRef.current]);
 
   useEffect(() => {
     function handler(e: KeyboardEvent) {
       if (e.ctrlKey && e.key === "n") {
-        openDialog();
+        setModalOpen(true);
       }
     }
 
@@ -39,13 +40,20 @@ function AddSiteDialog() {
 
   return (
     <>
-      <button type="button" onClick={openDialog}>
+      <button type="button" onClick={() => setModalOpen(true)}>
         Add New Site (ctrl + n)
       </button>
 
       <dialog ref={dialogRef}>
-        <h2>Add a Site</h2>
-        <SiteForm onSuccess={closeDialog} onCancel={closeDialog} />
+        {modalOpen ? (
+          <>
+            <h2>Add a Site</h2>
+            <SiteForm
+              onSuccess={() => setModalOpen(false)}
+              onCancel={() => setModalOpen(false)}
+            />
+          </>
+        ) : undefined}
       </dialog>
     </>
   );

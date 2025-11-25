@@ -1,5 +1,6 @@
 import { useForm } from "@inertiajs/react";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { fetchMetadata } from "@/api/metadata";
 
 interface SiteFormProps {
   onSuccess: () => void;
@@ -14,10 +15,11 @@ export default function SiteForm({ onSuccess, onCancel }: SiteFormProps) {
   });
 
   const formRef = useRef<HTMLFormElement>(null);
+  const [fetching, setFetching] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    post("/list/sites", {
+    post("/sites", {
       onSuccess: () => {
         reset();
         onSuccess();
@@ -30,15 +32,53 @@ export default function SiteForm({ onSuccess, onCancel }: SiteFormProps) {
     onCancel();
   };
 
+  const handleFetchMetadata = async () => {
+    if (!data.url) {
+      return;
+    }
+
+    setFetching(true);
+    try {
+      const result = await fetchMetadata(data.url);
+
+      if ("error" in result) {
+        alert(`Failed to fetch metadata: ${result.error}`);
+      } else {
+        if (result.title) {
+          setData("title", result.title);
+        }
+        if (result.description) {
+          setData("description", result.description);
+        }
+      }
+    } catch (error) {
+      alert(`Failed to fetch metadata: ${error}`);
+    } finally {
+      setFetching(false);
+    }
+  };
+
   useEffect(() => {
     function handler(e: KeyboardEvent) {
-      console.log(e.ctrlKey, e.key);
       if (e.ctrlKey && e.key === "s") {
-        formRef.current?.submit();
+        e.preventDefault();
+        e.stopPropagation();
+        formRef.current?.requestSubmit();
+        return;
       }
 
       if (e.ctrlKey && e.key === "c") {
+        e.preventDefault();
+        e.stopPropagation();
         handleCancel();
+        return;
+      }
+
+      if (e.ctrlKey && e.key === "m") {
+        e.preventDefault();
+        e.stopPropagation();
+        handleFetchMetadata();
+        return;
       }
     }
 
@@ -47,10 +87,10 @@ export default function SiteForm({ onSuccess, onCancel }: SiteFormProps) {
     return () => {
       document.removeEventListener("keypress", handler);
     };
-  }, []);
+  }, [formRef.current, data, post]);
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form ref={formRef} onSubmit={handleSubmit}>
       <div>
         <label htmlFor="url">URL</label>
         <input
@@ -60,6 +100,13 @@ export default function SiteForm({ onSuccess, onCancel }: SiteFormProps) {
           onChange={(e) => setData("url", e.target.value)}
           required
         />
+        <button
+          type="button"
+          onClick={handleFetchMetadata}
+          disabled={!data.url || fetching}
+        >
+          {fetching ? "Fetching..." : "Auto-fill (ctrl+m)"}
+        </button>
       </div>
 
       <div>
