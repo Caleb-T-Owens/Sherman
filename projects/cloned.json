@@ -82,5 +82,13 @@
   "diesel": {
     "url": "git@github.com:diesel-rs/diesel.git",
     "profiles": ["work", "home"]
+  },
+  "git": {
+    "url": "git@github.com:git/git.git",
+    "profiles": ["work", "home"]
+  },
+  "ruby": {
+    "url": "git@github.com:ruby/ruby.git",
+    "profiles": ["work", "home"]
   }
 }
