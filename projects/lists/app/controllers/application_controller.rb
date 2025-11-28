@@ -2,7 +2,7 @@ class ApplicationController < ActionController::Base
   inertia_share app_name: "Lists"
   inertia_share current_user: -> {
     if current_user
-      { id: current_user.id, email: current_user.email }
+      { id: current_user.id, email: current_user.email, admin: current_user.admin? }
     end
   }
 

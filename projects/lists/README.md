@@ -17,3 +17,5 @@ A Rails 8 app using Inertia.js for building server-driven SPAs.
 - Components use semantic HTML without styling—designer will handle CSS later
 - Session-based authentication with bcrypt (login/register/logout flows
   implemented)
+- Admin dashboard powered by Administrate v1, accessible at `/admin` for
+  authorized users (see `User#admin?` in `app/models/user.rb`)

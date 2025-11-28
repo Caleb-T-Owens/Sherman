@@ -6,4 +6,8 @@ class User < ApplicationRecord
   validates :email, presence: true, uniqueness: true, format: { with: URI::MailTo::EMAIL_REGEXP }
 
   normalizes :email, with: ->(email) { email.strip.downcase }
+
+  def admin?
+    email == "hello@calebowens.com"
+  end
 end
