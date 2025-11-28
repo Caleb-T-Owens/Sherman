@@ -9,6 +9,7 @@ interface PageProps {
   current_user?: {
     id: number;
     email: string;
+    admin: boolean;
   };
   [key: string]: unknown;
 }
@@ -33,6 +34,11 @@ export default function Layout({ children }: LayoutProps) {
             {current_user && (
               <li>
                 <a href="/list/my">My List</a>
+              </li>
+            )}
+            {current_user?.admin && (
+              <li>
+                <a href="/admin">Admin</a>
               </li>
             )}
           </ul>
