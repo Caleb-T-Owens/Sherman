@@ -1,4 +1,4 @@
-import { router, usePage } from "@inertiajs/react";
+import { Link, router, usePage } from "@inertiajs/react";
 import { ReactNode } from "react";
 
 interface LayoutProps {
@@ -23,22 +23,21 @@ export default function Layout({ children }: LayoutProps) {
 
   return (
     <>
-      <h1 className="title">Lists</h1>
       <header className="page-header">
         <nav>
           <h2>Main</h2>
           <ul>
             <li>
-              <a href="/">Home</a>
+              <Link href="/">Home</Link>
             </li>
             {current_user && (
               <li>
-                <a href="/list/my">My List</a>
+                <Link href="/list/my">My List</Link>
               </li>
             )}
             {current_user?.admin && (
               <li>
-                <a href="/admin">Admin</a>
+                <Link href="/admin">Admin</Link>
               </li>
             )}
           </ul>
@@ -58,10 +57,10 @@ export default function Layout({ children }: LayoutProps) {
             ) : (
               <>
                 <li>
-                  <a href="/login">Login</a>
+                  <Link href="/login">Login</Link>
                 </li>
                 <li>
-                  <a href="/register">Register</a>
+                  <Link href="/register">Register</Link>
                 </li>
               </>
             )}

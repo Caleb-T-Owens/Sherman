@@ -1,5 +1,5 @@
 import { createRoot } from "react-dom/client";
-import { createInertiaApp } from "@inertiajs/react";
+import { createInertiaApp, router } from "@inertiajs/react";
 import { pages } from "./pages";
 
 createInertiaApp({
