@@ -1,0 +1,11 @@
+[package]
+name = "any"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+rust-sitter = "0.4.5"
+anyhow = "1.0"
+
+[build-dependencies]
+rust-sitter-tool = "0.4.5"
