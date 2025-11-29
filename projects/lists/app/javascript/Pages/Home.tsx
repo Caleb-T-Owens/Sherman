@@ -46,65 +46,69 @@ function Home() {
       </p>
       <h2>Hotkeys</h2>
       <table>
-        <tr>
-          <th>Keybind</th>
-          <th>Scope</th>
-          <th>Action</th>
-        </tr>
-        <tr>
-          <td>ctrl + n</td>
-          <td>Global</td>
-          <td>Opens the new site modal</td>
-        </tr>
-        <tr>
-          <td>ctrl + e</td>
-          <td>Global</td>
-          <td>
-            Opens the edit site modal for the currently cursor-focused site
-          </td>
-        </tr>
-        <tr>
-          <td>ctrl + s</td>
-          <td>New site modal | Edit site modal</td>
-          <td>Saves the site</td>
-        </tr>
-        <tr>
-          <td>ctrl + m</td>
-          <td>New site modal | Edit site modal</td>
-          <td>
-            Fetches site <b>m</b>etadata
-          </td>
-        </tr>
-        <tr>
-          <td>ctrl + c</td>
-          <td>New site modal | Edit site modal</td>
-          <td>Closes the modal</td>
-        </tr>
-        <tr>
-          <td>ctrl + k</td>
-          <td>Global</td>
-          <td>Moves the cursor up</td>
-        </tr>
-        <tr>
-          <td>ctrl + j</td>
-          <td>Global</td>
-          <td>Moves the cursor down</td>
-        </tr>
-        <tr>
-          <td>ctrl + enter</td>
-          <td>Global</td>
-          <td>Opens the current cursor-focused site</td>
-        </tr>
-        <tr>
-          <td>ctrl + g</td>
-          <td>Global</td>
-          <td>Opens Google with the your current search term</td>
-        </tr>
-        <tr>
-          <td>ctrl + w</td>
-          <td>Global</td>
-          <td>Opens Wikipedia with the your current search term</td>
-        </tr>
+        <thead>
+          <tr>
+            <th>Keybind</th>
+            <th>Scope</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>ctrl + n</td>
+            <td>Global</td>
+            <td>Opens the new site modal</td>
+          </tr>
+          <tr>
+            <td>ctrl + e</td>
+            <td>Global</td>
+            <td>
+              Opens the edit site modal for the currently cursor-focused site
+            </td>
+          </tr>
+          <tr>
+            <td>ctrl + s</td>
+            <td>New site modal | Edit site modal</td>
+            <td>Saves the site</td>
+          </tr>
+          <tr>
+            <td>ctrl + m</td>
+            <td>New site modal | Edit site modal</td>
+            <td>
+              Fetches site <b>m</b>etadata
+            </td>
+          </tr>
+          <tr>
+            <td>ctrl + c</td>
+            <td>New site modal | Edit site modal</td>
+            <td>Closes the modal</td>
+          </tr>
+          <tr>
+            <td>ctrl + k</td>
+            <td>Global</td>
+            <td>Moves the cursor up</td>
+          </tr>
+          <tr>
+            <td>ctrl + j</td>
+            <td>Global</td>
+            <td>Moves the cursor down</td>
+          </tr>
+          <tr>
+            <td>ctrl + enter</td>
+            <td>Global</td>
+            <td>Opens the current cursor-focused site</td>
+          </tr>
+          <tr>
+            <td>ctrl + g</td>
+            <td>Global</td>
+            <td>Opens Google with the your current search term</td>
+          </tr>
+          <tr>
+            <td>ctrl + w</td>
+            <td>Global</td>
+            <td>Opens Wikipedia with the your current search term</td>
+          </tr>
+        </tbody>
       </table>
     </article>
   );
