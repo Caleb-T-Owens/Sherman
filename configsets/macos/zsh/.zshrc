@@ -49,10 +49,10 @@ function pp {
 export COMPOSE_MENU=0
 
 
-if [ -e /opt/homebrew/opt/sdkman-cli/libexec ]
+if [ -e $HOME/.sdkman ]
 then
-    export SDKMAN_DIR="/opt/homebrew/opt/sdkman-cli/libexec"
-    [[ -s "/opt/homebrew/opt/sdkman-cli/libexec/bin/sdkman-init.sh" ]] && source "/opt/homebrew/opt/sdkman-cli/libexec/bin/sdkman-init.sh"
+    export SDKMAN_DIR="$HOME/.sdkman"
+    [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
 fi
 
 # Local bin seems like a good idea.
