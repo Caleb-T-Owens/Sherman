@@ -1,7 +1,8 @@
+import SiteForm from "@/components/SiteForm";
 import { Site } from "@/types";
 import { useForm } from "@inertiajs/react";
 import Fuse from "fuse.js";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type Props = {
   sites: Site[];
@@ -62,16 +63,17 @@ export default function SitesList({ sites, searchTerm }: Props) {
   }, [sortedSites, cursor]);
 
   return (
-    <ul>
+    <ul style={{ padding: "0" }}>
       {sortedSites.map((site, idx) => (
         <li
           key={site.id}
           className={idx === cursor ? "site-cursor-focus" : undefined}
+          style={{ padding: "8px", listStyleType: "none" }}
         >
-          <p style={{ marginBottom: "2px" }}>
-            <DeleteSite siteId={site.id} /> {site.title} -{" "}
-            <a href={site.url}>{site.url}</a>
-          </p>
+          <DeleteSite siteId={site.id} />
+          <EditSite site={site} cursorFocus={idx === cursor} /> {site.title} -{" "}
+          <a href={site.url}>{site.url}</a>
+          <br />
           <small>{site.description}</small>
         </li>
       ))}
@@ -87,6 +89,52 @@ function DeleteSite({ siteId }: { siteId: number }) {
   }
 
   return <button onClick={deleteSite}>X</button>;
+}
+
+function EditSite({ site, cursorFocus }: { site: Site; cursorFocus: boolean }) {
+  const [open, setOpen] = useState(false);
+  const dialogRef = useRef<HTMLDialogElement>(null);
+
+  useEffect(() => {
+    if (open) {
+      dialogRef.current?.showModal();
+    } else {
+      dialogRef.current?.close();
+    }
+  }, [open, dialogRef.current]);
+
+  useEffect(() => {
+    if (!cursorFocus || open) return;
+
+    function handle(e: KeyboardEvent) {
+      if (e.ctrlKey && e.key === "e") {
+        setOpen(true);
+      }
+    }
+
+    document.addEventListener("keydown", handle);
+
+    return () => {
+      document.removeEventListener("keydown", handle);
+    };
+  }, [cursorFocus, open]);
+
+  return (
+    <>
+      <button onClick={() => setOpen(true)}>E</button>
+      <dialog ref={dialogRef}>
+        {open ? (
+          <>
+            <SiteForm
+              onSuccess={() => setOpen(false)}
+              onCancel={() => setOpen(false)}
+              operation={{ kind: "update", site }}
+            />
+          </>
+        ) : undefined}
+      </dialog>
+    </>
+  );
 }
 
 function sortSites(sites: Site[], searchTerm?: string): Site[] {
