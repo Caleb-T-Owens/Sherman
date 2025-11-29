@@ -1,30 +1,56 @@
 import { useForm } from "@inertiajs/react";
 import { useEffect, useRef, useState } from "react";
 import { fetchMetadata } from "@/api/metadata";
+import { Site } from "@/types";
 
 interface SiteFormProps {
   onSuccess: () => void;
   onCancel: () => void;
+  operation:
+    | {
+        kind: "create";
+      }
+    | {
+        kind: "update";
+        site: Site;
+      };
 }
 
-export default function SiteForm({ onSuccess, onCancel }: SiteFormProps) {
-  const { data, setData, post, processing, reset } = useForm({
-    url: "",
-    title: "",
-    description: "",
-  });
+export default function SiteForm({
+  onSuccess,
+  onCancel,
+  operation,
+}: SiteFormProps) {
+  const { data, setData, post, put, processing, reset } = useForm(
+    operation.kind === "update"
+      ? operation.site
+      : {
+          title: "",
+          description: "",
+          url: "",
+        }
+  );
 
   const formRef = useRef<HTMLFormElement>(null);
   const [fetching, setFetching] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    post("/sites", {
-      onSuccess: () => {
-        reset();
-        onSuccess();
-      },
-    });
+    if (operation.kind === "create") {
+      post("/sites", {
+        onSuccess: () => {
+          reset();
+          onSuccess();
+        },
+      });
+    } else {
+      put(`/sites/${operation.site.id}`, {
+        onSuccess: () => {
+          reset();
+          onSuccess();
+        },
+      });
+    }
   };
 
   const handleCancel = () => {
@@ -82,10 +108,10 @@ export default function SiteForm({ onSuccess, onCancel }: SiteFormProps) {
       }
     }
 
-    document.addEventListener("keypress", handler);
+    document.addEventListener("keydown", handler);
 
     return () => {
-      document.removeEventListener("keypress", handler);
+      document.removeEventListener("keydown", handler);
     };
   }, [formRef.current, data, post]);
 
