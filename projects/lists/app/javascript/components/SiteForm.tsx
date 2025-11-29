@@ -82,10 +82,10 @@ export default function SiteForm({ onSuccess, onCancel }: SiteFormProps) {
       }
     }
 
-    document.addEventListener("keypress", handler);
+    document.addEventListener("keydown", handler);
 
     return () => {
-      document.removeEventListener("keypress", handler);
+      document.removeEventListener("keydown", handler);
     };
   }, [formRef.current, data, post]);
 

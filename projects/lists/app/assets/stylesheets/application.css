@@ -116,3 +116,7 @@ code {
   background-color: var(--color-code-bg) !important;
   padding: 8px;
 }
+
+.site-cursor-focus {
+  outline: 2px solid black;
+}

@@ -31,10 +31,10 @@ function AddSiteDialog() {
       }
     }
 
-    document.addEventListener("keypress", handler);
+    document.addEventListener("keydown", handler);
 
     return () => {
-      document.removeEventListener("keypress", handler);
+      document.removeEventListener("keydown", handler);
     };
   }, []);
 
@@ -60,16 +60,27 @@ function AddSiteDialog() {
 }
 
 function My({ sites }: MyProps) {
+  const [term, setTerm] = useState("");
+
   return (
     <>
       <section>
         <h2>Your Sites</h2>
+        <input
+          autoFocus
+          type="text"
+          value={term}
+          onInput={(e) => {
+            setTerm(e.currentTarget.value);
+          }}
+        ></input>
+        <br />
         <AddSiteDialog />
 
         {sites.length === 0 ? (
           <p>No sites yet.</p>
         ) : (
-          <SitesList sites={sites} />
+          <SitesList sites={sites} searchTerm={term} />
         )}
       </section>
     </>
