@@ -62,7 +62,7 @@ def one(input)
     if instr[:instr] == :or
       memory[instr[:outreg]] = clamp(access_value(memory, instr[:ina]) | access_value(memory, instr[:inb]))
     elsif instr[:instr] == :and
-      memory[instr[:outreg]] = access_value(memory, instr[:ina]) & access_value(memory, instr[:inb]))
+      memory[instr[:outreg]] = access_value(memory, instr[:ina]) & access_value(memory, instr[:inb])
     elsif instr[:instr] == :lshift
       memory[instr[:outreg]] = access_value(memory, instr[:ina]) << access_value(memory, instr[:inb])
     elsif instr[:instr] == :and
