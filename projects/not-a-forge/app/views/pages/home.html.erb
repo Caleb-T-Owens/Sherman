@@ -1,0 +1,17 @@
+<article>
+  <h1>Welcome to Not A Forge</h1>
+
+  <p>
+    This is a simple project management platform. Sign up or sign in to get started!
+  </p>
+
+  <% unless authenticated? %>
+    <p>
+      <%= link_to "Sign Up", signup_path %> or <%= link_to "Sign In", new_session_path %>
+    </p>
+  <% else %>
+    <p>
+      Welcome back! You are signed in as <%= Current.user.email_address %>.
+    </p>
+  <% end %>
+</article>
