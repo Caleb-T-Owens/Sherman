@@ -22,10 +22,11 @@
     <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module" %>
   </head>
 
-  <body>
-    <h1 class="title">Not A Forge</h1>
-
-    <%= render "shared/navigation" do; end %>
+  <body class="main-layout">
+    <%= render "shared/top_bar" %>
+    <% if authenticated? %>
+      <%= render "shared/side_bar" %>
+    <% end %>
 
     <% if notice.present? %>
       <div class="notice readable-width"><%= notice %></div>
@@ -35,6 +36,8 @@
       <div class="alert readable-width"><%= alert %></div>
     <% end %>
 
+    <main class="content">
     <%= yield %>
+    </main>
   </body>
 </html>

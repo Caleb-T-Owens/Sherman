@@ -1,6 +1,7 @@
-class Settings::ProfilesController < ApplicationController
+class Settings::ProfilesController < Settings::BaseController
   layout "settings"
   before_action :set_user
+  before_action :set_page_name, only: %i[show edit]
 
   def show
   end
@@ -60,5 +61,9 @@ class Settings::ProfilesController < ApplicationController
     else
       { email_address: update_params[:email_address] }
     end
+  end
+
+  def set_page_name
+    @page_name = "Profile settings"
   end
 end
