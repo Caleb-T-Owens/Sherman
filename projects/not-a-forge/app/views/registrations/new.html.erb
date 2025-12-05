@@ -1,0 +1,39 @@
+<article>
+  <h1>Sign Up</h1>
+
+  <%= form_with model: @user, url: signup_path do |form| %>
+    <% if @user.errors.any? %>
+      <div style="color: red">
+        <h2><%= pluralize(@user.errors.count, "error") %> prohibited this user from being saved:</h2>
+        <ul>
+          <% @user.errors.each do |error| %>
+            <li><%= error.full_message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div>
+      <%= form.label :email_address %>
+      <%= form.email_field :email_address, required: true, autofocus: true, autocomplete: "email" %>
+    </div>
+
+    <div>
+      <%= form.label :password %>
+      <%= form.password_field :password, required: true, autocomplete: "new-password" %>
+    </div>
+
+    <div>
+      <%= form.label :password_confirmation %>
+      <%= form.password_field :password_confirmation, required: true, autocomplete: "new-password" %>
+    </div>
+
+    <div>
+      <%= form.submit "Sign Up" %>
+    </div>
+  <% end %>
+
+  <p>
+    Already have an account? <%= link_to "Sign in", new_session_path %>
+  </p>
+</article>

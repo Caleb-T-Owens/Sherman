@@ -1,0 +1,25 @@
+<header class="page-header">
+  <nav>
+    <h2>Main</h2>
+    <ul>
+      <li><%= link_to "Home", root_path %></li>
+    </ul>
+  </nav>
+
+  <% if authenticated? %>
+    <nav>
+      <h2>Account</h2>
+      <ul>
+        <li><%= link_to "Sign Out", session_path, data: { turbo_method: :delete } %></li>
+      </ul>
+    </nav>
+  <% else %>
+    <nav>
+      <h2>Account</h2>
+      <ul>
+        <li><%= link_to "Sign In", new_session_path %></li>
+        <li><%= link_to "Sign Up", signup_path %></li>
+      </ul>
+    </nav>
+  <% end %>
+</header>
