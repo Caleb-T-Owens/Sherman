@@ -1,5 +1,5 @@
 <article>
-  <h1>Edit Profile</h1>
+  <h1>Profile</h1>
 
   <%= form_with model: @user, url: settings_profile_path, method: :patch do |form| %>
     <% if @user.errors.any? %>
@@ -13,35 +13,31 @@
       </div>
     <% end %>
 
-    <section>
-      <h2>Account Details</h2>
+    <h2>Account Details</h2>
 
-      <div>
-        <%= form.label :email_address %>
-        <%= form.email_field :email_address, required: true, autocomplete: "email" %>
-      </div>
-    </section>
+    <div>
+      <%= form.label :email_address %>
+      <%= form.email_field :email_address, required: true, autocomplete: "email" %>
+    </div>
 
-    <section>
-      <h2>Change Password</h2>
+    <h2>Change Password</h2>
 
-      <p>Leave blank if you don't want to change your password.</p>
+    <p>Leave blank if you don't want to change your password.</p>
 
-      <div>
-        <%= form.label :current_password, "Current Password (required to make changes)" %>
-        <%= form.password_field :current_password, autocomplete: "current-password" %>
-      </div>
+    <div>
+      <%= form.label :current_password, "Current Password (required to make changes)" %>
+      <%= form.password_field :current_password, autocomplete: "current-password" %>
+    </div>
 
-      <div>
-        <%= form.label :password, "New Password" %>
-        <%= form.password_field :password, autocomplete: "new-password" %>
-      </div>
+    <div>
+      <%= form.label :password, "New Password" %>
+      <%= form.password_field :password, autocomplete: "new-password" %>
+    </div>
 
-      <div>
-        <%= form.label :password_confirmation, "Confirm New Password" %>
-        <%= form.password_field :password_confirmation, autocomplete: "new-password" %>
-      </div>
-    </section>
+    <div>
+      <%= form.label :password_confirmation, "Confirm New Password" %>
+      <%= form.password_field :password_confirmation, autocomplete: "new-password" %>
+    </div>
 
     <div>
       <%= form.submit "Update Profile" %>

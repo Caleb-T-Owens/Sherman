@@ -1,0 +1,11 @@
+<aside class="side-bar">
+  <nav>
+    <b>Hi <%= Current.user.email_address %></b>
+    <ul>
+      <li><%= link_to "Settings", settings_profile_path %></li>
+      <li><%= link_to "Sign Out", session_path, data: { turbo_method: :delete } %></li>
+    </ul>
+  </nav>
+
+  <%= content_for?(:side_bar) ? yield(:side_bar) : nil %>
+</aside>
