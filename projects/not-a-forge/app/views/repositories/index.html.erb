@@ -1,0 +1,35 @@
+<article>
+  <h1>My Repositories</h1>
+
+  <p>
+    <%= link_to "Add Repository", new_repository_path %>
+  </p>
+
+  <% if @repositories.any? %>
+    <table>
+      <thead>
+        <tr>
+          <th>Repository</th>
+          <th>Token</th>
+          <th>Added</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @repositories.each do |repository| %>
+          <tr>
+            <td><strong><%= repository.full_name %></strong></td>
+            <td><%= repository.token&.name || "None" %></td>
+            <td><%= repository.created_at.to_date %></td>
+            <td>
+              <%= link_to "Edit", edit_repository_path(repository) %>
+              <%= button_to "Remove", repository_path(repository), method: :delete, data: { turbo_confirm: "Are you sure you want to remove this repository?" } %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% else %>
+    <p>You haven't added any repositories yet. Add a repository to get started.</p>
+  <% end %>
+</article>

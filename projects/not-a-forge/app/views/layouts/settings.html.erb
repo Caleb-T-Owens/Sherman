@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
   <head>
     <meta charset="utf-8">
     <title><%= content_for(:title) || "Not A Forge" %></title>
@@ -23,18 +23,27 @@
   </head>
 
   <body>
-    <h1 class="title">Not A Forge</h1>
-
-    <%= render "shared/navigation" do; end %>
-
-    <% if notice.present? %>
-      <div class="notice readable-width"><%= notice %></div>
+    <%= render "shared/navigation" do %>
+      <nav>
+        <h2>Settings</h2>
+          <ul>
+            <li><%= link_to "Profile", settings_profile_path, style: (current_page?(settings_profile_path) || current_page?(edit_settings_profile_path) ? "font-weight: bold;" : "") %></li>
+            <li><%= link_to "Tokens", settings_tokens_path, style: (controller_name == "tokens" ? "font-weight: bold;" : "") %></li>
+          </ul>
+        </nav>
     <% end %>
 
-    <% if alert.present? %>
-      <div class="alert readable-width"><%= alert %></div>
-    <% end %>
+    <main>
 
-    <%= yield %>
+      <% if notice.present? %>
+        <p class="notice"><%= notice %></p>
+      <% end %>
+
+      <% if alert.present? %>
+        <p class="alert"><%= alert %></p>
+      <% end %>
+
+      <%= yield %>
+    </main>
   </body>
 </html>

@@ -1,7 +1,7 @@
 <article>
   <h1>Edit Profile</h1>
 
-  <%= form_with model: @user, url: profile_path, method: :patch do |form| %>
+  <%= form_with model: @user, url: settings_profile_path, method: :patch do |form| %>
     <% if @user.errors.any? %>
       <div style="color: red">
         <h2><%= pluralize(@user.errors.count, "error") %> prohibited this profile from being saved:</h2>
@@ -45,7 +45,7 @@
 
     <div>
       <%= form.submit "Update Profile" %>
-      <%= link_to "Cancel", profile_path %>
+      <%= link_to "Cancel", settings_profile_path %>
     </div>
   <% end %>
 </article>

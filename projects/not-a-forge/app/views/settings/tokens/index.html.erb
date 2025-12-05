@@ -1,0 +1,33 @@
+<article>
+  <h1>GitHub Access Tokens</h1>
+
+  <p>
+    <%= link_to "New Token", new_settings_token_path %>
+  </p>
+
+  <% if @tokens.any? %>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Created</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @tokens.each do |token| %>
+          <tr>
+            <td><%= token.name %></td>
+            <td><%= token.created_at.to_date %></td>
+            <td>
+              <%= link_to "Edit", edit_settings_token_path(token) %>
+              <%= button_to "Delete", settings_token_path(token), method: :delete, data: { turbo_confirm: "Are you sure you want to delete this token?" } %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% else %>
+    <p>You haven't added any tokens yet. Add a GitHub Personal Access Token to get started.</p>
+  <% end %>
+</article>

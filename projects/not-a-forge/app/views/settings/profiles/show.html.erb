@@ -10,7 +10,7 @@
     </dl>
 
     <p>
-      <%= link_to "Edit Profile", edit_profile_path %>
+      <%= link_to "Edit Profile", edit_settings_profile_path %>
     </p>
   </section>
 
@@ -21,7 +21,7 @@
       Deleting your account is <strong>permanent</strong> and cannot be undone. All your data will be permanently removed.
     </p>
 
-    <%= form_with url: profile_path, method: :delete, data: { turbo_confirm: "Are you absolutely sure you want to delete your account? This action cannot be undone." } do |form| %>
+    <%= form_with url: settings_profile_path, method: :delete, data: { turbo_confirm: "Are you absolutely sure you want to delete your account? This action cannot be undone." } do |form| %>
       <div>
         <%= form.label :current_password, "Confirm your password to delete account" %>
         <%= form.password_field :current_password, required: true, autocomplete: "current-password" %>

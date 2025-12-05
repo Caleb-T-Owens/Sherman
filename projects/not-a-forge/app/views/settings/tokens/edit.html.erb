@@ -1,0 +1,27 @@
+<article>
+  <h1>Edit Token</h1>
+
+  <%= form_with model: @token, url: settings_token_path(@token), method: :patch do |form| %>
+    <% if @token.errors.any? %>
+      <div style="color: red">
+        <h2><%= pluralize(@token.errors.count, "error") %> prohibited this token from being saved:</h2>
+        <ul>
+          <% @token.errors.each do |error| %>
+            <li><%= error.full_message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div>
+      <%= form.label :name, "Token Name" %>
+      <%= form.text_field :name, required: true %>
+      <small>You can only change the name. To update the token itself, delete and recreate it.</small>
+    </div>
+
+    <div>
+      <%= form.submit "Update Token Name" %>
+      <%= link_to "Cancel", settings_tokens_path %>
+    </div>
+  <% end %>
+</article>
