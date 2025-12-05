@@ -10,11 +10,14 @@ Rails.application.routes.draw do
   get "signup", to: "registrations#new", as: :signup
   post "signup", to: "registrations#create"
 
-  # Profile routes
-  get "profile", to: "profile#show", as: :profile
-  get "profile/edit", to: "profile#edit", as: :edit_profile
-  patch "profile", to: "profile#update"
-  delete "profile", to: "profile#destroy"
+  # Dashboard
+  resources :repositories
+
+  # Settings namespace
+  namespace :settings do
+    resource :profile, only: [:show, :edit, :update, :destroy]
+    resources :tokens
+  end
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
