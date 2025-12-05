@@ -48,6 +48,10 @@ html {
   font-size: 18px;
 }
 
+body {
+  margin: 0;
+}
+
 html.font-large {
   font-size: 20px;
 }
@@ -60,33 +64,6 @@ input[type="radio"] {
   width: 1.05rem; /* Oh Apple oh Apple */
   height: 1rem;
   margin: 0.5rem;
-}
-
-.page-header {
-  border-bottom: 2px solid var(--color-border);
-  border-top: 2px solid var(--color-border);
-}
-
-.page-header > nav {
-  display: inline-block;
-  vertical-align: top;
-
-  padding-right: 1rem;
-  padding-left: 1rem;
-  padding-bottom: 1rem;
-}
-
-.page-header > nav > ul {
-  list-style-type: none;
-  padding-left: 0;
-}
-
-.page-header > nav > ul > li {
-  margin-bottom: 0.5rem;
-}
-
-.page-header > nav > ul > li:last-child {
-  margin-bottom: 0;
 }
 
 article,
@@ -187,4 +164,43 @@ dd {
   background-color: #f8d7da;
   border: 1px solid #f5c6cb;
   color: #721c24;
+}
+
+.main-layout {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto 1fr;
+  grid-template-areas: 
+    "topbar topbar"
+    "sidebar content";
+
+  height: 100vh;
+  width: 100vw;
+}
+
+.top-bar {
+  grid-area: topbar;
+
+  border-bottom: 1px solid black;
+
+  padding: 12px;
+
+  display: flex;
+  gap: 8px;
+}
+
+.side-bar {
+  grid-area: sidebar;
+
+  border-right: 1px solid black;
+
+  nav {
+    padding: 8px;
+  }
+}
+
+.content {
+  grid-area: content;
+
+  overflow-x: auto;
 }

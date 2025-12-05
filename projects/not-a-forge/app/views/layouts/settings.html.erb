@@ -1,49 +1,14 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <title><%= content_for(:title) || "Not A Forge" %></title>
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <meta name="description" content="<%= content_for(:description) || 'A simple forge for your projects' %>">
-    <%= csrf_meta_tags %>
-    <%= csp_meta_tag %>
+<% content_for :side_bar do %>
+  <nav>
+    <b>Settings</b>
+    <ul>
+      <li><%= link_to "Profile", settings_profile_path, style: (current_page?(settings_profile_path) || current_page?(edit_settings_profile_path) ? "font-weight: bold;" : "") %></li>
+      <li><%= link_to "Tokens", settings_tokens_path, style: (controller_name == "tokens" ? "font-weight: bold;" : "") %></li>
+    </ul>
+  </nav>
+<% end %>
 
-    <%= yield :head %>
-
-    <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
-    <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
-
-    <link rel="icon" href="/icon.png" type="image/png">
-    <link rel="icon" href="/icon.svg" type="image/svg+xml">
-    <link rel="apple-touch-icon" href="/icon.png">
-
-    <%# Includes all stylesheet files in app/assets/stylesheets %>
-    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
-    <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module" %>
-  </head>
-
-  <body>
-    <%= render "shared/navigation" do %>
-      <nav>
-        <h2>Settings</h2>
-          <ul>
-            <li><%= link_to "Profile", settings_profile_path, style: (current_page?(settings_profile_path) || current_page?(edit_settings_profile_path) ? "font-weight: bold;" : "") %></li>
-            <li><%= link_to "Tokens", settings_tokens_path, style: (controller_name == "tokens" ? "font-weight: bold;" : "") %></li>
-          </ul>
-        </nav>
-    <% end %>
-
-    <main>
-
-      <% if notice.present? %>
-        <p class="notice"><%= notice %></p>
-      <% end %>
-
-      <% if alert.present? %>
-        <p class="alert"><%= alert %></p>
-      <% end %>
-
-      <%= yield %>
-    </main>
-  </body>
-</html>
+<% content_for :top_bar do %>
+  - <%= @page_name %>
+<% end %>
+<%= render template: "layouts/application" %>

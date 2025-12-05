@@ -1,6 +1,7 @@
-class Settings::TokensController < ApplicationController
+class Settings::TokensController < Settings::BaseController
   layout "settings"
-  before_action :set_token, only: [:edit, :update, :destroy]
+  before_action :set_token, only: [ :edit, :update, :destroy ]
+  before_action :set_page_name, only: %i[index new update]
 
   def index
     @tokens = Current.user.tokens.order(created_at: :desc)
@@ -45,5 +46,9 @@ class Settings::TokensController < ApplicationController
 
   def token_params
     params.require(:token).permit(:name, :token)
+  end
+
+  def set_page_name
+    @page_name = "Tokens settings"
   end
 end
