@@ -10,7 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_12_05_162200) do
+ActiveRecord::Schema[8.1].define(version: 2025_12_05_164604) do
+  create_table "repositories", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "name", null: false
+    t.string "owner", null: false
+    t.integer "token_id"
+    t.datetime "updated_at", null: false
+    t.integer "user_id", null: false
+    t.index ["token_id"], name: "index_repositories_on_token_id"
+    t.index ["user_id", "owner", "name"], name: "index_repositories_on_user_id_and_owner_and_name", unique: true
+    t.index ["user_id"], name: "index_repositories_on_user_id"
+  end
+
   create_table "sessions", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "ip_address"
@@ -18,6 +30,16 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_05_162200) do
     t.string "user_agent"
     t.integer "user_id", null: false
     t.index ["user_id"], name: "index_sessions_on_user_id"
+  end
+
+  create_table "tokens", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "name", null: false
+    t.text "token", null: false
+    t.datetime "updated_at", null: false
+    t.integer "user_id", null: false
+    t.index ["user_id", "name"], name: "index_tokens_on_user_id_and_name", unique: true
+    t.index ["user_id"], name: "index_tokens_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -28,5 +50,8 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_05_162200) do
     t.index ["email_address"], name: "index_users_on_email_address", unique: true
   end
 
+  add_foreign_key "repositories", "tokens"
+  add_foreign_key "repositories", "users"
   add_foreign_key "sessions", "users"
+  add_foreign_key "tokens", "users"
 end

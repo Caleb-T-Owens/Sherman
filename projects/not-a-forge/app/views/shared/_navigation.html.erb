@@ -10,7 +10,8 @@
     <nav>
       <h2>Account</h2>
       <ul>
-        <li><%= link_to "Profile", profile_path %></li>
+        <li><%= link_to "Dashboard", repositories_path %></li>
+        <li><%= link_to "Settings", settings_profile_path %></li>
         <li><%= link_to "Sign Out", session_path, data: { turbo_method: :delete } %></li>
       </ul>
     </nav>
@@ -23,4 +24,6 @@
       </ul>
     </nav>
   <% end %>
+
+  <%= yield %>
 </header>

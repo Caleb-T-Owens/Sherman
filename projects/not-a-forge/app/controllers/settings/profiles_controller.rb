@@ -1,4 +1,5 @@
-class ProfileController < ApplicationController
+class Settings::ProfilesController < ApplicationController
+  layout "settings"
   before_action :set_user
 
   def show
@@ -24,7 +25,7 @@ class ProfileController < ApplicationController
     end
 
     if @user.update(user_update_params)
-      redirect_to profile_path, notice: "Profile updated successfully."
+      redirect_to settings_profile_path, notice: "Profile updated successfully."
     else
       render :edit, status: :unprocessable_entity
     end
@@ -33,7 +34,7 @@ class ProfileController < ApplicationController
   def destroy
     # Require password confirmation for account deletion
     unless @user.authenticate(params[:current_password])
-      redirect_to profile_path, alert: "Incorrect password. Account was not deleted."
+      redirect_to settings_profile_path, alert: "Incorrect password. Account was not deleted."
       return
     end
 
