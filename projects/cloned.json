@@ -94,5 +94,9 @@
   "si": {
     "url": "git@github.com:systeminit/si.git",
     "profiles": ["work", "home"]
+  },
+  "stationapi": {
+    "url": "git@github.com:ModificationStation/StationAPI.git",
+    "profiles": ["work", "home"]
   }
 }
