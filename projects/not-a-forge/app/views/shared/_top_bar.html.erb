@@ -1,0 +1,4 @@
+<header class="top-bar">
+    <%= link_to "Not a forge", root_path %>
+    <%= content_for?(:top_bar) ? yield(:top_bar) : nil %>
+</header>

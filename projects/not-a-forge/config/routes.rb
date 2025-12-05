@@ -4,7 +4,6 @@ Rails.application.routes.draw do
 
   # Public pages
   root "pages#home"
-  get "pages/home"
 
   # Registration routes
   get "signup", to: "registrations#new", as: :signup
@@ -15,7 +14,7 @@ Rails.application.routes.draw do
 
   # Settings namespace
   namespace :settings do
-    resource :profile, only: [:show, :edit, :update, :destroy]
+    resource :profile, only: [ :show, :edit, :update, :destroy ]
     resources :tokens
   end
 
