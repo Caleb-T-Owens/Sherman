@@ -1,0 +1,35 @@
+<article>
+  <h1>Profile</h1>
+
+  <section>
+    <h2>Account Details</h2>
+
+    <dl>
+      <dt>Email Address</dt>
+      <dd><%= @user.email_address %></dd>
+    </dl>
+
+    <p>
+      <%= link_to "Edit Profile", edit_profile_path %>
+    </p>
+  </section>
+
+  <section style="border: 2px solid darkred; padding: 1rem; margin-top: 2rem;">
+    <h2 style="color: darkred;">Danger Zone</h2>
+
+    <p>
+      Deleting your account is <strong>permanent</strong> and cannot be undone. All your data will be permanently removed.
+    </p>
+
+    <%= form_with url: profile_path, method: :delete, data: { turbo_confirm: "Are you absolutely sure you want to delete your account? This action cannot be undone." } do |form| %>
+      <div>
+        <%= form.label :current_password, "Confirm your password to delete account" %>
+        <%= form.password_field :current_password, required: true, autocomplete: "current-password" %>
+      </div>
+
+      <div>
+        <%= form.submit "Delete Account", style: "background-color: darkred; color: white;", data: { turbo_confirm: "Last chance! Delete your account permanently?" } %>
+      </div>
+    <% end %>
+  </section>
+</article>

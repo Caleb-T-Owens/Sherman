@@ -107,3 +107,84 @@ h1 {
 code {
   background-color: var(--color-code-bg);
 }
+
+/* Forms */
+form div {
+  margin-bottom: 1rem;
+}
+
+form label {
+  display: block;
+  margin-bottom: 0.25rem;
+  font-weight: bold;
+}
+
+form input[type="email"],
+form input[type="password"],
+form input[type="text"] {
+  width: 100%;
+  max-width: 400px;
+  padding: 0.5rem;
+  border: 1px solid var(--color-border);
+  font-size: 1rem;
+}
+
+form input[type="submit"] {
+  padding: 0.5rem 1rem;
+  background-color: var(--color-text);
+  color: var(--color-background);
+  border: 2px solid var(--color-border);
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+form input[type="submit"]:hover {
+  background-color: var(--color-background);
+  color: var(--color-text);
+}
+
+/* Profile page sections */
+section {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--color-border);
+}
+
+section:first-of-type {
+  border-top: none;
+}
+
+/* Danger zone styling */
+section h2:contains("Danger") {
+  color: darkred;
+}
+
+dl {
+  margin: 1rem 0;
+}
+
+dt {
+  font-weight: bold;
+  margin-top: 0.5rem;
+}
+
+dd {
+  margin-left: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Notices and alerts */
+.notice {
+  padding: 1rem;
+  margin: 1rem auto;
+  background-color: #d4edda;
+  border: 1px solid #c3e6cb;
+}
+
+.alert {
+  padding: 1rem;
+  margin: 1rem auto;
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  color: #721c24;
+}
