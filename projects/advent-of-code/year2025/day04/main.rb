@@ -3,17 +3,6 @@ require "../lib/main.rb"
 input = input_lines("aoc-input.txt")
 test_input =  input_lines("aoc-test.txt")
 
-SIDES = [
-  [-1, -1],
-  [-1, 0],
-  [-1, 1],
-  [0, -1],
-  [0, 1],
-  [1, -1],
-  [1, 0],
-  [1, 1],
-]
-
 def one(input)
   i = input.map { _1.dup }
   height = input.size
