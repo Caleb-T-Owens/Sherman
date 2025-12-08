@@ -19,7 +19,7 @@ def one(input, con_c)
 
     circuts.delete(tos)
     circuts.delete(froms)
-    circuts.push([*tos, *froms].uniq)
+    circuts.push([*tos, *froms])
   end
 
   circuts.map { _1.size }.max(3).reduce { _1 * _2 }
@@ -43,7 +43,7 @@ def two(input)
 
     circuts.delete(tos)
     circuts.delete(froms)
-    circuts.push([*tos, *froms].uniq)
+    circuts.push([*tos, *froms])
 
     if circuts.size == 1
       score = to[0] * from[0]
