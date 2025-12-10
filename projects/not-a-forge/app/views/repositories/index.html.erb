@@ -18,7 +18,7 @@
       <tbody>
         <% @repositories.each do |repository| %>
           <tr>
-            <td><strong><%= repository.full_name %></strong></td>
+            <td><strong><%= link_to repository.full_name, repository %></strong></td>
             <td><%= repository.token&.name || "None" %></td>
             <td><%= repository.created_at.to_date %></td>
             <td>

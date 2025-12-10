@@ -1,0 +1,10 @@
+<article>
+  <h1><%= @repository.full_name %></h1>
+
+  <ul>
+    <li>Issues: <%= @repository.info.open_issues %></li>
+    <li>PRs: ??</li>
+    <li>Stars: <%= @repository.info.stargazers_count %></li>
+    <li>Watchers: <%= @repository.info.subscribers_count %></li>
+  </ul>
+</article>

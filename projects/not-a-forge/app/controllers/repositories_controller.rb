@@ -1,5 +1,9 @@
 class RepositoriesController < ApplicationController
-  before_action :set_repository, only: [:edit, :update, :destroy]
+  before_action :set_repository, only: [ :edit, :update, :destroy, :show ]
+
+  def show
+    pp @repository.info
+  end
 
   def index
     @repositories = Current.user.repositories.includes(:token).order(created_at: :desc)
