@@ -1,0 +1,16 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    cbc-wrapper (2.9.9.5)
+    ruby-cbc (0.3.19)
+      cbc-wrapper (~> 2.9.9.2)
+
+PLATFORMS
+  arm64-darwin-24
+  ruby
+
+DEPENDENCIES
+  ruby-cbc
+
+BUNDLED WITH
+   2.5.22
