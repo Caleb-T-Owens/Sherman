@@ -7,7 +7,7 @@ test_input_2 =  input_lines("aoc-test-2.txt")
 def one(input)
   g = input.map { a, b = _1.split(": "); [a, b.split(" ")]}
 
-  dfs({}, g, "svr", "out")
+  dfs({}, g, "you", "out")
 end
 
 def dfs(ch, g, now, target)
@@ -30,12 +30,13 @@ end
 def two(input)
   g = input.map { a, b = _1.split(": "); [a, b.split(" ")]}
 
-  s_to_f = dfs({}, g, "svr", "fft")
-  s_to_d = dfs({}, g, "svr", "dac")
-  d_to_f = dfs({}, g, "dac", "fft")
-  f_to_d = dfs({}, g, "fft", "dac")
-  d_to_o = dfs({}, g, "dac", "out")
-  f_to_o = dfs({}, g, "fft", "out")
+  ch = {}
+  s_to_f = dfs(ch, g, "svr", "fft")
+  s_to_d = dfs(ch, g, "svr", "dac")
+  d_to_f = dfs(ch, g, "dac", "fft")
+  f_to_d = dfs(ch, g, "fft", "dac")
+  d_to_o = dfs(ch, g, "dac", "out")
+  f_to_o = dfs(ch, g, "fft", "out")
 
   s_to_d * d_to_f * f_to_o + s_to_f * f_to_d * d_to_o
 end
