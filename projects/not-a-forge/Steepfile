@@ -1,0 +1,12 @@
+D = Steep::Diagnostic
+
+target :app do
+  signature "sig"
+
+  # Check Rails directories
+  check "app"
+  check "lib"
+
+  # Use lenient diagnostics for Rails code (can be made stricter over time)
+  # configure_code_diagnostics(D::Ruby.stricter)
+end

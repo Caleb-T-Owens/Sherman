@@ -39,5 +39,8 @@
 
 /node_modules
 
+# Ignore RBS collection directory (commit rbs_collection.yaml and rbs_collection.lock.yaml)
+/.gem_rbs_collection/
+
 # Ignore Sherman agent memories
 /.agents/

@@ -60,6 +60,10 @@ end
 group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem "web-console"
+
+  # RBS type signatures and type checking
+  gem "rbs_rails", require: false
+  gem "steep", require: false
 end
 
 group :test do
