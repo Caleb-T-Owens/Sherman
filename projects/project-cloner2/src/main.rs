@@ -39,7 +39,7 @@ fn update_gitignore(base_path: PathBuf, config: &Config) {
         .collect::<Vec<String>>();
 
     for key in config.keys() {
-        let key: String = format!("{}/", key);
+        let key: String = format!("/{}/", key);
         if !gitignore.iter().any(|entry| *entry == key) {
             gitignore.push(key);
         };
