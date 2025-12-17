@@ -1,0 +1,32 @@
+{
+    "schemaVersion": 1,
+    "id": "ctech",
+    "version": "${version}",
+
+    "name": "ctech",
+    "description": "A mod that adds technology that scales in a responsible manner",
+    "authors": ["Caleb"],
+    "contact": {
+        "homepage": "https://cto.je/",
+        "sources": "https://github.com/Caleb-T-Owens/Sherman"
+    },
+
+    "license": "FSL-1.1-MIT",
+    "icon": "assets/ctech/icon.png",
+
+    "environment": "*",
+    "entrypoints": {
+        "stationapi:event_bus": ["je.cto.ctech.CTech"],
+        "stationapi:event_bus_client": [],
+        "stationapi:event_bus_server": [],
+        "bhcreative:event_bus": ["je.cto.ctech.events.bhcreative.Entrypoint"]
+    },
+    "mixins": ["ctech.mixins.json"],
+
+    "depends": {
+        "minecraft": "1.0.0-beta.7.3"
+    },
+    "suggests": {
+        "bhcreative": "*"
+    }
+}
