@@ -1,0 +1,5 @@
+{
+    "variants": {
+        "": { "model": "ctech:block/debug_block" }
+    }
+}

@@ -1,0 +1,6 @@
+# @ is a shorthand for the current mod id, which is ctech. E.g: tile.@.redclay.name
+tab.@.creative_tab.name=CTech
+
+tile.@.debug_block.name=Debug Block
+tile.@.basic_machine_block.name=Basic Machine
+tile.@.basic_extractor_block.name=Basic Extractor
