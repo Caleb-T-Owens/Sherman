@@ -12,6 +12,7 @@ import je.cto.ctech.blockentity.BasicExtractorBlockEntity;
 import net.mine_diver.unsafeevents.listener.EventListener;
 import net.minecraft.block.Block;
 import net.modificationstation.stationapi.api.client.event.texture.TextureRegisterEvent;
+import net.modificationstation.stationapi.api.event.recipe.RecipeRegisterEvent;
 import net.modificationstation.stationapi.api.client.texture.atlas.Atlases;
 import net.modificationstation.stationapi.api.client.texture.atlas.ExpandableAtlas;
 import net.modificationstation.stationapi.api.event.block.entity.BlockEntityRegisterEvent;
@@ -91,5 +92,15 @@ public class CTech {
 
         basicItemPipeBlockTexture = terrainAtlas.addTexture(CTech.basicItemPipeBlockTextureId).index;
         CTech.basicItemPipeBlock.textureId = basicItemPipeBlockTexture;
+    }
+
+    @EventListener
+    public void registerRecipes(RecipeRegisterEvent event) {
+        RecipeRegisterEvent.Vanilla type = RecipeRegisterEvent.Vanilla.fromType(event.recipeId);
+        if (type == RecipeRegisterEvent.Vanilla.CRAFTING_SHAPED) {
+            BasicItemPipeBlock.registerRecipe(basicItemPipeBlock);
+            BasicMachineBlock.registerRecipe(basicMachineBlock);
+            BasicExtractorBlock.registerRecipe(basicExtractorBlock, basicMachineBlock);
+        }
     }
 }
