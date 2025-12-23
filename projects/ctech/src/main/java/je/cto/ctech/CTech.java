@@ -5,6 +5,7 @@ import java.lang.invoke.MethodHandles;
 import org.apache.logging.log4j.Logger;
 
 import je.cto.ctech.block.BasicExtractorBlock;
+import je.cto.ctech.block.BasicItemPipeBlock;
 import je.cto.ctech.block.BasicMachineBlock;
 import je.cto.ctech.block.DebugBlock;
 import je.cto.ctech.blockentity.BasicExtractorBlockEntity;
@@ -46,6 +47,11 @@ public class CTech {
     public static Block basicExtractorBlock;
     public static int basicExtractorBlockTexture;
 
+    public static Identifier basicItemPipeBlockId;
+    public static Identifier basicItemPipeBlockTextureId;
+    public static Block basicItemPipeBlock;
+    public static int basicItemPipeBlockTexture;
+
     @EventListener
     public void registerBlocks(BlockRegistryEvent _event) {
         debugBlockId = NAMESPACE.id("debug_block");
@@ -59,6 +65,10 @@ public class CTech {
         basicExtractorBlockId = NAMESPACE.id("basic_extractor_block");
         basicExtractorBlockTextureId = NAMESPACE.id("block/basic_extractor_block");
         basicExtractorBlock = new BasicExtractorBlock(basicExtractorBlockId).setTranslationKey(basicExtractorBlockId);
+
+        basicItemPipeBlockId = NAMESPACE.id("basic_item_pipe");
+        basicItemPipeBlockTextureId = NAMESPACE.id("block/basic_item_pipe");
+        basicItemPipeBlock = new BasicItemPipeBlock(basicItemPipeBlockId).setTranslationKey(basicItemPipeBlockId);
     }
 
     @EventListener
@@ -78,5 +88,8 @@ public class CTech {
 
         basicExtractorBlockTexture = terrainAtlas.addTexture(CTech.basicExtractorBlockTextureId).index;
         CTech.basicExtractorBlock.textureId = basicExtractorBlockTexture;
+
+        basicItemPipeBlockTexture = terrainAtlas.addTexture(CTech.basicItemPipeBlockTextureId).index;
+        CTech.basicItemPipeBlock.textureId = basicItemPipeBlockTexture;
     }
 }

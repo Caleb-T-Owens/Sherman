@@ -17,5 +17,6 @@ public class Entrypoint {
         tab.addItem(new ItemStack(CTech.debugBlock));
         tab.addItem(new ItemStack(CTech.basicMachineBlock));
         tab.addItem(new ItemStack(CTech.basicExtractorBlock));
+        tab.addItem(new ItemStack(CTech.basicItemPipeBlock));
     }
 }

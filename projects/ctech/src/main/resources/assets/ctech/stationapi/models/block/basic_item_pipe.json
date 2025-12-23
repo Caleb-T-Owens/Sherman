@@ -1,0 +1,6 @@
+{
+    "parent": "block/cube_all",
+    "textures": {
+        "all": "ctech:block/basic_item_pipe"
+    }
+}

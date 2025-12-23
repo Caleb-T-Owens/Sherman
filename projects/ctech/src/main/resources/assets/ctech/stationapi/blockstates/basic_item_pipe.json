@@ -1,0 +1,5 @@
+{
+    "variants": {
+        "": { "model": "ctech:block/basic_item_pipe" }
+    }
+}
