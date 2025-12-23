@@ -8,4 +8,9 @@ public class BasicItemPipeBlock extends TemplateBlock {
     public BasicItemPipeBlock(Identifier id) {
         super(id, Material.METAL);
     }
+
+    @Override
+    public boolean isFullCube() {
+        return false;
+    }
 }
