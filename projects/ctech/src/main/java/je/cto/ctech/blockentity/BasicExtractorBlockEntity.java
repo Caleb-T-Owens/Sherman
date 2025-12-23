@@ -2,277 +2,137 @@ package je.cto.ctech.blockentity;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
+import java.util.Optional;
 import java.util.Set;
 
-import je.cto.ctech.CTech;
+import je.cto.ctech.transport.BlockChecker;
+import je.cto.ctech.transport.BlockPos;
+import je.cto.ctech.transport.Inventory;
+import je.cto.ctech.transport.ItemTransferService;
+import je.cto.ctech.transport.PipeNetworkTraverser;
+import je.cto.ctech.transport.impl.BfsPipeNetworkTraverser;
+import je.cto.ctech.transport.impl.DefaultItemTransferService;
+import je.cto.ctech.transport.impl.MinecraftBlockChecker;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.ChestBlockEntity;
-import net.minecraft.item.ItemStack;
 
+/**
+ * Block entity for the Basic Extractor.
+ *
+ * The extractor transfers items from adjacent input chests to output chests
+ * connected via a pipe network. It uses dependency injection for the core
+ * algorithms, allowing them to be tested independently.
+ */
 public class BasicExtractorBlockEntity extends BlockEntity {
-    private int counter = 0;
 
-    // Helper class to store positions
-    private static class BlockPos {
-        int x, y, z;
+    private static final int TICK_INTERVAL = 10;
 
-        BlockPos(int x, int y, int z) {
-            this.x = x;
-            this.y = y;
-            this.z = z;
-        }
+    /**
+     * Direction offsets for the 6 adjacent blocks.
+     */
+    private static final int[][] DIRECTION_OFFSETS = {
+        { 0,  1,  0},  // Up
+        { 0, -1,  0},  // Down
+        { 1,  0,  0},  // East
+        {-1,  0,  0},  // West
+        { 0,  0,  1},  // South
+        { 0,  0, -1}   // North
+    };
 
-        @Override
-        public boolean equals(Object obj) {
-            if (!(obj instanceof BlockPos))
-                return false;
-            BlockPos other = (BlockPos) obj;
-            return x == other.x && y == other.y && z == other.z;
-        }
+    private final PipeNetworkTraverser networkTraverser;
+    private final ItemTransferService transferService;
 
-        @Override
-        public int hashCode() {
-            int hash = 7;
-            hash = hash * 31 + x;
-            hash = hash * 31 + y;
-            hash = hash * 31 + z;
-            return hash;
-        }
+    private int tickCounter = 0;
+
+    /**
+     * Default constructor used by Minecraft.
+     * Creates the block entity with default service implementations.
+     */
+    public BasicExtractorBlockEntity() {
+        this(new BfsPipeNetworkTraverser(), new DefaultItemTransferService());
+    }
+
+    /**
+     * Constructor for dependency injection (used in tests).
+     *
+     * @param networkTraverser the pipe network traversal implementation
+     * @param transferService the item transfer service implementation
+     */
+    BasicExtractorBlockEntity(PipeNetworkTraverser networkTraverser, ItemTransferService transferService) {
+        this.networkTraverser = networkTraverser;
+        this.transferService = transferService;
     }
 
     @Override
     public void tick() {
-        ++counter;
-        if (counter < 10) {
+        if (++tickCounter < TICK_INTERVAL) {
             return;
         }
-        counter = 0;
+        tickCounter = 0;
+
+        BlockChecker blockChecker = createBlockChecker();
+        BlockPos myPosition = new BlockPos(x, y, z);
 
         // Step 1: Find input chests (directly adjacent to extractor)
-        List<ChestBlockEntity> inputChests = findAdjacentChests();
+        List<Inventory> inputChests = findAdjacentInventories(blockChecker);
 
-        // Step 2: Traverse the entire connected pipe network starting from this
-        // extractor
-        Set<BlockPos> pipeNetwork = traversePipeNetwork();
+        // Step 2: Traverse the connected pipe network
+        Set<BlockPos> pipeNetwork = networkTraverser.traverse(myPosition, blockChecker);
 
-        // Step 3: Find output chests (adjacent to any pipe in network, excluding
-        // inputs)
-        List<ChestBlockEntity> outputChests = findChestsAdjacentToPipes(pipeNetwork, inputChests);
+        // Step 3: Find output chests (adjacent to pipes, excluding inputs)
+        List<Inventory> outputChests = findOutputInventories(pipeNetwork, inputChests, blockChecker);
 
         // Step 4: Transfer one item
-        transferOneItem(inputChests, outputChests);
+        transferService.transferOne(inputChests, outputChests);
     }
 
     /**
-     * Find all chests directly adjacent to this extractor
+     * Creates the block checker for this tick.
+     * Protected to allow overriding in tests.
      */
-    private List<ChestBlockEntity> findAdjacentChests() {
-        List<ChestBlockEntity> chests = new ArrayList<>();
-
-        // Check all 6 directions
-        int[][] offsets = {
-                { 0, 1, 0 }, // Up
-                { 0, -1, 0 }, // Down
-                { 1, 0, 0 }, // East
-                { -1, 0, 0 }, // West
-                { 0, 0, 1 }, // South
-                { 0, 0, -1 } // North
-        };
-
-        for (int[] offset : offsets) {
-            BlockEntity entity = world.getBlockEntity(x + offset[0], y + offset[1], z + offset[2]);
-            if (entity instanceof ChestBlockEntity) {
-                chests.add((ChestBlockEntity) entity);
-            }
-        }
-
-        return chests;
+    protected BlockChecker createBlockChecker() {
+        return new MinecraftBlockChecker(world);
     }
 
     /**
-     * Traverse the entire connected pipe network using BFS (Breadth-First Search).
-     * Starts from this extractor's position and explores all connected pipes.
-     * Prevents infinite loops by tracking visited pipes.
+     * Finds all inventories directly adjacent to this extractor.
      */
-    private Set<BlockPos> traversePipeNetwork() {
-        Set<BlockPos> pipeNetwork = new HashSet<>();
-        Queue<BlockPos> queue = new LinkedList<>();
+    private List<Inventory> findAdjacentInventories(BlockChecker blockChecker) {
+        List<Inventory> inventories = new ArrayList<>();
 
-        int[][] offsets = {
-                { 0, 1, 0 }, // Up
-                { 0, -1, 0 }, // Down
-                { 1, 0, 0 }, // East
-                { -1, 0, 0 }, // West
-                { 0, 0, 1 }, // South
-                { 0, 0, -1 } // North
-        };
-
-        // Find adjacent pipes as starting points
-        for (int[] offset : offsets) {
-            int px = this.x + offset[0];
-            int py = this.y + offset[1];
-            int pz = this.z + offset[2];
-
-            int blockId = world.getBlockId(px, py, pz);
-            if (blockId == CTech.basicItemPipeBlock.id) {
-                BlockPos pipePos = new BlockPos(px, py, pz);
-                pipeNetwork.add(pipePos);
-                queue.add(pipePos);
-            }
+        for (int[] offset : DIRECTION_OFFSETS) {
+            BlockPos neighborPos = new BlockPos(x + offset[0], y + offset[1], z + offset[2]);
+            Optional<Inventory> inventory = blockChecker.getInventory(neighborPos);
+            inventory.ifPresent(inventories::add);
         }
 
-        // BFS traversal from starting pipes
-        while (!queue.isEmpty()) {
-            BlockPos currentPipe = queue.poll();
+        return inventories;
+    }
 
-            // Check all 6 adjacent positions
-            for (int[] offset : offsets) {
-                int nx = currentPipe.x + offset[0];
-                int ny = currentPipe.y + offset[1];
-                int nz = currentPipe.z + offset[2];
+    /**
+     * Finds all inventories adjacent to pipes in the network, excluding input inventories.
+     */
+    private List<Inventory> findOutputInventories(
+            Set<BlockPos> pipeNetwork,
+            List<Inventory> inputInventories,
+            BlockChecker blockChecker) {
 
-                BlockPos neighborPos = new BlockPos(nx, ny, nz);
+        // Use a set to track already-added inventories (by identity)
+        Set<Inventory> addedInventories = new HashSet<>(inputInventories);
+        List<Inventory> outputInventories = new ArrayList<>();
 
-                // If not visited and is a pipe, add to network
-                if (!pipeNetwork.contains(neighborPos)) {
-                    int blockId = world.getBlockId(nx, ny, nz);
-                    if (blockId == CTech.basicItemPipeBlock.id) {
-                        pipeNetwork.add(neighborPos);
-                        queue.add(neighborPos);
-                    }
+        for (BlockPos pipePos : pipeNetwork) {
+            for (int[] offset : DIRECTION_OFFSETS) {
+                BlockPos neighborPos = pipePos.offset(offset[0], offset[1], offset[2]);
+                Optional<Inventory> inventory = blockChecker.getInventory(neighborPos);
+
+                if (inventory.isPresent() && !addedInventories.contains(inventory.get())) {
+                    addedInventories.add(inventory.get());
+                    outputInventories.add(inventory.get());
                 }
             }
         }
 
-        return pipeNetwork;
-    }
-
-    /**
-     * Find all chests adjacent to any pipe in the network, excluding input chests.
-     * This searches the entire connected pipe network for output destinations.
-     */
-    private List<ChestBlockEntity> findChestsAdjacentToPipes(Set<BlockPos> pipeNetwork,
-            List<ChestBlockEntity> inputChests) {
-        List<ChestBlockEntity> outputChests = new ArrayList<>();
-
-        int[][] offsets = {
-                { 0, 1, 0 }, // Up
-                { 0, -1, 0 }, // Down
-                { 1, 0, 0 }, // East
-                { -1, 0, 0 }, // West
-                { 0, 0, 1 }, // South
-                { 0, 0, -1 } // North
-        };
-
-        for (BlockPos pipe : pipeNetwork) {
-            for (int[] offset : offsets) {
-                BlockEntity entity = world.getBlockEntity(
-                        pipe.x + offset[0],
-                        pipe.y + offset[1],
-                        pipe.z + offset[2]);
-
-                if (entity instanceof ChestBlockEntity) {
-                    ChestBlockEntity chest = (ChestBlockEntity) entity;
-
-                    // Don't add if it's already an input chest or already in outputs
-                    if (!inputChests.contains(chest) && !outputChests.contains(chest)) {
-                        outputChests.add(chest);
-                    }
-                }
-            }
-        }
-
-        return outputChests;
-    }
-
-    /**
-     * Transfer one item from inputs to outputs.
-     * Priority: merge into existing stacks first, then use empty slots.
-     * Returns true if an item was transferred, false otherwise.
-     */
-    private boolean transferOneItem(List<ChestBlockEntity> inputs, List<ChestBlockEntity> outputs) {
-        if (inputs.isEmpty() || outputs.isEmpty()) {
-            return false;
-        }
-
-        // Iterate through all input chests
-        for (ChestBlockEntity inputChest : inputs) {
-            for (int inputSlot = 0; inputSlot < inputChest.size(); inputSlot++) {
-                ItemStack sourceStack = inputChest.getStack(inputSlot);
-
-                if (sourceStack == null || sourceStack.count <= 0) {
-                    continue;
-                }
-
-                // Try to merge with existing stack first
-                for (ChestBlockEntity outputChest : outputs) {
-                    for (int outputSlot = 0; outputSlot < outputChest.size(); outputSlot++) {
-                        ItemStack targetStack = outputChest.getStack(outputSlot);
-
-                        if (targetStack != null && canMergeStacks(sourceStack, targetStack)) {
-                            // Found a matching stack with space
-                            if (targetStack.count < targetStack.getMaxCount()) {
-                                // Transfer 1 item
-                                targetStack.count++;
-                                sourceStack.count--;
-
-                                // Clean up source if empty
-                                if (sourceStack.count <= 0) {
-                                    inputChest.setStack(inputSlot, null);
-                                }
-
-                                inputChest.markDirty();
-                                outputChest.markDirty();
-
-                                return true;
-                            }
-                        }
-                    }
-                }
-
-                // No matching stack found, try to place in empty slot
-                for (ChestBlockEntity outputChest : outputs) {
-                    for (int outputSlot = 0; outputSlot < outputChest.size(); outputSlot++) {
-                        ItemStack targetStack = outputChest.getStack(outputSlot);
-
-                        if (targetStack == null) {
-                            // Found empty slot, create new stack with 1 item
-                            ItemStack newStack = new ItemStack(
-                                    sourceStack.itemId,
-                                    1,
-                                    sourceStack.getDamage());
-                            outputChest.setStack(outputSlot, newStack);
-
-                            // Remove 1 from source
-                            sourceStack.count--;
-                            if (sourceStack.count <= 0) {
-                                inputChest.setStack(inputSlot, null);
-                            }
-
-                            inputChest.markDirty();
-                            outputChest.markDirty();
-
-                            return true;
-                        }
-                    }
-                }
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * Check if two item stacks can be merged (same item type and damage)
-     */
-    private boolean canMergeStacks(ItemStack stack1, ItemStack stack2) {
-        if (stack1 == null || stack2 == null) {
-            return false;
-        }
-
-        return stack1.itemId == stack2.itemId && stack1.getDamage() == stack2.getDamage();
+        return outputInventories;
     }
 }

@@ -8,4 +8,9 @@ public class BasicMachineBlock extends TemplateBlock {
     public BasicMachineBlock(Identifier id) {
         super(id, Material.METAL);
     }
+
+    @Override
+    public boolean isFullCube() {
+        return false;
+    }
 }

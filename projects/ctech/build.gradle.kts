@@ -86,6 +86,10 @@ dependencies {
 	// modImplementation("net.glasslauncher.mods:AlwaysMoreItems:${project.properties["alwaysmoreitems_version"]}")
 
 	modImplementation ("com.github.paulevsGitch:BHCreative:${project.properties["bhcreative_version"]}")
+
+	// Testing
+	testImplementation("org.junit.jupiter:junit-jupiter:5.10.0")
+	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
 configurations.all {
@@ -105,6 +109,10 @@ tasks.withType<ProcessResources> {
 // see http://yodaconditions.net/blog/fix-for-java-file-encoding-problems-with-gradle.html
 tasks.withType<JavaCompile> {
 	options.encoding = "UTF-8"
+}
+
+tasks.test {
+	useJUnitPlatform()
 }
 
 java {

@@ -15,4 +15,9 @@ public class BasicExtractorBlock extends TemplateBlockWithEntity {
     protected BlockEntity createBlockEntity() {
         return new BasicExtractorBlockEntity();
     }
+
+    @Override
+    public boolean isFullCube() {
+        return false;
+    }
 }
