@@ -1,5 +1,7 @@
-input = File.readlines("aoc-input.txt", chomp: true)
-test_input =  File.readlines("aoc-test.txt", chomp: true)
+require "../lib/main.rb"
+
+input = input_lines("aoc-input.txt")
+test_input =  input_lines("aoc-test.txt")
 
 def one(input)
   input.size
