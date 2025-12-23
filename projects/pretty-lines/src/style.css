@@ -1,0 +1,28 @@
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  padding: 0;
+  margin: 0;
+
+  width: 100vw;
+  height: 100vh;
+}
+
+body {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+}
+
+canvas {
+  aspect-ratio: 1;
+
+  height: 80vh;
+
+  border: 1px solid black;
+
+  image-rendering: crisp-edges;
+}
