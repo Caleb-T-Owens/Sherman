@@ -5,3 +5,4 @@ tile.@.debug_block.name=Debug Block
 tile.@.basic_machine_block.name=Basic Machine
 tile.@.basic_extractor_block.name=Basic Extractor
 tile.@.basic_item_pipe.name=Basic Item Pipe
+tile.@.basic_generator.name=Basic Generator

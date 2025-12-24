@@ -5,10 +5,12 @@ import java.lang.invoke.MethodHandles;
 import org.apache.logging.log4j.Logger;
 
 import je.cto.ctech.block.BasicExtractorBlock;
+import je.cto.ctech.block.BasicGeneratorBlock;
 import je.cto.ctech.block.BasicItemPipeBlock;
 import je.cto.ctech.block.BasicMachineBlock;
 import je.cto.ctech.block.DebugBlock;
 import je.cto.ctech.blockentity.BasicExtractorBlockEntity;
+import je.cto.ctech.blockentity.BasicGeneratorBlockEntity;
 import net.mine_diver.unsafeevents.listener.EventListener;
 import net.minecraft.block.Block;
 import net.modificationstation.stationapi.api.client.event.texture.TextureRegisterEvent;
@@ -53,6 +55,11 @@ public class CTech {
     public static Block basicItemPipeBlock;
     public static int basicItemPipeBlockTexture;
 
+    public static Identifier basicGeneratorBlockId;
+    public static Identifier basicGeneratorBlockTextureId;
+    public static Block basicGeneratorBlock;
+    public static int basicGeneratorBlockTexture;
+
     @EventListener
     public void registerBlocks(BlockRegistryEvent _event) {
         debugBlockId = NAMESPACE.id("debug_block");
@@ -70,11 +77,16 @@ public class CTech {
         basicItemPipeBlockId = NAMESPACE.id("basic_item_pipe");
         basicItemPipeBlockTextureId = NAMESPACE.id("block/basic_item_pipe");
         basicItemPipeBlock = new BasicItemPipeBlock(basicItemPipeBlockId).setTranslationKey(basicItemPipeBlockId);
+
+        basicGeneratorBlockId = NAMESPACE.id("basic_generator");
+        basicGeneratorBlockTextureId = NAMESPACE.id("block/basic_generator");
+        basicGeneratorBlock = new BasicGeneratorBlock(basicGeneratorBlockId).setTranslationKey(basicGeneratorBlockId);
     }
 
     @EventListener
     public void registerBlockEntities(BlockEntityRegisterEvent event) {
         event.register(BasicExtractorBlockEntity.class, basicExtractorBlockId.toString());
+        event.register(BasicGeneratorBlockEntity.class, basicGeneratorBlockId.toString());
     }
 
     @EventListener
@@ -92,6 +104,9 @@ public class CTech {
 
         basicItemPipeBlockTexture = terrainAtlas.addTexture(CTech.basicItemPipeBlockTextureId).index;
         CTech.basicItemPipeBlock.textureId = basicItemPipeBlockTexture;
+
+        basicGeneratorBlockTexture = terrainAtlas.addTexture(CTech.basicGeneratorBlockTextureId).index;
+        CTech.basicGeneratorBlock.textureId = basicGeneratorBlockTexture;
     }
 
     @EventListener
@@ -101,6 +116,7 @@ public class CTech {
             BasicItemPipeBlock.registerRecipe(basicItemPipeBlock);
             BasicMachineBlock.registerRecipe(basicMachineBlock);
             BasicExtractorBlock.registerRecipe(basicExtractorBlock, basicMachineBlock);
+            BasicGeneratorBlock.registerRecipe(basicGeneratorBlock, basicMachineBlock);
         }
     }
 }
