@@ -12,9 +12,12 @@ import je.cto.ctech.block.DebugBlock;
 import je.cto.ctech.blockentity.BasicExtractorBlockEntity;
 import je.cto.ctech.blockentity.BasicGeneratorBlockEntity;
 import net.mine_diver.unsafeevents.listener.EventListener;
+import je.cto.ctech.item.JoltItem;
 import net.minecraft.block.Block;
+import net.minecraft.item.Item;
 import net.modificationstation.stationapi.api.client.event.texture.TextureRegisterEvent;
 import net.modificationstation.stationapi.api.event.recipe.RecipeRegisterEvent;
+import net.modificationstation.stationapi.api.event.registry.ItemRegistryEvent;
 import net.modificationstation.stationapi.api.client.texture.atlas.Atlases;
 import net.modificationstation.stationapi.api.client.texture.atlas.ExpandableAtlas;
 import net.modificationstation.stationapi.api.event.block.entity.BlockEntityRegisterEvent;
@@ -60,6 +63,11 @@ public class CTech {
     public static Block basicGeneratorBlock;
     public static int basicGeneratorBlockTexture;
 
+    public static Item jolt1A;
+    public static Item jolt2A;
+    public static Item jolt4A;
+    public static Item jolt8A;
+
     @EventListener
     public void registerBlocks(BlockRegistryEvent _event) {
         debugBlockId = NAMESPACE.id("debug_block");
@@ -81,6 +89,14 @@ public class CTech {
         basicGeneratorBlockId = NAMESPACE.id("basic_generator");
         basicGeneratorBlockTextureId = NAMESPACE.id("block/basic_generator");
         basicGeneratorBlock = new BasicGeneratorBlock(basicGeneratorBlockId).setTranslationKey(basicGeneratorBlockId);
+    }
+
+    @EventListener
+    public void registerItems(ItemRegistryEvent event) {
+        jolt1A = new JoltItem(NAMESPACE.id("jolt_1a"), 1).setTranslationKey(NAMESPACE, "jolt_1a");
+        jolt2A = new JoltItem(NAMESPACE.id("jolt_2a"), 2).setTranslationKey(NAMESPACE, "jolt_2a");
+        jolt4A = new JoltItem(NAMESPACE.id("jolt_4a"), 4).setTranslationKey(NAMESPACE, "jolt_4a");
+        jolt8A = new JoltItem(NAMESPACE.id("jolt_8a"), 8).setTranslationKey(NAMESPACE, "jolt_8a");
     }
 
     @EventListener
@@ -107,6 +123,11 @@ public class CTech {
 
         basicGeneratorBlockTexture = terrainAtlas.addTexture(CTech.basicGeneratorBlockTextureId).index;
         CTech.basicGeneratorBlock.textureId = basicGeneratorBlockTexture;
+
+        jolt1A.setTexture(NAMESPACE.id("item/jolt_1a"));
+        jolt2A.setTexture(NAMESPACE.id("item/jolt_2a"));
+        jolt4A.setTexture(NAMESPACE.id("item/jolt_4a"));
+        jolt8A.setTexture(NAMESPACE.id("item/jolt_8a"));
     }
 
     @EventListener

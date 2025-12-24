@@ -153,6 +153,78 @@ In `src/main/java/je/cto/ctech/events/bhcreative/Entrypoint.java`, add to `onTab
 tab.addItem(new ItemStack(CTech.myBlock));
 ```
 
+## Adding a New Item
+
+### 1. Create the item class
+
+```java
+// src/main/java/je/cto/ctech/item/MyItem.java
+package je.cto.ctech.item;
+
+import net.modificationstation.stationapi.api.template.item.TemplateItem;
+import net.modificationstation.stationapi.api.util.Identifier;
+
+public class MyItem extends TemplateItem {
+    public MyItem(Identifier identifier) {
+        super(identifier);
+    }
+}
+```
+
+### 2. Register in CTech.java
+
+Add static field:
+
+```java
+public static Item myItem;
+```
+
+Register in `registerItems`:
+
+```java
+@EventListener
+public void registerItems(ItemRegistryEvent event) {
+    myItem = new MyItem(NAMESPACE.id("my_item")).setTranslationKey(NAMESPACE, "my_item");
+}
+```
+
+Register texture in `registerTextures`:
+
+```java
+myItem.setTexture(NAMESPACE.id("item/my_item"));
+```
+
+### 3. Add assets
+
+**Item model** (`src/main/resources/assets/ctech/stationapi/models/item/my_item.json`):
+
+```json
+{
+    "parent": "item/generated",
+    "textures": {
+        "layer0": "ctech:item/my_item"
+    }
+}
+```
+
+**Texture**: Place your 16x16 PNG at `src/main/resources/assets/ctech/stationapi/textures/item/my_item.png`
+
+### 4. Add translation
+
+In `src/main/resources/assets/ctech/stationapi/lang/en_US.lang`:
+
+```
+item.@.my_item.name=My Item
+```
+
+### 5. Add to creative menu
+
+In `src/main/java/je/cto/ctech/events/bhcreative/Entrypoint.java`, add to `onTabInit()`:
+
+```java
+tab.addItem(new ItemStack(CTech.myItem));
+```
+
 ## Building Testable Block Logic
 
 For blocks with complex logic (algorithms, multiple edge cases), use dependency injection to separate pure business logic from Minecraft-specific code. This enables unit testing without the game runtime.
