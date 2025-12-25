@@ -1,5 +1,5 @@
 # Build stage
-FROM node:lts-bookworm AS build
+FROM oven/bun:1 AS build
 
 # Set CI environment for pnpm
 ENV CI=true
@@ -8,9 +8,8 @@ COPY . /app
 WORKDIR /app
 
 # Install dependencies and build
-RUN npm install -g pnpm
-RUN pnpm install --frozen-lockfile
-RUN pnpm build
+RUN bun install --frozen-lockfile --production
+RUN bun run build
 
 # Production stage - use nginx for high-performance static file serving
 FROM nginx:alpine
