@@ -81,12 +81,12 @@ const displayDate = modifiedDate ? formatDate(modifiedDate) : null;
 
 {
   displayDate ? (
-    <p>
-      Last updated <time datetime={isoDate}>{displayDate}</time>
+    <p class="last-updated">
+      Page last updated <time datetime={isoDate}>{displayDate}</time>
     </p>
   ) : (
-    <p>
-      <em>Last updated date unavailable</em>
+    <p class="last-updated">
+      <em>Page last updated date unavailable</em>
     </p>
   )
 }
