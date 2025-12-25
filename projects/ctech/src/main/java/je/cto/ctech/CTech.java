@@ -4,13 +4,20 @@ import java.lang.invoke.MethodHandles;
 
 import org.apache.logging.log4j.Logger;
 
+import je.cto.ctech.block.BasicCrusherBlock;
+import je.cto.ctech.block.BasicElectricFoundryBlock;
 import je.cto.ctech.block.BasicExtractorBlock;
 import je.cto.ctech.block.BasicGeneratorBlock;
 import je.cto.ctech.block.BasicItemPipeBlock;
 import je.cto.ctech.block.BasicMachineBlock;
 import je.cto.ctech.block.DebugBlock;
+import je.cto.ctech.block.WaterCollectorBlock;
+import je.cto.ctech.blockentity.BasicCrusherBlockEntity;
+import je.cto.ctech.blockentity.BasicElectricFoundryBlockEntity;
 import je.cto.ctech.blockentity.BasicExtractorBlockEntity;
 import je.cto.ctech.blockentity.BasicGeneratorBlockEntity;
+import je.cto.ctech.blockentity.WaterCollectorBlockEntity;
+import je.cto.ctech.item.CrushedOreItem;
 import net.mine_diver.unsafeevents.listener.EventListener;
 import je.cto.ctech.item.JoltItem;
 import net.minecraft.block.Block;
@@ -68,6 +75,18 @@ public class CTech {
     public static Item jolt4A;
     public static Item jolt8A;
 
+    public static Item crushedIron;
+    public static Item crushedGold;
+
+    public static Identifier basicCrusherBlockId;
+    public static Block basicCrusherBlock;
+
+    public static Identifier basicElectricFoundryBlockId;
+    public static Block basicElectricFoundryBlock;
+
+    public static Identifier waterCollectorBlockId;
+    public static Block waterCollectorBlock;
+
     @EventListener
     public void registerBlocks(BlockRegistryEvent _event) {
         debugBlockId = NAMESPACE.id("debug_block");
@@ -89,6 +108,15 @@ public class CTech {
         basicGeneratorBlockId = NAMESPACE.id("basic_generator");
         basicGeneratorBlockTextureId = NAMESPACE.id("block/basic_generator");
         basicGeneratorBlock = new BasicGeneratorBlock(basicGeneratorBlockId).setTranslationKey(basicGeneratorBlockId);
+
+        basicCrusherBlockId = NAMESPACE.id("basic_crusher");
+        basicCrusherBlock = new BasicCrusherBlock(basicCrusherBlockId).setTranslationKey(basicCrusherBlockId);
+
+        basicElectricFoundryBlockId = NAMESPACE.id("basic_electric_foundry");
+        basicElectricFoundryBlock = new BasicElectricFoundryBlock(basicElectricFoundryBlockId).setTranslationKey(basicElectricFoundryBlockId);
+
+        waterCollectorBlockId = NAMESPACE.id("water_collector");
+        waterCollectorBlock = new WaterCollectorBlock(waterCollectorBlockId).setTranslationKey(waterCollectorBlockId);
     }
 
     @EventListener
@@ -97,12 +125,18 @@ public class CTech {
         jolt2A = new JoltItem(NAMESPACE.id("jolt_2a"), 2).setTranslationKey(NAMESPACE, "jolt_2a");
         jolt4A = new JoltItem(NAMESPACE.id("jolt_4a"), 4).setTranslationKey(NAMESPACE, "jolt_4a");
         jolt8A = new JoltItem(NAMESPACE.id("jolt_8a"), 8).setTranslationKey(NAMESPACE, "jolt_8a");
+
+        crushedIron = new CrushedOreItem(NAMESPACE.id("crushed_iron")).setTranslationKey(NAMESPACE, "crushed_iron");
+        crushedGold = new CrushedOreItem(NAMESPACE.id("crushed_gold")).setTranslationKey(NAMESPACE, "crushed_gold");
     }
 
     @EventListener
     public void registerBlockEntities(BlockEntityRegisterEvent event) {
         event.register(BasicExtractorBlockEntity.class, basicExtractorBlockId.toString());
         event.register(BasicGeneratorBlockEntity.class, basicGeneratorBlockId.toString());
+        event.register(BasicCrusherBlockEntity.class, basicCrusherBlockId.toString());
+        event.register(BasicElectricFoundryBlockEntity.class, basicElectricFoundryBlockId.toString());
+        event.register(WaterCollectorBlockEntity.class, waterCollectorBlockId.toString());
     }
 
     @EventListener
@@ -128,6 +162,9 @@ public class CTech {
         jolt2A.setTexture(NAMESPACE.id("item/jolt_2a"));
         jolt4A.setTexture(NAMESPACE.id("item/jolt_4a"));
         jolt8A.setTexture(NAMESPACE.id("item/jolt_8a"));
+
+        crushedIron.setTexture(NAMESPACE.id("item/crushed_iron"));
+        crushedGold.setTexture(NAMESPACE.id("item/crushed_gold"));
     }
 
     @EventListener
@@ -138,6 +175,9 @@ public class CTech {
             BasicMachineBlock.registerRecipe(basicMachineBlock);
             BasicExtractorBlock.registerRecipe(basicExtractorBlock, basicMachineBlock);
             BasicGeneratorBlock.registerRecipe(basicGeneratorBlock, basicMachineBlock);
+            BasicCrusherBlock.registerRecipe(basicCrusherBlock, basicMachineBlock);
+            BasicElectricFoundryBlock.registerRecipe(basicElectricFoundryBlock, basicMachineBlock);
+            WaterCollectorBlock.registerRecipe(waterCollectorBlock, basicMachineBlock);
         }
     }
 }

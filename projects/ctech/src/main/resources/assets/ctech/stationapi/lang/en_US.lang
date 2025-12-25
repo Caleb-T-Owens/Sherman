@@ -6,3 +6,15 @@ tile.@.basic_machine_block.name=Basic Machine
 tile.@.basic_extractor_block.name=Basic Extractor
 tile.@.basic_item_pipe.name=Basic Item Pipe
 tile.@.basic_generator.name=Basic Generator
+
+item.@.jolt_1a.name=1A Jolt
+item.@.jolt_2a.name=2A Jolt
+item.@.jolt_4a.name=4A Jolt
+item.@.jolt_8a.name=8A Jolt
+
+item.@.crushed_iron.name=Crushed Iron
+item.@.crushed_gold.name=Crushed Gold
+
+tile.@.basic_crusher.name=Basic Crusher
+tile.@.basic_electric_foundry.name=Basic Electric Foundry
+tile.@.water_collector.name=Water Collector
