@@ -1,9 +1,11 @@
 package je.cto.ctech.machine;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Random;
 
 import je.cto.ctech.transport.Inventory;
 import je.cto.ctech.transport.ItemData;
@@ -17,9 +19,18 @@ import je.cto.ctech.transport.ItemData;
 public final class DefaultMachineProcessingService implements MachineProcessingService {
 
     private final StackSizeLookup stackSizeLookup;
+    private final Random random;
 
     public DefaultMachineProcessingService(StackSizeLookup stackSizeLookup) {
+        this(stackSizeLookup, new Random());
+    }
+
+    /**
+     * Constructor for dependency injection (used in tests).
+     */
+    public DefaultMachineProcessingService(StackSizeLookup stackSizeLookup, Random random) {
         this.stackSizeLookup = stackSizeLookup;
+        this.random = random;
     }
 
     @Override
@@ -44,18 +55,43 @@ public final class DefaultMachineProcessingService implements MachineProcessingS
             return false;
         }
 
-        // Step 2: Check if outputs can fit
-        if (!canFitOutputs(recipe.getOutputs(), output)) {
+        // Step 2: Determine which outputs will be produced (roll for probabilistic outputs)
+        List<MachineItem> actualOutputs = rollForOutputs(recipe.getOutputs());
+
+        // Must produce at least one guaranteed output to proceed
+        boolean hasGuaranteedOutput = recipe.getOutputs().stream().anyMatch(MachineItem::isGuaranteed);
+        if (hasGuaranteedOutput && actualOutputs.isEmpty()) {
             return false;
         }
 
-        // Step 3: Consume inputs
+        // Step 3: Check if outputs can fit
+        if (!actualOutputs.isEmpty() && !canFitOutputs(actualOutputs, output)) {
+            return false;
+        }
+
+        // Step 4: Consume inputs
         consumeInputs(matches, input);
 
-        // Step 4: Produce outputs
-        produceOutputs(recipe.getOutputs(), output);
+        // Step 5: Produce outputs
+        if (!actualOutputs.isEmpty()) {
+            produceOutputs(actualOutputs, output);
+        }
 
         return true;
+    }
+
+    /**
+     * Rolls for each output based on its chance.
+     * Guaranteed outputs (chance = 1.0) are always included.
+     */
+    private List<MachineItem> rollForOutputs(List<MachineItem> outputs) {
+        List<MachineItem> result = new ArrayList<>();
+        for (MachineItem output : outputs) {
+            if (output.isGuaranteed() || random.nextDouble() < output.getChance()) {
+                result.add(output);
+            }
+        }
+        return result;
     }
 
     /**

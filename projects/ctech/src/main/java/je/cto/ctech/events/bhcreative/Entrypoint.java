@@ -19,9 +19,14 @@ public class Entrypoint {
         tab.addItem(new ItemStack(CTech.basicExtractorBlock));
         tab.addItem(new ItemStack(CTech.basicItemPipeBlock));
         tab.addItem(new ItemStack(CTech.basicGeneratorBlock));
+        tab.addItem(new ItemStack(CTech.basicCrusherBlock));
+        tab.addItem(new ItemStack(CTech.basicElectricFoundryBlock));
+        tab.addItem(new ItemStack(CTech.waterCollectorBlock));
         tab.addItem(new ItemStack(CTech.jolt1A));
         tab.addItem(new ItemStack(CTech.jolt2A));
         tab.addItem(new ItemStack(CTech.jolt4A));
         tab.addItem(new ItemStack(CTech.jolt8A));
+        tab.addItem(new ItemStack(CTech.crushedIron));
+        tab.addItem(new ItemStack(CTech.crushedGold));
     }
 }
