@@ -1,33 +1,39 @@
 ---
+import FontSelector from "./FontSelector.astro";
+
 // Navigation component
 ---
 
-<header class="page-header">
-  <nav>
-    <h2>Main</h2>
-    <ul>
-      <li><a href="/">Home</a></li>
-      <!-- <li><a href="/phrases">Phrases</a></li> -->
-      <li><a href="/thoughts">Thoughts</a></li>
-    </ul>
-  </nav>
-  <nav>
-    <h2>Tech</h2>
-    <ul>
-      <li><a href="/projects">Projects</a></li>
-      <li><a href="/tech">Misc tech writing</a></li>
-    </ul>
-  </nav>
-  <nav>
-    <h2>External</h2>
-    <ul>
-      <li>
-        <a
-          href="https://github.com/Caleb-T-Owens/Sherman/tree/main/projects/website4"
-        >
-          Website source code
-        </a>
-      </li>
-    </ul>
-  </nav>
-</header>
+<div class="sidebar">
+  <header>
+    <h2><a href="/" class="website-title">Caleb's Website</a></h2>
+    <FontSelector />
+    <nav>
+      <h4>Main</h4>
+      <ul>
+        <li><a href="/">Home</a></li>
+        <!-- <li><a href="/phrases">Phrases</a></li> -->
+        <li><a href="/thoughts">Thoughts</a></li>
+      </ul>
+    </nav>
+    <nav>
+      <h4>Tech</h4>
+      <ul>
+        <li><a href="/projects">Projects</a></li>
+        <li><a href="/tech">Misc tech writing</a></li>
+      </ul>
+    </nav>
+    <nav>
+      <h4>External</h4>
+      <ul>
+        <li>
+          <a
+            href="https://github.com/Caleb-T-Owens/Sherman/tree/main/projects/website4"
+          >
+            Website source code
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </header>
+</div>

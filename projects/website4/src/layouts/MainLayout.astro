@@ -64,10 +64,12 @@ const fullUrl = canonicalUrl ?? `https://cto.je${Astro.url.pathname}`;
       src="https://u.cto.je/script.js"
       data-website-id="c22a908a-6801-4765-a697-e9f2a307298b"></script>
   </head>
-  <body>
-    <h1 class="title">Caleb Owens' Website</h1>
-    <FontSelector />
+  <body class="layout">
     <Navigation />
-    <slot />
+    <div class="main-container">
+      <main>
+        <slot />
+      </main>
+    </div>
   </body>
 </html>
