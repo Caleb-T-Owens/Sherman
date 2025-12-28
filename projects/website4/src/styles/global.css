@@ -120,6 +120,13 @@ a {
 main {
   max-width: var(--readable-width);
   width: 100%;
+
+  > ::after {
+    content: "";
+    display: block;
+    height: 16px;
+    width: 100%;
+  }
 }
 
 .sidebar {
@@ -192,4 +199,11 @@ input[type="radio"] {
   font-size: 0.8em;
 
   height: 0px;
+}
+
+img {
+  display: block;
+  max-width: min(500px, 80vw);
+  max-height: 500px;
+  height: auto;
 }
