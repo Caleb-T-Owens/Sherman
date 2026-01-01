@@ -1,5 +1,5 @@
 ---
-import FontSelector from "../components/FontSelector.astro";
+import { undefined } from "astro:schema";
 import Navigation from "../components/Navigation.astro";
 import "../styles/global.css";
 
@@ -58,11 +58,16 @@ const fullUrl = canonicalUrl ?? `https://cto.je${Astro.url.pathname}`;
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
     <link rel="manifest" href="/site.webmanifest" />
-    <script
-      async
-      is:inline
-      src="https://u.cto.je/script.js"
-      data-website-id="c22a908a-6801-4765-a697-e9f2a307298b"></script>
+    {
+      process.env.NODE_ENV === "production" ? (
+        <script
+          async
+          is:inline
+          src="https://u.cto.je/script.js"
+          data-website-id="c22a908a-6801-4765-a697-e9f2a307298b"
+        />
+      ) : <></>
+    }
   </head>
   <body class="layout">
     <Navigation />
