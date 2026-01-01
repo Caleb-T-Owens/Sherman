@@ -1,8 +1,8 @@
 ---
 layout: ../../../layouts/MainLayout.astro
 title: "Playing Beta Minecraft - Caleb Owens"
-canonicalUrl: https://cto.je/minecraft/beta-minecraft/playing-beta-minecraft
-description: Adventures in Minecraft Beta.
+canonicalUrl: https://cto.je/minecraft/beta-minecraft/01-playing-beta-minecraft
+description: How I set up my Minecraft world with a few historical tangents
 ---
 
 import LastUpdated from "../../../components/LastUpdated.astro";
@@ -11,7 +11,7 @@ import LastUpdated from "../../../components/LastUpdated.astro";
 
 # Playing Beta Minecraft
 
-<LastUpdated filePath="src/pages/minecraft/beta-minecraft/playing-beta-minecraft.mdx" />
+<LastUpdated filePath="src/pages/minecraft/beta-minecraft/01-playing-beta-minecraft.mdx" />
 
 Playing a
 [14 year old version of a game](https://minecraft.wiki/w/Java_Edition_Beta_1.7.3)
@@ -21,13 +21,13 @@ linux with Java 1.8, it will run fine. On macOS it's a little more tricky. If
 you start up the game, you will get a screenshot like this with the colors
 inverted:
 
-![Minecraft, but red and blue channels are swapped making the sky, water red, and a blue heath bar](./bgr-vs-rgb.png)
+![Minecraft, but red and blue channels are swapped making the sky, water red, and a blue heath bar](./01-bgr-vs-rgb.png)
 
 This
 [_seems_ to be an endienness issue](https://www.minecraftforum.net/forums/support/java-edition-support/3049963-red-and-blue-colors-seem-to-be-inverted).
 On little endien machines (like aarch64 macs), lwjgl 2 seems to expect bgr
 colors instead of rgb. I'm not entirly sure why, and the existing fixes don't
-come with any explanation about how their fixes actually solve the problem.
+come with any explanation about how their fixes actually solve the problem. If anyone knows more about this, please contact me at [bgr@intherain.cloud](mailto:bgr@intherain.cloud).
 
 Before I talk about fixing the problem, the first thing we really need to do is
 to figgure out how we want to launch the game. We need to modify the game's jar
@@ -48,7 +48,7 @@ version, you can click on the profile edit button, go to the "version" tab, and
 click on the "Add agents" button which will let you select another jar-file
 whose contents get applied to the game jar itself.
 
-![Prism launcher's "version" tab](./version-tab.png)
+![Prism launcher's "version" tab](./01-version-tab.png)
 
 The first fix comes in the form of (https://betacraft.uk)'s
 [legacyfix mod](https://github.com/betacraftuk/legacyfix). You can download the
@@ -106,7 +106,7 @@ to the "mods" tab, click on the "add mods" button, and search for "StationAPI",
 and install the API mod. Then, you can install any other compatible mods that
 you fancy.
 
-![The mods tab in the Prism launcher](./mods-tab.png)
+![The mods tab in the Prism launcher](./01-mods-tab.png)
 
 ## How I set up my game
 
