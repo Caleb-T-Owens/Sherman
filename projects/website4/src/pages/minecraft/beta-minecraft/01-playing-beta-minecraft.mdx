@@ -29,6 +29,8 @@ On little endian machines (like aarch64 macs), lwjgl 2 seems to expect bgr
 colors instead of rgb. I'm not entirely sure why, and the existing fixes don't
 come with any explanation about how their fixes actually solve the problem. If anyone knows more about this, please contact me at [bgr@intherain.cloud](mailto:bgr@intherain.cloud).
 
+## Choosing a Launcher
+
 Before I talk about fixing the problem, the first thing we need to do is figure
 out how we want to launch the game. We need to modify the game's jar
 file in order to run any modifications - or an inverted color fix. In the old
@@ -50,17 +52,7 @@ whose contents get applied to the game jar itself.
 
 ![Prism launcher's "version" tab](./01-version-tab.png)
 
-The first fix comes in the form of betacraft's
-[legacyfix mod](https://github.com/betacraftuk/legacyfix). You can download the
-latest version, add it as an agent, and you're off to the races. It has some
-additional patches like fixing Minecraft skins too. If you don't want any
-further mods, this is probably a good option to go for.
-
-The second fix that I know of comes in the form of a
-[Babric](https://babric.github.io) mod called
-[gambac](https://github.com/DanyGames2014/gambac). I ended up going with this
-option because it works with the Babric mod loader which gives better
-compatibility with other mods.
+## The Beta Modding Ecosystem
 
 Modding beta Minecraft has changed quite a bit in the last couple years.
 
@@ -107,7 +99,24 @@ you fancy.
 
 ![The mods tab in the Prism launcher](./01-mods-tab.png)
 
-## How I set up my game
+## Fixing the Color Issue
+
+Now that we understand the modding ecosystem, we can look at fixing the macOS
+color inversion problem.
+
+The first fix comes in the form of betacraft's
+[legacyfix mod](https://github.com/betacraftuk/legacyfix). You can download the
+latest version, add it as an agent, and you're off to the races. It has some
+additional patches like fixing Minecraft skins too. If you don't want any
+further mods, this is probably a good option to go for.
+
+The second fix that I know of comes in the form of a
+[Babric](https://babric.github.io) mod called
+[gambac](https://github.com/DanyGames2014/gambac). I ended up going with this
+option because it works with the Babric mod loader which gives better
+compatibility with other mods.
+
+## How I Set Up My Game
 
 There are a wide range of mods available for Babric & StationAPI that can
 completely change your game. I was quite keen on staying within the "spirit" of
