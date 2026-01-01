@@ -2,6 +2,13 @@ import type { RSSFeedItem } from "@astrojs/rss";
 
 export const recent: RSSFeedItem[] = [
   {
+    title: "Playing Beta Minecraft",
+    description:
+      "How I set up Minecraft Beta 1.7.3 on macOS with the Babric mod loader.",
+    pubDate: new Date("Jan 1 2026"),
+    link: "/minecraft/beta-minecraft/01-playing-beta-minecraft",
+  },
+  {
     title: "Do Three Way Merges Care About Linebreaks",
     description: "I make a case that merges are not linebreak sensitive.",
     pubDate: new Date("Nov 18 2025"),
