@@ -76,7 +76,7 @@ what I've seen, it doesn't seem to have as much steam behind it.
 A more modern approach seems to be [Babric](https://babric.github.io) with
 [StationAPI](https://stationapi.wiki). Babric is based on the relatively new
 [FabricMC](https://fabricmc.net) project which was started as a fresh project
-for modding release 1.8.0. Fabric is roughly equivalent to MCP in that it
+for modding release 1.14.0. Fabric is roughly equivalent to MCP in that it
 provides utilities for compiling and decompiling the game jar. It then has a
 FabricAPI layer which modders consume to actually implement their mods.
 
@@ -126,10 +126,9 @@ without changing any gameplay mechanics.
 The current list is as follows:
 
 - [StationAPI](https://modrinth.com/mod/stationapi) - to support StationAPI mods
+- [Glass Networking](https://modrinth.com/mod/glass-networking) - a networking library that GlassConfigAPI requires
 - [GlassConfigAPI](https://modrinth.com/mod/glass-config-api) - a configuration
   API that a handful of StationAPI mods use
-- [Glass Networking](https://modrinth.com/mod/glass-networking) - another core
-  API that _something_ needs
 - [Gambac](https://modrinth.com/mod/gambac) - for fixing macOS related issues
 - [Fov Slider](https://modrinth.com/mod/fov-slider) - in beta 1.7.3 the FOV is
   fixed to 70 so this lets us change it to a more reasonable 90
@@ -146,5 +145,9 @@ navigating in Minecraft, but it is nice to be able to make waypoints. I would
 prefer something more thematic like the
 [Antique Atlas mod](https://modrinth.com/mod/antique-atlas-4) so I might
 consider back-porting it at some point.
+
+---
+
+Thank you to [calmilamsy](https://github.com/calmilamsy) who spotted that Fabric came out for 1.14.0, not 1.8.0. He also clarified that the mod requiring Glass Networking was in fact GlassConfigAPI.
 
 </article>
