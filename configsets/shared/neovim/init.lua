@@ -1,3 +1,7 @@
+-- Set vim leader key to space
+-- Still not convinced about this one
+vim.g.mapleader = " "
+
 -- Bootstrap lazy.nvim, plugin manager
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
@@ -11,10 +15,6 @@ if not vim.loop.fs_stat(lazypath) then
   })
 end
 vim.opt.rtp:prepend(lazypath)
-
--- Set vim leader key to space
--- Still not convinced about this one
-vim.g.mapleader = " "
 
 -- Set plugins for lazy to install
 require("lazy").setup({
@@ -41,8 +41,18 @@ vim.keymap.set('n', '<leader>fg', builtin.live_grep, {})
 vim.keymap.set('n', '<leader>fb', builtin.buffers, {})
 vim.keymap.set('n', '<leader>fh', builtin.help_tags, {})
 
+-- LSP
+
+vim.lsp.config["rust_ls"] = {
+  cmd = { "rust-analyzer" },
+  filetypes = { "rust" },
+  root_markers = { "Cargo.toml" }
+}
+
+vim.lsp.enable("rust_ls")
+
 -- DOWN WITH THE MOUSE
-vim.opt.mouse = nil
+vim.opt.mouse = ""
 
 -- Make haml files easier to read
 vim.opt.cursorcolumn = true

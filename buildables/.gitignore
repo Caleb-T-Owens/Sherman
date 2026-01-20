@@ -4,3 +4,7 @@ nvim/repo/
 st/repo/
 dmenu/repo/
 ripgrep/repo/
+/dmenu/repo/
+/dillo/repo/
+/ripgrep/repo/
+/dwm/repo/
