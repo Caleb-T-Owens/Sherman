@@ -9,7 +9,7 @@
   },
   "empower-learn": {
     "url": "git@github.com:learningproject/empower-learn-monorepo.git",
-    "profiles": ["work", "home", "electron"]
+    "profiles": ["work", "home", "charm"]
   },
   "empower-learn-backend": {
     "url": "git@github.com:learningproject/empower-learn.git",
