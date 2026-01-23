@@ -1,0 +1,28 @@
+services:
+  backend:
+    build:
+      context: artifacts/backend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment:
+      RAILS_ENV: production
+      RAILS_LOG_TO_STDOUT: "true"
+      SECRET_KEY_BASE: ${SECRET_KEY_BASE:-change-this-secret-key-base-in-production}
+    volumes:
+      - ${HOME}/volumes/empower-learn/storage:/rails/storage
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:80/ || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    restart: unless-stopped
+    ports:
+      - "3014:80"
+    depends_on:
+      backend:
+        condition: service_healthy
