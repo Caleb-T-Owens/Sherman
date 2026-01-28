@@ -23,6 +23,13 @@ configure -t shared/git
 # Run without dependencies
 configure -t shared/git --no-deps
 
+# Run a profile (work, home, charm, anti)
+configure -p work
+configure --profile charm
+
+# List available profiles
+configure --profiles
+
 # Run a specific config file
 configure ./configsets/shared/git/configurable.conf
 
@@ -50,6 +57,25 @@ deps: macos/brew shared/rustup
 - `name`: Task identifier (typically `category/name`)
 - `script`: Path to install script (relative to configurable.conf)
 - `deps`: Space-separated list of dependencies (optional)
+
+## Profiles
+
+Profiles are lists of tasks to run for a specific environment. They live in `configsets/profiles/`:
+
+```
+# profiles/work.conf
+macos/brew
+shared/git
+shared/neovim
+# Actions
+shared/action-clone-projects
+```
+
+Available profiles:
+- `work` - macOS work machine
+- `home` - macOS home machine  
+- `charm` - Charm deployment
+- `anti` - Debian (anti) setup
 
 ## Environment
 

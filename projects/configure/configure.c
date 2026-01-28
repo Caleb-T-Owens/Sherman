@@ -9,12 +9,18 @@
  *   configure ./configurable.conf - run a specific config file
  *   configure -t task            - run a task by name
  *   configure -t task --no-deps  - run without dependencies
+ *   configure -p profile         - run all tasks in a profile
  *   configure -l                 - list available tasks
  * 
  * Config format (configurable.conf):
  *   name: shared/git
  *   script: ./install.sh
  *   deps: shared/brew shared/rustup
+ * 
+ * Profile format (profiles/*.conf):
+ *   # Comment
+ *   macos/brew
+ *   shared/git
  */
 
 #define _POSIX_C_SOURCE 200809L
@@ -260,6 +266,75 @@ static void list_tasks(TaskList *list) {
     }
 }
 
+/* List available profiles */
+static void list_profiles(const char *basedir) {
+    char profiles_path[MAX_PATH];
+    snprintf(profiles_path, sizeof(profiles_path), "%s/configsets/profiles", basedir);
+    
+    DIR *dir = opendir(profiles_path);
+    if (!dir) {
+        printf("No profiles found in %s\n", profiles_path);
+        return;
+    }
+    
+    printf("Available profiles:\n\n");
+    struct dirent *entry;
+    while ((entry = readdir(dir)) != NULL) {
+        if (entry->d_name[0] == '.') continue;
+        char *dot = strrchr(entry->d_name, '.');
+        if (dot && strcmp(dot, ".conf") == 0) {
+            *dot = '\0';
+            printf("  %s\n", entry->d_name);
+        }
+    }
+    closedir(dir);
+}
+
+/* Run all tasks in a profile */
+static int run_profile(const char *basedir, const char *profile_name, TaskList *list) {
+    char profile_path[MAX_PATH];
+    snprintf(profile_path, sizeof(profile_path), "%s/configsets/profiles/%s.conf", 
+             basedir, profile_name);
+    
+    FILE *f = fopen(profile_path, "r");
+    if (!f) {
+        fprintf(stderr, "Error: Profile '%s' not found at %s\n", profile_name, profile_path);
+        list_profiles(basedir);
+        return -1;
+    }
+    
+    printf("\033[1;36m=== Running profile: %s ===\033[0m\n\n", profile_name);
+    
+    char line[MAX_LINE];
+    int failed = 0;
+    
+    while (fgets(line, sizeof(line), f)) {
+        char *trimmed = trim(line);
+        
+        /* Skip empty lines and comments */
+        if (!*trimmed || *trimmed == '#' || strlen(trimmed) < 2) continue;
+        
+        Task *task = find_task(list, trimmed);
+        if (!task) {
+            fprintf(stderr, "Warning: Task '%s' not found, skipping\n", trimmed);
+            continue;
+        }
+        
+        if (run_with_deps(list, task) < 0) {
+            failed = 1;
+            break;
+        }
+    }
+    
+    fclose(f);
+    
+    if (!failed) {
+        printf("\n\033[1;32m=== Profile '%s' completed ===\033[0m\n", profile_name);
+    }
+    
+    return failed ? -1 : 0;
+}
+
 /* Get base directory - check ./configsets first, then SHERMAN_DIR, then $HOME/Sherman */
 static const char *get_base_dir(void) {
     struct stat st;
@@ -300,15 +375,19 @@ static void usage(const char *prog) {
     fprintf(stderr, "  %s <configurable.conf>   Run a specific config file\n", prog);
     fprintf(stderr, "  %s -t <task>             Run a task by name\n", prog);
     fprintf(stderr, "  %s -t <task> --no-deps   Run without dependencies\n", prog);
+    fprintf(stderr, "  %s -p <profile>          Run all tasks in a profile\n", prog);
     fprintf(stderr, "  %s -l, --list            List available tasks\n", prog);
+    fprintf(stderr, "  %s --profiles            List available profiles\n", prog);
     fprintf(stderr, "  %s -h, --help            Show this help\n", prog);
 }
 
 int main(int argc, char **argv) {
     TaskList list = {0};
     const char *target_task = NULL;
+    const char *profile = NULL;
     int no_deps = 0;
     int list_only = 0;
+    int list_profiles_only = 0;
     const char *config_file = NULL;
     
     for (int i = 1; i < argc; i++) {
@@ -318,10 +397,18 @@ int main(int argc, char **argv) {
                 return 1;
             }
             target_task = argv[i];
+        } else if (strcmp(argv[i], "-p") == 0 || strcmp(argv[i], "--profile") == 0) {
+            if (++i >= argc) {
+                fprintf(stderr, "Error: -p requires a profile name\n");
+                return 1;
+            }
+            profile = argv[i];
         } else if (strcmp(argv[i], "--no-deps") == 0) {
             no_deps = 1;
         } else if (strcmp(argv[i], "-l") == 0 || strcmp(argv[i], "--list") == 0) {
             list_only = 1;
+        } else if (strcmp(argv[i], "--profiles") == 0) {
+            list_profiles_only = 1;
         } else if (strcmp(argv[i], "-h") == 0 || strcmp(argv[i], "--help") == 0) {
             usage(argv[0]);
             return 0;
@@ -334,13 +421,21 @@ int main(int argc, char **argv) {
         }
     }
     
+    const char *base_dir = get_base_dir();
+    
+    /* List profiles */
+    if (list_profiles_only) {
+        list_profiles(base_dir);
+        return 0;
+    }
+    
     if (config_file) {
         Task task;
         if (parse_config(config_file, &task) < 0) {
             fprintf(stderr, "Error: Could not parse '%s'\n", config_file);
             return 1;
         }
-        discover_tasks(get_base_dir(), &list);
+        discover_tasks(base_dir, &list);
         if (!find_task(&list, task.name) && list.count < MAX_TASKS) {
             list.tasks[list.count++] = task;
         }
@@ -351,7 +446,6 @@ int main(int argc, char **argv) {
         return run_with_deps(&list, t);
     }
     
-    const char *base_dir = get_base_dir();
     if (discover_tasks(base_dir, &list) == 0) {
         fprintf(stderr, "No tasks found in %s/configsets/\n", base_dir);
         fprintf(stderr, "Set SHERMAN_DIR or run from a Sherman directory.\n");
@@ -361,6 +455,11 @@ int main(int argc, char **argv) {
     if (list_only) {
         list_tasks(&list);
         return 0;
+    }
+    
+    /* Run profile */
+    if (profile) {
+        return run_profile(base_dir, profile, &list) < 0 ? 1 : 0;
     }
     
     if (target_task) {
@@ -375,6 +474,6 @@ int main(int argc, char **argv) {
     }
     
     list_tasks(&list);
-    printf("\nUse -t <task> to run a task, or -h for help.\n");
+    printf("\nUse -t <task> to run a task, -p <profile> to run a profile, or -h for help.\n");
     return 0;
 }
