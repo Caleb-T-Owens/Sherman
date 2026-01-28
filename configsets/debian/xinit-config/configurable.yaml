@@ -1,6 +1,0 @@
-name: debian/xinit-config
-script: ./install.sh
-dependencies:
-  - debian/action-aptfile-sync
-  - debian/xorg
-  - debian/dwm

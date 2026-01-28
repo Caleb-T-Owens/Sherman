@@ -1,5 +1,0 @@
-name: debian/dmenu
-script: ./install.sh
-dependencies:
-  - debian/action-aptfile-sync
-  - shared/action-sync-buildables

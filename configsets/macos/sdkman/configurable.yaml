@@ -1,3 +1,0 @@
-name: macos/sdkman
-script: ./install.sh
-dependencies: []

@@ -1,4 +1,0 @@
-name: macos/linearmouse
-script: ./install.sh
-dependencies:
-  - macos/brew

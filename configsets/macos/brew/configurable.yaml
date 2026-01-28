@@ -1,3 +1,0 @@
-name: macos/brew
-script: ./install.sh
-dependencies: []

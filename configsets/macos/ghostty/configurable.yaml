@@ -1,4 +1,0 @@
-name: macos/ghostty
-script: ./install.sh
-dependencies:
-  - macos/brew

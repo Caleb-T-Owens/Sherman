@@ -1,4 +1,0 @@
-name: shared/action-sync-buildables
-script: ./install.sh
-dependencies:
-  - shared/project-cloner2

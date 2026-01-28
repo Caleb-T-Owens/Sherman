@@ -1,4 +1,0 @@
-name: shared/project-cloner2
-script: ./install.sh
-dependencies:
-  - shared/rustup

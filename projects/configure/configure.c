@@ -1,15 +1,20 @@
 /*
  * configure - A minimal configset runner for Sherman
  * 
- * Reads configurable.yaml files from configsets/ and executes them
+ * Reads configurable.conf files from configsets/ and executes them
  * with proper dependency resolution via topological sort.
  * 
  * Usage:
- *   configure                    - run all configsets from current env
- *   configure ./config.yaml      - run a specific config file
+ *   configure                    - list available tasks
+ *   configure ./configurable.conf - run a specific config file
  *   configure -t task            - run a task by name
  *   configure -t task --no-deps  - run without dependencies
  *   configure -l                 - list available tasks
+ * 
+ * Config format (configurable.conf):
+ *   name: shared/git
+ *   script: ./install.sh
+ *   deps: shared/brew shared/rustup
  */
 
 #define _POSIX_C_SOURCE 200809L
@@ -31,11 +36,11 @@
 typedef struct {
     char name[MAX_NAME];
     char script[MAX_PATH];
-    char dir[MAX_PATH];           /* Directory containing the configurable.yaml */
+    char dir[MAX_PATH];
     char deps[MAX_DEPS][MAX_NAME];
     int dep_count;
     int completed;
-    int visiting;                  /* For cycle detection */
+    int visiting;
 } Task;
 
 typedef struct {
@@ -54,13 +59,24 @@ static char *trim(char *s) {
     return s;
 }
 
-/* Parse a configurable.yaml file */
+/* Parse space-separated dependencies */
+static void parse_deps(char *value, Task *task) {
+    char *saveptr;
+    char *token = strtok_r(value, " \t", &saveptr);
+    while (token && task->dep_count < MAX_DEPS) {
+        if (*token) {
+            strncpy(task->deps[task->dep_count++], token, MAX_NAME - 1);
+        }
+        token = strtok_r(NULL, " \t", &saveptr);
+    }
+}
+
+/* Parse a configurable.conf file */
 static int parse_config(const char *path, Task *task) {
     FILE *f = fopen(path, "r");
     if (!f) return -1;
     
     char line[MAX_LINE];
-    int in_deps = 0;
     
     /* Extract directory from path */
     strncpy(task->dir, path, MAX_PATH - 1);
@@ -89,20 +105,10 @@ static int parse_config(const char *path, Task *task) {
             
             if (strcmp(key, "name") == 0) {
                 strncpy(task->name, value, MAX_NAME - 1);
-                in_deps = 0;
             } else if (strcmp(key, "script") == 0) {
                 strncpy(task->script, value, MAX_PATH - 1);
-                in_deps = 0;
-            } else if (strcmp(key, "dependencies") == 0) {
-                in_deps = 1;
-            } else {
-                in_deps = 0;
-            }
-        } else if (in_deps && trimmed[0] == '-') {
-            /* Parse dependency list item */
-            char *dep = trim(trimmed + 1);
-            if (*dep && task->dep_count < MAX_DEPS) {
-                strncpy(task->deps[task->dep_count++], dep, MAX_NAME - 1);
+            } else if (strcmp(key, "deps") == 0) {
+                parse_deps(value, task);
             }
         }
     }
@@ -149,19 +155,15 @@ static int run_task(Task *task) {
     }
     
     if (pid == 0) {
-        /* Child process */
         if (chdir(task->dir) < 0) {
             perror("chdir");
             exit(1);
         }
-        
-        /* Execute the script */
         execl("/bin/bash", "bash", "-e", task->script, NULL);
         perror("execl");
         exit(1);
     }
     
-    /* Parent: wait for child */
     int status;
     waitpid(pid, &status, 0);
     
@@ -175,11 +177,9 @@ static int run_task(Task *task) {
     }
 }
 
-/* Topological sort with cycle detection - runs task and its dependencies */
+/* Topological sort with cycle detection */
 static int run_with_deps(TaskList *list, Task *task) {
-    if (is_completed(list, task->name)) {
-        return 0;  /* Already done */
-    }
+    if (is_completed(list, task->name)) return 0;
     
     if (task->visiting) {
         fprintf(stderr, "Error: Circular dependency detected at '%s'\n", task->name);
@@ -188,7 +188,6 @@ static int run_with_deps(TaskList *list, Task *task) {
     
     task->visiting = 1;
     
-    /* Run dependencies first */
     for (int i = 0; i < task->dep_count; i++) {
         Task *dep = find_task(list, task->deps[i]);
         if (!dep) {
@@ -196,23 +195,18 @@ static int run_with_deps(TaskList *list, Task *task) {
                     task->deps[i], task->name);
             continue;
         }
-        if (run_with_deps(list, dep) < 0) {
-            return -1;
-        }
+        if (run_with_deps(list, dep) < 0) return -1;
     }
     
     task->visiting = 0;
     
-    /* Run the task itself */
-    if (run_task(task) < 0) {
-        return -1;
-    }
+    if (run_task(task) < 0) return -1;
     
     mark_completed(list, task->name);
     return 0;
 }
 
-/* Discover all configurable.yaml files in a directory tree */
+/* Discover all configurable.conf files in a directory tree */
 static int discover_tasks(const char *basedir, TaskList *list) {
     char configsets_path[MAX_PATH];
     snprintf(configsets_path, sizeof(configsets_path), "%s/configsets", basedir);
@@ -231,7 +225,7 @@ static int discover_tasks(const char *basedir, TaskList *list) {
             if (entry->d_name[0] == '.') continue;
             
             char config_path[MAX_PATH];
-            snprintf(config_path, sizeof(config_path), "%s/%s/configurable.yaml",
+            snprintf(config_path, sizeof(config_path), "%s/%s/configurable.conf",
                      subdir_path, entry->d_name);
             
             struct stat st;
@@ -257,27 +251,44 @@ static void list_tasks(TaskList *list) {
         Task *t = &list->tasks[i];
         printf("  \033[1m%-30s\033[0m", t->name);
         if (t->dep_count > 0) {
-            printf(" (deps: ");
+            printf(" -> ");
             for (int j = 0; j < t->dep_count; j++) {
                 printf("%s%s", t->deps[j], j < t->dep_count - 1 ? ", " : "");
             }
-            printf(")");
         }
         printf("\n");
     }
 }
 
-/* Get SHERMAN_DIR or default */
-static const char *get_sherman_dir(void) {
-    const char *dir = getenv("SHERMAN_DIR");
-    if (dir) return dir;
+/* Get base directory - check ./configsets first, then SHERMAN_DIR, then $HOME/Sherman */
+static const char *get_base_dir(void) {
+    struct stat st;
     
-    /* Try $HOME/Sherman */
+    /* Check ./configsets first (Ralph learning!) */
+    if (stat("./configsets", &st) == 0 && S_ISDIR(st.st_mode)) {
+        return ".";
+    }
+    
+    /* Check SHERMAN_DIR */
+    const char *dir = getenv("SHERMAN_DIR");
+    if (dir) {
+        char path[MAX_PATH];
+        snprintf(path, sizeof(path), "%s/configsets", dir);
+        if (stat(path, &st) == 0 && S_ISDIR(st.st_mode)) {
+            return dir;
+        }
+    }
+    
+    /* Fallback to $HOME/Sherman */
     const char *home = getenv("HOME");
     if (home) {
         static char default_dir[MAX_PATH];
         snprintf(default_dir, sizeof(default_dir), "%s/Sherman", home);
-        return default_dir;
+        char path[MAX_PATH];
+        snprintf(path, sizeof(path), "%s/configsets", default_dir);
+        if (stat(path, &st) == 0 && S_ISDIR(st.st_mode)) {
+            return default_dir;
+        }
     }
     
     return ".";
@@ -285,12 +296,12 @@ static const char *get_sherman_dir(void) {
 
 static void usage(const char *prog) {
     fprintf(stderr, "Usage:\n");
-    fprintf(stderr, "  %s                      Discover and list tasks\n", prog);
-    fprintf(stderr, "  %s <config.yaml>        Run a specific config file\n", prog);
-    fprintf(stderr, "  %s -t <task>            Run a task by name\n", prog);
-    fprintf(stderr, "  %s -t <task> --no-deps  Run without dependencies\n", prog);
-    fprintf(stderr, "  %s -l, --list           List available tasks\n", prog);
-    fprintf(stderr, "  %s -h, --help           Show this help\n", prog);
+    fprintf(stderr, "  %s                       List available tasks\n", prog);
+    fprintf(stderr, "  %s <configurable.conf>   Run a specific config file\n", prog);
+    fprintf(stderr, "  %s -t <task>             Run a task by name\n", prog);
+    fprintf(stderr, "  %s -t <task> --no-deps   Run without dependencies\n", prog);
+    fprintf(stderr, "  %s -l, --list            List available tasks\n", prog);
+    fprintf(stderr, "  %s -h, --help            Show this help\n", prog);
 }
 
 int main(int argc, char **argv) {
@@ -300,7 +311,6 @@ int main(int argc, char **argv) {
     int list_only = 0;
     const char *config_file = NULL;
     
-    /* Parse arguments */
     for (int i = 1; i < argc; i++) {
         if (strcmp(argv[i], "-t") == 0 || strcmp(argv[i], "--task") == 0) {
             if (++i >= argc) {
@@ -324,46 +334,35 @@ int main(int argc, char **argv) {
         }
     }
     
-    /* If a specific config file is provided, just run it */
     if (config_file) {
         Task task;
         if (parse_config(config_file, &task) < 0) {
             fprintf(stderr, "Error: Could not parse '%s'\n", config_file);
             return 1;
         }
-        
-        /* For single-file mode, we need to discover all tasks for deps */
-        discover_tasks(get_sherman_dir(), &list);
-        
-        /* Add this task if not already in list */
+        discover_tasks(get_base_dir(), &list);
         if (!find_task(&list, task.name) && list.count < MAX_TASKS) {
             list.tasks[list.count++] = task;
         }
-        
         Task *t = find_task(&list, task.name);
         if (!t) t = &task;
         
-        if (no_deps) {
-            return run_task(t);
-        }
+        if (no_deps) return run_task(t);
         return run_with_deps(&list, t);
     }
     
-    /* Discover all tasks */
-    const char *sherman_dir = get_sherman_dir();
-    if (discover_tasks(sherman_dir, &list) == 0) {
-        fprintf(stderr, "No tasks found in %s/configsets/\n", sherman_dir);
-        fprintf(stderr, "Make sure SHERMAN_DIR is set or you're in a Sherman directory.\n");
+    const char *base_dir = get_base_dir();
+    if (discover_tasks(base_dir, &list) == 0) {
+        fprintf(stderr, "No tasks found in %s/configsets/\n", base_dir);
+        fprintf(stderr, "Set SHERMAN_DIR or run from a Sherman directory.\n");
         return 1;
     }
     
-    /* List mode */
     if (list_only) {
         list_tasks(&list);
         return 0;
     }
     
-    /* Run specific task */
     if (target_task) {
         Task *task = find_task(&list, target_task);
         if (!task) {
@@ -371,14 +370,10 @@ int main(int argc, char **argv) {
             fprintf(stderr, "Use -l to list available tasks.\n");
             return 1;
         }
-        
-        if (no_deps) {
-            return run_task(task) < 0 ? 1 : 0;
-        }
+        if (no_deps) return run_task(task) < 0 ? 1 : 0;
         return run_with_deps(&list, task) < 0 ? 1 : 0;
     }
     
-    /* No arguments - just list tasks */
     list_tasks(&list);
     printf("\nUse -t <task> to run a task, or -h for help.\n");
     return 0;

@@ -1,6 +1,0 @@
-name: debian/dwm
-script: ./install.sh
-dependencies:
-  - debian/action-aptfile-sync
-  - debian/xorg
-  - shared/action-sync-buildables

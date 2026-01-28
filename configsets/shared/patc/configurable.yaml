@@ -1,4 +1,0 @@
-name: shared/patc
-script: ./install.sh
-dependencies:
-  - shared/rustup

@@ -1,3 +1,0 @@
-name: shared/bun
-script: ./install.sh
-dependencies: []

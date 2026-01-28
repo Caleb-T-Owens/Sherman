@@ -1,3 +1,0 @@
-name: shared/action-sync-notes
-script: ./install.sh
-dependencies: []

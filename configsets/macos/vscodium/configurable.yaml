@@ -1,4 +1,0 @@
-name: macos/vscodium
-script: ./install.sh
-dependencies:
-  - macos/brew

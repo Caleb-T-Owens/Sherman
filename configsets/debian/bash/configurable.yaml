@@ -1,4 +1,0 @@
-name: debian/bash
-script: ./install.sh
-dependencies:
-  - shared/rustup

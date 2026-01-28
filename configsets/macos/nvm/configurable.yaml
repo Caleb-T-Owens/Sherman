@@ -1,4 +1,0 @@
-name: macos/nvm
-script: ./install.sh
-dependencies:
-  - macos/brew

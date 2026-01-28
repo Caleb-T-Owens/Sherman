@@ -6,7 +6,6 @@ A minimal configset runner for Sherman, written in C.
 
 ```bash
 make
-make install  # installs to $HOME/Sherman/bin/
 ```
 
 Requires only a C compiler (`cc` or `gcc`) - no external dependencies.
@@ -19,13 +18,13 @@ configure -l
 configure --list
 
 # Run a task (with dependencies)
-configure -t git
+configure -t shared/git
 
 # Run without dependencies
-configure -t git --no-deps
+configure -t shared/git --no-deps
 
 # Run a specific config file
-configure ./path/to/configurable.yaml
+configure ./configsets/shared/git/configurable.conf
 
 # Show help
 configure -h
@@ -33,28 +32,48 @@ configure -h
 
 ## How it works
 
-1. Discovers all `configurable.yaml` files in `$SHERMAN_DIR/configsets/`
+1. Discovers all `configurable.conf` files in `configsets/`
 2. Parses task definitions (name, script, dependencies)
 3. Uses topological sort for dependency resolution
 4. Executes scripts in order, tracking completed tasks in-memory
 
-## configurable.yaml format
+## configurable.conf format
 
-Each configset needs a `configurable.yaml`:
+Each configset needs a `configurable.conf` (simple line-based, easy to parse):
 
-```yaml
-name: git
+```
+name: shared/git
 script: ./install.sh
-dependencies:
-  - shared/brew
-  - shared/rustup
+deps: macos/brew shared/rustup
 ```
 
-- `name`: Unique task identifier (typically `category/name` like `shared/git`)
-- `script`: Path to install script, relative to the configurable.yaml location
-- `dependencies`: List of task names that must run first (optional)
+- `name`: Task identifier (typically `category/name`)
+- `script`: Path to install script (relative to configurable.conf)
+- `deps`: Space-separated list of dependencies (optional)
 
 ## Environment
 
-- `SHERMAN_DIR`: Base directory (defaults to `$HOME/Sherman`)
-- Uses `bash -e` to execute scripts (stops on first error)
+- Looks for `./configsets/` first (run from repo root)
+- Falls back to `$SHERMAN_DIR/configsets/`
+- Then `$HOME/Sherman/configsets/`
+
+## Example
+
+```bash
+$ ./configure -l
+Available tasks (34):
+
+  shared/neovim                 -> shared/ripgrep
+  shared/ripgrep                -> shared/rustup, shared/action-sync-buildables
+  shared/rustup
+  macos/zsh
+  ...
+
+$ ./configure -t shared/neovim
+=== Running: shared/rustup ===
+...
+=== Running: shared/ripgrep ===
+...
+=== Running: shared/neovim ===
+...
+```

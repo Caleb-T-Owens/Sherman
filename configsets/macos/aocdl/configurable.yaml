@@ -1,4 +1,0 @@
-name: macos/aocdl
-script: ./install.sh
-dependencies:
-  - macos/brew

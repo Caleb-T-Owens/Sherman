@@ -1,4 +1,0 @@
-name: shared/action-charm-deploy
-script: ./install.sh
-dependencies:
-  - shared/deploydeploy

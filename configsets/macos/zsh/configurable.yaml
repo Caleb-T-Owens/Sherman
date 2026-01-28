@@ -1,3 +1,0 @@
-name: macos/zsh
-script: ./install.sh
-dependencies: []

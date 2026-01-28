@@ -1,4 +1,0 @@
-name: debian/xorg
-script: ./install.sh
-dependencies:
-  - shared/rustup
