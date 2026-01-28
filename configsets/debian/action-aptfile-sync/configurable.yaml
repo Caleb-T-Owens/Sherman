@@ -1,0 +1,4 @@
+name: debian/action-aptfile-sync
+script: ./install.sh
+dependencies:
+  - debian/aptfile

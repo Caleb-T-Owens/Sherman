@@ -1,0 +1,4 @@
+name: shared/memory-sync
+script: ./install.sh
+dependencies:
+  - shared/rustup

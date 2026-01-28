@@ -1,0 +1,4 @@
+name: macos/wezterm
+script: ./install.sh
+dependencies:
+  - macos/brew

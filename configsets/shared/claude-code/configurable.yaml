@@ -1,0 +1,3 @@
+name: shared/claude-code
+script: ./install.sh
+dependencies: []

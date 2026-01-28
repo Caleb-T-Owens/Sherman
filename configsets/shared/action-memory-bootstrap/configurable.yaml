@@ -1,0 +1,4 @@
+name: shared/action-memory-bootstrap
+script: ./install.sh
+dependencies:
+  - shared/memory-sync

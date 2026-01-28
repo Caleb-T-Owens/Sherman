@@ -1,0 +1,5 @@
+name: shared/ripgrep
+script: ./install.sh
+dependencies:
+  - shared/rustup
+  - shared/action-sync-buildables

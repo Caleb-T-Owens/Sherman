@@ -1,0 +1,4 @@
+name: debian/aptfile
+script: ./install.sh
+dependencies:
+  - shared/rustup

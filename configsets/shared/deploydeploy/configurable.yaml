@@ -1,0 +1,4 @@
+name: shared/deploydeploy
+script: ./install.sh
+dependencies:
+  - shared/bun

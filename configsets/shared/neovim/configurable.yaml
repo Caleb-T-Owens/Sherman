@@ -1,0 +1,4 @@
+name: shared/neovim
+script: ./install.sh
+dependencies:
+  - shared/ripgrep

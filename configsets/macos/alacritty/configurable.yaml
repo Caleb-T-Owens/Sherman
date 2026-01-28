@@ -1,0 +1,4 @@
+name: macos/alacritty
+script: ./install.sh
+dependencies:
+  - macos/brew
