@@ -49,9 +49,6 @@ configure --list
 ### Other options
 
 ```bash
-# Force re-run even if already completed
-configure -t git -f
-
 # Dry run - see what would be executed
 configure -t neovim -n
 
@@ -80,13 +77,15 @@ dependencies:
 | `description` | No | Human-readable description |
 | `dependencies` | No | List of paths to dependent configurables |
 
-## Lock Files
+## How It Works
 
-Configure tracks completed installations via `.configure-lock` files in each configset directory. This is separate from the old `make-lock` files used by the Makefile system.
+Configure tracks completed tasks **in-memory during a single execution**. This means:
 
-- Skip already-completed tasks automatically
-- Use `-f/--force` to re-run anyway
-- Delete `.configure-lock` manually to reset a single task
+- Each task runs exactly once per invocation (handles diamond dependencies)
+- No persistent state between runs — every `configure` invocation starts fresh
+- No lock files to manage or clean up
+
+This design fits the typical use case: run all your configs in one go when setting up a machine.
 
 ## Migration from Makefiles
 

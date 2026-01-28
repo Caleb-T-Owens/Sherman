@@ -24,10 +24,6 @@ struct Args {
     #[arg(long = "no-deps", default_value = "false")]
     no_deps: bool,
 
-    /// Force re-run even if already completed
-    #[arg(short = 'f', long = "force", default_value = "false")]
-    force: bool,
-
     /// Dry run - show what would be executed without running
     #[arg(short = 'n', long = "dry-run", default_value = "false")]
     dry_run: bool,
@@ -68,16 +64,16 @@ impl Configurable {
 struct ConfigureRunner {
     configsets_dir: PathBuf,
     configurables: HashMap<String, (PathBuf, Configurable)>,
-    force: bool,
+    completed: HashSet<String>,
     dry_run: bool,
 }
 
 impl ConfigureRunner {
-    fn new(configsets_dir: PathBuf, force: bool, dry_run: bool) -> Self {
+    fn new(configsets_dir: PathBuf, dry_run: bool) -> Self {
         Self {
             configsets_dir,
             configurables: HashMap::new(),
-            force,
+            completed: HashSet::new(),
             dry_run,
         }
     }
@@ -114,22 +110,6 @@ impl ConfigureRunner {
                 self.discover_in_dir(&path)?;
             }
         }
-        Ok(())
-    }
-
-    /// Get lock file path for a configurable
-    fn lock_file(config_dir: &Path) -> PathBuf {
-        config_dir.join(".configure-lock")
-    }
-
-    /// Check if a configurable is already completed
-    fn is_completed(config_dir: &Path) -> bool {
-        Self::lock_file(config_dir).exists()
-    }
-
-    /// Mark a configurable as completed
-    fn mark_completed(config_dir: &Path) -> Result<()> {
-        fs::write(Self::lock_file(config_dir), "")?;
         Ok(())
     }
 
@@ -203,7 +183,7 @@ impl ConfigureRunner {
     }
 
     /// Run a single configurable
-    fn run_single(&self, config_dir: &Path, config: &Configurable) -> Result<()> {
+    fn run_single(&mut self, task_key: &str, config_dir: &Path, config: &Configurable) -> Result<()> {
         let script_path = config_dir.join(&config.script);
 
         if !script_path.exists() {
@@ -223,6 +203,7 @@ impl ConfigureRunner {
 
         if self.dry_run {
             println!("  {} {}", "Would execute:".yellow(), script_path.display());
+            self.completed.insert(task_key.to_string());
             return Ok(());
         }
 
@@ -240,7 +221,7 @@ impl ConfigureRunner {
             );
         }
 
-        Self::mark_completed(config_dir)?;
+        self.completed.insert(task_key.to_string());
         println!(
             "{} {} {}",
             "✓".green(),
@@ -252,7 +233,7 @@ impl ConfigureRunner {
     }
 
     /// Run a task with its dependencies
-    fn run_task(&self, task_key: &str, with_deps: bool) -> Result<()> {
+    fn run_task(&mut self, task_key: &str, with_deps: bool) -> Result<()> {
         let tasks = if with_deps {
             self.resolve_dependencies(task_key)?
         } else {
@@ -271,23 +252,25 @@ impl ConfigureRunner {
         println!();
 
         for task in &tasks {
-            let (config_dir, config) = self
-                .configurables
-                .get(task)
-                .with_context(|| format!("Task '{}' not found", task))?;
-
-            if !self.force && Self::is_completed(config_dir) {
+            // Skip if already completed in this run (handles diamond dependencies)
+            if self.completed.contains(task) {
+                let (_, config) = self.configurables.get(task).unwrap();
                 println!(
-                    "{} {} {} {}",
+                    "{} {} {}",
                     "⏭".yellow(),
                     "Skipping:".bold(),
-                    config.name.yellow(),
-                    "(already completed, use -f to force)".dimmed()
+                    config.name.yellow()
                 );
                 continue;
             }
 
-            self.run_single(config_dir, config)?;
+            let (config_dir, config) = self
+                .configurables
+                .get(task)
+                .with_context(|| format!("Task '{}' not found", task))?
+                .clone();
+
+            self.run_single(task, &config_dir, &config)?;
         }
 
         println!();
@@ -387,7 +370,7 @@ fn main() -> Result<()> {
         find_configsets_dir()?
     };
 
-    let mut runner = ConfigureRunner::new(configsets_dir.clone(), args.force, args.dry_run);
+    let mut runner = ConfigureRunner::new(configsets_dir.clone(), args.dry_run);
 
     // Handle direct config file execution
     if let Some(config_file) = &args.config_file {
