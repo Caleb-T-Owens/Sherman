@@ -1,0 +1,4 @@
+name: git
+script: ./install.sh
+description: Configure git with appropriate gitconfig
+dependencies: []

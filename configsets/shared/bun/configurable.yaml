@@ -1,0 +1,4 @@
+name: bun
+script: ./install.sh
+description: Install Bun JavaScript runtime
+dependencies: []

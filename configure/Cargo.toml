@@ -1,0 +1,12 @@
+[package]
+name = "configure"
+version = "0.1.0"
+edition = "2024"
+description = "A CLI tool to manage configset installations with dependencies"
+
+[dependencies]
+clap = { version = "4", features = ["derive"] }
+serde = { version = "1", features = ["derive"] }
+serde_yaml = "0.9"
+anyhow = "1"
+colored = "2"

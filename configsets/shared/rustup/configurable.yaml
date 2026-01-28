@@ -1,0 +1,4 @@
+name: rustup
+script: ./install.sh
+description: Install Rust via rustup
+dependencies: []

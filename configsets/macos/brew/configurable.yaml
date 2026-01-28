@@ -1,0 +1,4 @@
+name: brew
+script: ./install.sh
+description: Install Homebrew packages from Brewfile
+dependencies: []

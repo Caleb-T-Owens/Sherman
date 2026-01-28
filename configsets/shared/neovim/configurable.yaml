@@ -1,0 +1,5 @@
+name: neovim
+script: ./install.sh
+description: Install and configure Neovim
+dependencies:
+  - shared/git
