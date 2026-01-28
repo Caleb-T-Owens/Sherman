@@ -1,12 +1,6 @@
 #!/bin/bash
 
-# Depends on rustup
-(cd $SHERMAN_DIR/configsets/shared/rustup && make)
-
-# Depends on buildables
-(cd $SHERMAN_DIR/configsets/shared/action-sync-buildables && make)
-
-# Install
+# Install ripgrep from buildables
 pushd $SHERMAN_DIR/buildables/ripgrep/repo
 
 cargo build --release
