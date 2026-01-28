@@ -1,0 +1,4 @@
+name: emacs
+script: ./install.sh
+dependencies:
+  - macos/brew
