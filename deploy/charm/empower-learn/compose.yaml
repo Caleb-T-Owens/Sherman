@@ -1,4 +1,15 @@
 services:
+  frontend:
+    build:
+      context: artifacts/frontend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - "3014:80"
+    depends_on:
+      backend:
+        condition: service_started
+
   backend:
     build:
       context: artifacts/backend
@@ -6,23 +17,10 @@ services:
     restart: unless-stopped
     environment:
       RAILS_ENV: production
-      RAILS_LOG_TO_STDOUT: "true"
-      SECRET_KEY_BASE: ${SECRET_KEY_BASE:-change-this-secret-key-base-in-production}
+      RAILS_MASTER_KEY: ${RAILS_MASTER_KEY}
+      SOLID_QUEUE_IN_PUMA: "true"
+      WEB_CONCURRENCY: ${WEB_CONCURRENCY:-1}
+      RAILS_MAX_THREADS: ${RAILS_MAX_THREADS:-3}
+      JOB_CONCURRENCY: ${JOB_CONCURRENCY:-1}
     volumes:
       - ${HOME}/volumes/empower-learn/storage:/rails/storage
-    healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:80/ || exit 1"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-
-  frontend:
-    build:
-      context: .
-      dockerfile: Dockerfile.frontend
-    restart: unless-stopped
-    ports:
-      - "3014:80"
-    depends_on:
-      backend:
-        condition: service_healthy
