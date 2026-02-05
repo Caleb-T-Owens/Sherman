@@ -24,7 +24,7 @@ mkdir -p $HOME/volumes/empower-learn/storage
 Create a `.env` file or export:
 
 ```bash
-export SECRET_KEY_BASE=$(openssl rand -hex 64)
+export RAILS_MASTER_KEY=<your-master-key>
 ```
 
 ### 3. Build and run
