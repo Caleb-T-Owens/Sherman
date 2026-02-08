@@ -98,5 +98,17 @@
   "stationapi": {
     "url": "git@github.com:ModificationStation/StationAPI.git",
     "profiles": ["work", "home"]
+  },
+  "shreeper": {
+    "url": "git@github.com:Caleb-T-Owens/shreeper.git",
+    "profiles": ["work", "home"]
+  },
+  "gitbutler-infra": {
+    "url": "git@github.com:gitbutlerapp/infra.git",
+    "profiles": ["work", "home"]
+  },
+  "jj": {
+    "url": "git@github.com:jj-vcs/jj.git",
+    "profiles": ["work", "home"]
   }
 }

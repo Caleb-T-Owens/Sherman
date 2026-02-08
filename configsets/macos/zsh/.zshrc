@@ -29,21 +29,10 @@ then
     source <(ng completion script)
 fi
 
-function pp {
-    if [ -e "pnpm-lock.yaml" ]
-    then
-        pnpm $*
-    elif [ -e "yarn.lock" ]
-    then
-        yarn $*
-    elif [ -e "bun.lockb" ]
-    then
-        bun $*
-    elif [ -e "package-lock.json" ]
-    then
-        npm $*
-    fi
-}
+if type -a nvim >&2;
+then
+    alias vim="nvim"
+fi
 
 # Disable some of the worst TUI bullshit I've ever seen
 export COMPOSE_MENU=0
@@ -58,5 +47,11 @@ fi
 # Local bin seems like a good idea.
 export PATH="$HOME/.local/bin:$PATH"
 
-# Setup zoxide
-eval "$(zoxide init zsh)"
+ls_inner() {
+    if [ $# -eq 1 ] && [ -f "$1" ]; then
+        cat -- "$1"
+    else
+        command ls "$@"
+    fi
+}
+alias ls="ls_inner"

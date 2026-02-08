@@ -1,3 +1,7 @@
+-- Set vim leader key to space
+-- Still not convinced about this one
+vim.g.mapleader = " "
+
 -- Bootstrap lazy.nvim, plugin manager
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
@@ -12,10 +16,6 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
--- Set vim leader key to space
--- Still not convinced about this one
-vim.g.mapleader = " "
-
 -- Set plugins for lazy to install
 require("lazy").setup({
   { 'projekt0n/github-nvim-theme' },
@@ -23,7 +23,12 @@ require("lazy").setup({
     "nvim-telescope/telescope.nvim",
     dependencies = { 'nvim-lua/plenary.nvim' }
   },
-  "tpope/vim-sleuth"
+  "tpope/vim-sleuth",
+  {
+    "nvim-treesitter/nvim-treesitter",
+    lazy = false,
+    build = ':TSUpdate'
+  }
 })
 
 -- Set colorscheme
@@ -41,8 +46,84 @@ vim.keymap.set('n', '<leader>fg', builtin.live_grep, {})
 vim.keymap.set('n', '<leader>fb', builtin.buffers, {})
 vim.keymap.set('n', '<leader>fh', builtin.help_tags, {})
 
+-- General LSP
+
+vim.opt.signcolumn = "no"
+
+-- Rust
+
+vim.lsp.config["rust_ls"] = {
+  cmd = { "rust-analyzer" },
+  filetypes = { "rust" },
+  root_markers = { "Cargo.toml" }
+}
+
+vim.lsp.enable("rust_ls")
+
+-- Svelte
+
+vim.filetype.add({
+  extension = {
+    svelte = "svelte"
+  }
+})
+
+vim.lsp.config["svelte_ls"] = {
+  cmd = { "bun", "x", "svelte-language-server" },
+  filetypes = { "svelte" },
+  root_markers = { "package.json" }
+}
+
+vim.lsp.enable("svelte_ls")
+
+-- Eslint
+
+vim.lsp.config["eslint_ls"] = {
+  cmd = { "bun", "x", "-p", "vscode-langservers-extracted", "vscode-eslint-language-server", "--stdio" },
+  filetypes = { "svelte" },
+  root_markers = { "package.json" },
+}
+
+vim.lsp.enable("eslint_ls")
+
+-- Typescript + friends
+
+vim.filetype.add({
+  extension = {
+    typescript = "ts",
+    typescript = "js",
+    typescript = "tsx",
+    typescript = "jsx",
+    typescript = "mts",
+    typescript = "mjs",
+    typescript = "cts",
+    typescript = "cjs",
+    typescript = "json", -- The TS language server can also serve json
+  }
+})
+
+vim.lsp.config["ts_ls"] = {
+  cmd = { "bun", "x", "typescript-language-server", "--stdio" },
+  filetypes = { "typescript" },
+  root_markers = { "package.json" },
+}
+
+vim.lsp.enable("ts_ls")
+
+-- Treesitter
+
+local treesitter = require('nvim-treesitter')
+treesitter.install { 'rust', 'typescript', 'javascript', 'json', 'toml', 'svelte', 'html', 'css' }
+
+vim.api.nvim_create_autocmd('FileType', {
+  -- These patterns should probably be defined language types, rather than what
+  -- nvim-treesitter _thinks_ a language is.
+  pattern = { 'rust', 'typescript', 'svelte', 'html', 'css' },
+  callback = function() vim.treesitter.start() end,
+})
+
 -- DOWN WITH THE MOUSE
-vim.opt.mouse = nil
+vim.opt.mouse = ""
 
 -- Make haml files easier to read
 vim.opt.cursorcolumn = true
@@ -157,27 +238,14 @@ vim.opt.list = true
 vim.keymap.set('n', '<leader>x', '<cmd>tabonly|%bd|e#<cr>')
 
 -- Show me where the lines are!
-vim.opt.colorcolumn = '80'
-
--- Standardrb
-vim.opt.signcolumn = "no" -- otherwise it bounces in and out, not strictly needed though
-vim.api.nvim_create_autocmd("FileType", {
-  pattern = "ruby",
-  group = vim.api.nvim_create_augroup("RubyLSP", { clear = true }), -- also this is not /needed/ but it's good practice 
-  callback = function()
-    vim.lsp.start {
-      name = "standard",
-      cmd = { "sherman_standardrb", "--lsp" },
-    }
-  end,
-})
+-- vim.opt.colorcolumn = '80'
+-- Wrap markdown and comments at ~~120~~ columns
+vim.opt.textwidth = 80
+-- Tabs should be 4 characteres
+vim.opt.tabstop = 4
 
 -- Making my terninal look cooler
 vim.opt.laststatus = 1
-
--- Wrap markdown and comments at ~~120~~ columns
--- 80 is the new 120
-vim.opt.textwidth = 80
 
 -- Please go away F1 help screen
 vim.keymap.set({'v', 'n', 'i'}, '<F1>', '<Esc>')
