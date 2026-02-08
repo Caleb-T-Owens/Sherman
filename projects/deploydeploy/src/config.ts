@@ -14,11 +14,12 @@ export async function readConfigs(servicesPath: string): Promise<Project[]> {
     await $`find ${servicesPath} -maxdepth 1 -mindepth 1 -type d`.text()
   )
     .trim()
-    .split("\n");
+    .split("\n")
+    .filter((line) => line.length > 0);
   const out = [];
   for await (const s of serviceFolders) {
     let config: Config | undefined;
-    if ((await $`test -f ${s}/config.json`.quiet()).exitCode === 0) {
+    if ((await $`test -f ${s}/config.json`.quiet().nothrow()).exitCode === 0) {
       config = JSON.parse(await $`cat ${s}/config.json`.text());
     }
 

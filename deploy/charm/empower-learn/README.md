@@ -13,6 +13,13 @@ A learning platform with React frontend and Rails API backend.
 
 ## Setup
 
+### 0. Repository sync hook
+
+Before each deploy, `install.sh` runs automatically from this folder. It ensures
+`./repo` exists in this deploy set, fetches from `origin`, and hard
+resets the checkout to `origin/main`.
+This deploy set no longer uses artifact symlinks.
+
 ### 1. Create volume directory
 
 ```bash
