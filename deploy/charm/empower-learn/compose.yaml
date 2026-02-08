@@ -1,26 +1,26 @@
 services:
-  frontend:
-    build:
-      context: artifacts/empower-learn/frontend
-      dockerfile: Dockerfile
-    restart: unless-stopped
-    ports:
-      - "3014:80"
-    depends_on:
-      backend:
-        condition: service_started
+    frontend:
+        build:
+            context: repo/frontend
+            dockerfile: Dockerfile
+        restart: unless-stopped
+        ports:
+            - "3014:80"
+        depends_on:
+            backend:
+                condition: service_started
 
-  backend:
-    build:
-      context: artifacts/empower-learn/backend
-      dockerfile: Dockerfile
-    restart: unless-stopped
-    environment:
-      RAILS_ENV: production
-      RAILS_MASTER_KEY: ${RAILS_MASTER_KEY}
-      SOLID_QUEUE_IN_PUMA: "true"
-      WEB_CONCURRENCY: ${WEB_CONCURRENCY:-1}
-      RAILS_MAX_THREADS: ${RAILS_MAX_THREADS:-3}
-      JOB_CONCURRENCY: ${JOB_CONCURRENCY:-1}
-    volumes:
-      - ${HOME}/volumes/empower-learn/storage:/rails/storage
+    backend:
+        build:
+            context: repo/backend
+            dockerfile: Dockerfile
+        restart: unless-stopped
+        environment:
+            RAILS_ENV: production
+            RAILS_MASTER_KEY: ${RAILS_MASTER_KEY}
+            SOLID_QUEUE_IN_PUMA: "true"
+            WEB_CONCURRENCY: ${WEB_CONCURRENCY:-1}
+            RAILS_MAX_THREADS: ${RAILS_MAX_THREADS:-3}
+            JOB_CONCURRENCY: ${JOB_CONCURRENCY:-1}
+        volumes:
+            - ${HOME}/volumes/empower-learn/storage:/rails/storage

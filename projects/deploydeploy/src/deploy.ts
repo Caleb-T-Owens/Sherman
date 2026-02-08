@@ -20,6 +20,7 @@ export async function upOne({
   console.log(`Deploying ${project.name}...`);
 
   const projectPath = path.join(servicesPath, project.name);
+  await runInstallScript(projectPath);
   await linkArtifacts(projectPath, project);
 
   console.log("Building and starting service...");
@@ -51,6 +52,19 @@ export async function downOne({
 
   console.log("Building and starting service...");
   const lines = $`cd ${projectPath} && docker compose up -d --build`.lines();
+  for await (const l of lines) {
+    console.log(l);
+  }
+}
+
+async function runInstallScript(projectPath: string) {
+  const installScriptPath = path.join(projectPath, "install.sh");
+  if ((await $`test -f ${installScriptPath}`.quiet().nothrow()).exitCode !== 0) {
+    return;
+  }
+
+  console.log("Running install.sh...");
+  const lines = $`cd ${projectPath} && bash ./install.sh`.lines();
   for await (const l of lines) {
     console.log(l);
   }
