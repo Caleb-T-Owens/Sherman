@@ -1,0 +1,10 @@
+[package]
+name = "two-same-parents"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+gix = { version = "0.68", features = ["basic", "index"] }
+clap = { version = "4", features = ["derive"] }
+anyhow = "1"
+smallvec = "1"
