@@ -1,6 +1,5 @@
 {
   "artifacts": {
-    "frontend": "$HOME/Sherman/projects/empower-learn/frontend",
-    "backend": "$HOME/Sherman/projects/empower-learn/backend"
+    "empower-learn": "$HOME/Sherman/projects/empower-learn"
   }
 }

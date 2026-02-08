@@ -1,7 +1,7 @@
 services:
   frontend:
     build:
-      context: artifacts/frontend
+      context: artifacts/empower-learn/frontend
       dockerfile: Dockerfile
     restart: unless-stopped
     ports:
@@ -12,7 +12,7 @@ services:
 
   backend:
     build:
-      context: artifacts/backend
+      context: artifacts/empower-learn/backend
       dockerfile: Dockerfile
     restart: unless-stopped
     environment:
