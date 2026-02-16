@@ -45,11 +45,12 @@ cask "ghostty"
 # Editors and terminals
 cask "alacritty"
 cask "wezterm"
-cask "emacs"
+# cask "emacs"
 cask "vscodium"
-cask "eloston-chromium"
+# cask "eloston-chromium"
 cask "google-chrome"
 cask "tableplus"
+cask "codex"
 
 # IRC
 cask "halloy"
@@ -79,4 +80,7 @@ brew "protobuf" # Client itself
 cask "spotify"
 
 # Rust alternatives because...
-brew "zoxide"
+# brew "zoxide"
+
+# Utils
+cask "espanso"
