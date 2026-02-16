@@ -1,0 +1,61 @@
+# espanso match file
+
+# For a complete introduction, visit the official docs at: https://espanso.org/docs/
+
+# You can use this file to define the base matches (aka snippets)
+# that will be available in every application when using espanso.
+
+# Matches are substitution rules: when you type the "trigger" string
+# it gets replaced by the "replace" string.
+
+# yaml-language-server: $schema=https://raw.githubusercontent.com/espanso/espanso/dev/schemas/match.schema.json
+
+matches:
+    - trigger: ":espanso"
+      replace: "Hi there!"
+
+    - trigger: ":codex"
+      replace: "{{codex_output}}"
+      vars:
+          - name: clipb
+            type: clipboard
+          - name: form1
+            type: form
+            params:
+                layout: |
+                    Instruction:
+                    [[instruction]]
+
+                    Text:
+                    [[text]]
+                fields:
+                    instruction:
+                        multiline: true
+                        default: "Improve the text for clarity while preserving the original meaning and tone."
+                    text:
+                        multiline: true
+                        default: "{{clipb}}"
+          - name: codex_output
+            type: shell
+            params:
+                cmd: "$CONFIG/scripts/codex-transform.sh"
+
+    - trigger: ":tone"
+      replace: "{{codex_output}}"
+      vars:
+          - name: clipb
+            type: clipboard
+          - name: codex_output
+            type: shell
+            params:
+                cmd: "$CONFIG/scripts/codex-tone.sh"
+
+    - trigger: ":prompt"
+      replace: "{{codex_output}}"
+      vars:
+          - name: clipb
+            type: clipboard
+          - name: codex_output
+            type: shell
+            params:
+                cmd: "$CONFIG/scripts/codex-prompt.sh"
