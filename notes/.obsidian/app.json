@@ -1,0 +1,8 @@
+{
+  "hi": true,
+  "stuff": 42,
+  "vimMode": true,
+  "readableLineLength": true,
+  "strictLineBreaks": false,
+  "livePreview": true
+}
