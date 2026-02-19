@@ -64,6 +64,8 @@ cask "MonitorControl"
 # Money money money
 cask "gnucash"
 
+#its' better
+
 # Music companion
 cask "music-assistant/tap/companion"
 
