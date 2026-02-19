@@ -1,0 +1,48 @@
+services:
+  synapse:
+    image: ghcr.io/element-hq/synapse:latest
+    restart: unless-stopped
+    entrypoint: ["/bin/sh", "/synapse-config/start.sh"]
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:8008:8008"
+    environment:
+      MATRIX_SERVER_NAME: ${MATRIX_SERVER_NAME:-matrix.localhost}
+      SYNAPSE_REPORT_STATS: ${SYNAPSE_REPORT_STATS:-no}
+      SYNAPSE_ENABLE_REGISTRATION: ${SYNAPSE_ENABLE_REGISTRATION:-true}
+      SYNAPSE_ENABLE_REGISTRATION_WITHOUT_VERIFICATION: ${SYNAPSE_ENABLE_REGISTRATION_WITHOUT_VERIFICATION:-true}
+      SYNAPSE_REGISTRATION_REQUIRES_TOKEN: ${SYNAPSE_REGISTRATION_REQUIRES_TOKEN:-false}
+      SYNAPSE_FORM_SECRET: ${SYNAPSE_FORM_SECRET:-}
+      SYNAPSE_MACAROON_SECRET_KEY: ${SYNAPSE_MACAROON_SECRET_KEY:-}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD}
+      SYNAPSE_CONFIG_PATH: /data/homeserver.yaml
+    volumes:
+      - ${HOME}/volumes/matrix/synapse:/data
+      - ./synapse:/synapse-config:ro
+
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    profiles: ["tunnel"]
+    restart: unless-stopped
+    command: tunnel --no-autoupdate run
+    environment:
+      TUNNEL_TOKEN: ${CLOUDFLARE_TUNNEL_TOKEN:-}
+    depends_on:
+      - synapse
+
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: synapse
+      POSTGRES_USER: synapse
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD}
+    volumes:
+      - ${HOME}/volumes/matrix/postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U synapse -d synapse"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
