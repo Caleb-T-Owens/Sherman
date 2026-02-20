@@ -1,0 +1,80 @@
+---
+layout: ../../layouts/MainLayout.astro
+title: "Advent of Code Recap - Caleb Owens"
+canonicalUrl: https://cto.je/tech/advent-of-code-2025
+description: brrr description yey
+---
+
+import LastUpdated from "../../components/LastUpdated.astro";
+
+<article>
+
+# Advent of Code 2025 Recap
+
+<LastUpdated filePath="src/pages/tech/advent-of-code-2025.mdx" />
+
+[Advent of Code](https://adventofcode.com) is one of my favourite events of the
+year. I love problem solving and figuring out obscure puzzles. AoC manages to
+strike the balance between providing a challanging puzzle and not requiring all
+day to solve.
+
+I've got a personal goal of writing more pages so I thought I'd recap my
+experience of the 2025 advent of code.
+
+Do be warned, there will be spoilers about the puzzles and their solutions in
+this article.
+
+## Some highlights of the days
+
+### Day 10
+
+Day 10 was one of the most fun problems to work on for me. Despite doing a more
+brute force for part 1, I had some fun thinking about how that search could be
+cut down to avoid extra
+
+The first part gave you a desired display state, IE: `[.##.]`. Starting from an
+empty display of `[....]` you need to press an amount of buttons in order to
+create that. Each button toggled some set of display cells. For this example,
+the buttons we could press were as follows: `(3) (1,3) (2) (2,3) (0,2) (0,1)`.
+The first part wants to know the shortest quantity of button presses in order to
+create the desired display state.
+
+When solving AoC problems, I often try to find the simplest to implement
+solution before a super optimal solution. This is to try and avoid programmer
+error and to try and get my solution finished as fast as possible.
+
+With this ethos, my first thought is often "Can I get away with just brute
+forcing this?". Since we are looking for the shortest number of button presses,
+can I just do a breadth first search through all the possible combinations until
+we find the shortest combination?... Absolutely. We can do slightly better than
+that though with very little extra effort.
+
+Pressing a button inverts the specified indicies of the display. We can model
+this operation as performing an `XOR` with a particular mask. Since we know that
+`A XOR B XOR B == A` and that `A XOR B == B XOR A`, we can assert that the
+shortest path won't include the same button getting pressed twice, which results
+in a tidy performance boost to our solution.
+
+The second part however comes in swinging hard. Our desired display state should
+actually look like `{3,5,4,7}` and pressing a button increments each segment's
+number. This almost immediatly smelled like the type of optimization problem
+that applying
+[integer programming](https://en.wikipedia.org/wiki/Integer_programming) could
+solve. The main signals to me here was the clear goal of "minimize the number of
+button presses" how each display segment can be represented as
+`N presses of button A + M preses of button B + ...`.
+
+To construct an IP for this problem we want our objective function to be
+minimizing the amount of buttons pressed. We then add the obvious constraints
+that disallow negative quantities of button presses. Finally, we add a
+constraint for each cell where number of _relevant_ button presses equals the
+desired display goal.
+
+We can then bung that into your favourite IP solver of choice or implement your
+own simplex algorithm yourself if you really fancy. Having built my own
+gauss-jordan implementation for a 4d ray tracer a couple years ago, I felt happy
+just importing [CBC](https://github.com/coin-or/Cbc) and it's well written ruby
+bindings [ruby-cbc](https://github.com/gverger/ruby-cbc) which is a well known
+LP solver and calling it a day.
+
+</article>
