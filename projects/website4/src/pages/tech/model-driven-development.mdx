@@ -1,0 +1,79 @@
+---
+layout: ../../layouts/MainLayout.astro
+title: "Model Driven Development - Caleb Owens"
+canonicalUrl: https://cto.je/tech/do-3wm-care-about-linebreaks
+description: My preferred approach to software development
+---
+
+import LastUpdated from "../../components/LastUpdated.astro";
+
+<article>
+
+# Model Driven Development
+
+<LastUpdated filePath="src/pages/tech/model-driven-development.mdx" />
+
+There are many approaches to software development. There are software developers
+who I greatly respect who approach things very differently to my own. It's hard
+to say if there is a "right" approach given how effectively software developers
+can be dispite working in very distinct ways.
+
+My approach to software development is to start of with your set of requirements
+for a system and to take the set of primatives for your particular data type and
+build them into a model that naturally satisfies those requirements.
+
+This is not a new concept at all. This is _exactly_ what mathematicans have been
+doing for centuries.
+
+When programming without a proof assistant, I think taking this approach is even
+more important. Without proofs for our code, we have to validate it using a
+finite quantity of tests. We have to pick a select number of scenarios that we
+anciticpate and hope that our algorithm works on everything in between.
+
+I'm concinced that we are much more likely to come up with an algorithm that
+works for all inputs by first trying to develop a theoretical model that on
+paper can perhaps be visually proven, rather than adding one test at a time and
+making changes to some system in the hopes that it eventually converts into a
+model that behaves how we desire it to.
+
+For example, if I were to approach the problem of defining an `is_odd` function,
+the requirement is that it returns `true` for any non-even number.
+
+A test driven approach would first define some tests that asserts our expected
+behaviour in a few scenarios, IE `is_odd(1) == true`, `is_odd(2) == false`, and
+`is_odd(5) == true`.
+
+Then, to make the tests pass, you could build the following function:
+
+```rs
+fn is_odd(input: usize) -> bool {
+    if input == 1 {
+        return true;
+    }
+    if input == 5 {
+        return true;
+    }
+    return false;
+}
+```
+
+We've not found a model that satisfies our requirement.
+
+Coming from a model first perspective, I will look at the data and consider what
+operations I can apply and what those opeations will tell me about my data. A
+key feature of an odd number is that it is not divisable by 2. Our computers can
+perform the `mod` operation which returns the remainder after one number has
+been divided by another. As such, our model can say "If our input `mod` 2 has a
+remainder 1, it must be odd". Resulting in this complete function:
+
+```rs
+fn is_odd(input: usize) -> bool {
+    input % 2 == 1
+}
+```
+
+Perhaps this is a bit of an absurd scenario, but when it comes to larger more
+complex systems I can't help but wonder how you don't fall into this sort of
+trap.
+
+</article>
