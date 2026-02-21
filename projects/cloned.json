@@ -110,5 +110,9 @@
   "jj": {
     "url": "git@github.com:jj-vcs/jj.git",
     "profiles": ["work", "home"]
+  },
+  "xdiff-rs": {
+    "url": "git@github.com:Caleb-T-Owens/xdiff-rs.git",
+    "profiles": ["work", "home"]
   }
 }
