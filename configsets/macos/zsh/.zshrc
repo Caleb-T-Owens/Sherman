@@ -46,6 +46,7 @@ fi
 
 # Local bin seems like a good idea.
 export PATH="$HOME/.local/bin:$PATH"
+export PATH="/Users/calebowens/.bun/bin:$PATH"
 
 ls_inner() {
     if [ $# -eq 1 ] && [ -f "$1" ]; then
