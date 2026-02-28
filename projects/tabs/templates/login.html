@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<section class="panel hero">
+  <h1>Log in</h1>
+  <p class="lede">Sign in with your username or email.</p>
+  {% if error %}
+    <p class="empty">{{ error }}</p>
+  {% endif %}
+  <form action="/login" method="post" class="auth-form">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <label for="identity">Username or email</label>
+    <input id="identity" name="identity" value="{{ values.identity }}" required>
+    <label for="password">Password</label>
+    <input id="password" type="password" name="password" minlength="12" required>
+    <button type="submit">Log in</button>
+  </form>
+  <p><a href="/register">Need an account? Register</a></p>
+</section>
+{% endblock %}

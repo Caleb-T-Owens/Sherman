@@ -1,36 +1,20 @@
 {% extends "base.html" %}
 
-{% block title %}Notes Home{% endblock %}
+{% block title %}Account Home{% endblock %}
 
 {% block content %}
 <section class="panel hero">
-  <h1>Notes</h1>
-  <p class="lede">A tiny server-rendered notebook with no frontend framework overhead.</p>
-  <form action="/notes" method="post" class="note-form">
-    <label for="body">New note</label>
-    <textarea id="body" name="body" rows="4" placeholder="Capture a thought..."></textarea>
-    <button type="submit">Save note</button>
+  <h1>Account</h1>
+  <p class="lede">You are signed in.</p>
+  <dl class="account-info">
+    <dt>Username</dt>
+    <dd>{{ account.username }}</dd>
+    <dt>Email</dt>
+    <dd>{{ account.email }}</dd>
+  </dl>
+  <form action="/logout" method="post" class="logout-form">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <button type="submit">Log out</button>
   </form>
-</section>
-
-<section class="panel notes">
-  <h2>Recent entries</h2>
-  {% if notes|length == 0 %}
-    <p class="empty">No notes yet. Add your first one above.</p>
-  {% else %}
-    <ul>
-      {% for note in notes %}
-        <li>
-          <article class="note-card">
-            <header>
-              <span>#{{ note.id }}</span>
-              <time>{{ note.created_at }}</time>
-            </header>
-            <p>{{ note.body }}</p>
-          </article>
-        </li>
-      {% endfor %}
-    </ul>
-  {% endif %}
 </section>
 {% endblock %}
