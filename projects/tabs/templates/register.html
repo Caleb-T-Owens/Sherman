@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}Register{% endblock %}
+
+{% block content %}
+<section class="panel hero">
+  <h1>Create account</h1>
+  <p class="lede">Use a long password. You will be signed in after registering.</p>
+  {% if error %}
+    <p class="empty">{{ error }}</p>
+  {% endif %}
+  <form action="/register" method="post" class="auth-form">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <label for="username">Username</label>
+    <input id="username" name="username" value="{{ values.username }}" required>
+    <label for="email">Email</label>
+    <input id="email" type="email" name="email" value="{{ values.email }}" required>
+    <label for="password">Password</label>
+    <input id="password" type="password" name="password" minlength="12" required>
+    <button type="submit">Register</button>
+  </form>
+  <p><a href="/login">Already have an account? Log in</a></p>
+</section>
+{% endblock %}
