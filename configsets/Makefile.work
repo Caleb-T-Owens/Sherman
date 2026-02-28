@@ -1,4 +1,4 @@
-CONFIGS = macos/brew macos/nvm macos/linearmouse macos/sdkman macos/wezterm macos/ghostty macos/vscodium macos/zsh macos/espanso shared/git shared/neovim shared/bun shared/rustup shared/patc shared/claude-code macos/sdkman macos/aocdl
+CONFIGS = macos/brew macos/nvm macos/linearmouse macos/sdkman macos/wezterm macos/ghostty macos/vscodium macos/zsh macos/espanso shared/git shared/neovim shared/tmux shared/bun shared/rustup shared/patc shared/claude-code macos/sdkman macos/aocdl shared/pi
 ACTIONS = shared/action-clone-projects shared/action-memory-bootstrap shared/action-sync-notes
 
 .PHONY: all
