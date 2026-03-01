@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# Dependency brew
-(cd $HOME/Sherman/configsets/macos/brew && make)
-
 # nvm post install
 if [ ! -e $HOME/.nvm ]
 then

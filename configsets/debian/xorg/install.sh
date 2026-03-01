@@ -1,4 +1,4 @@
 #!/bin/bash
 
-# Depends on action-aptfile-sync
-(cd $SHERMAN_DIR/configsets/shared/rustup && make)
+# xorg dependencies are handled by aptfile
+echo "xorg configured"

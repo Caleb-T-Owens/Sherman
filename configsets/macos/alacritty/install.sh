@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# Dependency brew
-(cd $HOME/Sherman/configsets/macos/brew && make)
-
 # Install
 
 if [ ! -d $HOME/.config/alacritty ]

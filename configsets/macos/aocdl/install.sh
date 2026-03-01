@@ -2,9 +2,6 @@
 
 if [[ ! -e $HOME/Sherman/bin/acodl ]]
 then
-    # Dependency brew install for wget
-    (cd $HOME/Sherman/configsets/macos/brew && make)
-
     # Install
     pushd $HOME/Sherman/bin
 
