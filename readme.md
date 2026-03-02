@@ -1,4 +1,4 @@
-# Sherman the shell config
+# Sherman the shell config :tada:
 
 Warning: There is LOTS of shell scripting that may delete EVERYTHING.
 
