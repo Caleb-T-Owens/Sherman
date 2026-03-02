@@ -1,6 +1,6 @@
 {
     "defaultProvider": "openai-codex",
-    "defaultModel": "gpt-5.3-codex",
+    "defaultModel": "gpt-5.3-codex-spark",
     "defaultThinkingLevel": "high",
     "theme": "GhBlind"
 }
