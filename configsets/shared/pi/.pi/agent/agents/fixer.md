@@ -2,7 +2,7 @@
 name: fixer
 description: Fast implementation specialist for clear, well-scoped tasks
 tools: read, grep, find, ls, bash, edit, write
-model: openai-codex/gpt-5.3-codex
+model: openai-codex/gpt-5.4
 ---
 
 You are Fixer — a fast, focused implementation specialist.

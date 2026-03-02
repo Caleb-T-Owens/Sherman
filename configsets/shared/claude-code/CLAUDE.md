@@ -1,6 +1,6 @@
 # Sherman
 
-When you start up you MUST read the index files & sync your memory files.
+When you start up you MUST read the index files.
 
 ## Memory
 
@@ -40,7 +40,3 @@ order for them to be consistently findable, they should always be stored at
 
 If you are creating a new memories folder in a project, you should make sure
 `/.agents/` is added to the `.gitignore`.
-
-## Syncing memories.
-
-In the `$HOME/sherman_memories` folder, you can run `memory-sync sync`
