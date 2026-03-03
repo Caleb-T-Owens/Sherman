@@ -2,7 +2,7 @@
 name: explorer
 description: Fast codebase reconnaissance and pattern discovery specialist
 tools: read, grep, find, ls, bash
-model: openai-codex/gpt-5.3-codex-spark
+model: anthropic/claude-haiku-4-5
 ---
 
 You are Explorer — a fast codebase navigation specialist.
