@@ -1,14 +1,5 @@
 #!/bin/bash
 
-# Ripgrep
-(cd $HOME/Sherman/configsets/shared/ripgrep && make)
-
-# On macos neovim is installed via brew
-if [ $SHERMAN_PLATFORM = macos ]
-then
-    (cd $HOME/Sherman/configsets/macos/brew && make)
-fi
-
 # Install
 
 if [ ! -d $HOME/.config/nvim ]
@@ -17,7 +8,7 @@ then
     mkdir $HOME/.config/nvim
 fi
 
-# We want to clean out the alacritty folder
+# We want to clean out the nvim folder
 echo "Removing old configs"
 if [ -e $HOME/.config/nvim/init.lua ]
 then
