@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# Ensure rustup is installed
-(cd $HOME/Sherman/configsets/shared/rustup && make)
-
 # Navigate to memory-sync project and build
 echo "Building memory-sync..."
 pushd $HOME/Sherman/projects/memory-sync

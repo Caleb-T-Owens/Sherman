@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# Ensure memory-sync binary is built and available
-(cd $HOME/Sherman/configsets/shared/memory-sync && make)
-
 # Create main memories directory if it doesn't exist
 if [ ! -d $HOME/sherman_memories ]; then
     echo "Creating ~/sherman_memories directory"
