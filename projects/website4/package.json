@@ -13,7 +13,10 @@
   "dependencies": {
     "@astrojs/mdx": "^4.3.14",
     "@astrojs/rss": "^4.0.18",
-    "astro": "^5.18.2"
+    "astro": "^5.18.2",
+    "katex": "^0.17.0",
+    "rehype-katex": "^7.0.1",
+    "remark-math": "^6.0.0"
   },
   "devDependencies": {
     "prettier": "^3.8.3",
