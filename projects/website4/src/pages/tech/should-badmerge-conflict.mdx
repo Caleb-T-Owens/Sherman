@@ -1,0 +1,258 @@
+---
+layout: ../../layouts/MainLayout.astro
+title: "Should bad-merge conflict? - Caleb Owens"
+canonicalUrl: https://cto.je/tech/should-badmerge-conflict
+description:
+  Questioning whether the "badmerge" scenario should end up in some sort of
+  conflicting state rather than merging cleanly.
+---
+
+import LastUpdated from "../../components/LastUpdated.astro";
+
+<article>
+
+# Should bad-merge conflict?
+
+<LastUpdated filePath="src/pages/tech/should-badmerge-conflict.mdx" />
+
+I was recently at the [Mercurial
+Sprint](https://www.mercurial-scm.org/news/2026/0001-london-sprint) in London
+where we had some really interesting conversations about merging text. One topic
+of discussion hit on the "badmerge" scenario that
+[Zooko](https://en.wikipedia.org/wiki/Zooko_Wilcox-O%27Hearn) highlighted in his
+[article here](https://tahoe-lafs.org/~zooko/badmerge/simple.html).
+
+The scenario has a setup of commits as follows:
+
+```
+B2: "abcxxabc"
+|
+B1: "xxabc"
+|
+|  C: "azc"
+\ /
+ A: "abc"
+```
+
+The question is: If I merge $B_2$ and $C$ together, what should the resulting
+file look like?
+
+## Three Way Merges
+
+When [git](https://git-scm.com) or other snapshot based VCSes merge files
+together, they typically make use of a [three way
+merge](https://en.wikipedia.org/wiki/Merge_(version_control)#Three-way_merge).
+The three way merge makes use of a common ancestor between your diverged file
+versions to help clarify how to combine the two sides.
+
+These VCSes will make use of their revision graph to determine which node is the
+common ancestor. In the case of our merge example, $A$ is chosen.
+
+By comparing against the common ancestor, we learn that between $A$ and $B_2$,
+the five characters `xxabc` have been added to the end. Between $A$ and $C$, we
+see that the second character `b` was replaced with a `z`.
+
+Taking the two deltas and applying them both to the contents of $A$, we produce
+the result `azcxxabc`.
+
+## Is that result correct?
+
+In the sense that we have some combined result that is a combination of the two
+deltas, we have indeed "correctly" merged these files.
+
+If we however look at the history, is that the expected result? If our diff told
+us that the delta between $A$ and $B_2$ was that five characters `abcxx` had
+instead been added to the start of the file, we would have ended up with the
+result `abcxxazc`.
+
+Is one result more correct than the other?
+
+VCSes like [Darcs](https://darcs.net) and [Pijul](https://pijul.org) which are
+based on a theory of patches, where the deltas are what are persisted, and what
+we would consider a "commit" in their history, is really a large set of deltas
+that can be combined together.
+
+Pijul will notice that $A \rightarrow B_1$ has added the start of the file and
+$B_1 \rightarrow B_2$ also added to the start of the file. Because of this, it
+knows that if I have a patch that is applied to $A$, it should be applied to the
+last three characters. As such, Pijul will always produce the result `abcxxazc`.
+
+You could argue that because Pijul doesn't depend on the whims of a diffing
+algorithm, their model is more correct.
+
+## Semantics
+
+I do agree that Darcs and Pijul are more correct systems when it comes to
+tracking the locations of changes. However, I don't think we can just dismiss
+the problem of the different possibilities for the semantics of the resulting
+file.
+
+The best result is either semantically correct, or it exposes the ambiguity to
+the user as a conflict.
+
+The [`badmerge`
+posts](https://tahoe-lafs.org/~zooko/badmerge/concrete-bad-semantics.html)
+provide an example for when you might actually prefer the result `azcxxabc` in
+the context of a C program.
+
+I think there are also scenarios where you might want to end up with the result
+`azcxxazc`.
+
+<details>
+<summary>Bug fix scenario</summary>
+Let's imagine our file $A$ had some lines that uploaded a file to a web server:
+
+```ruby
+def upload_saves(save)
+    s = save.to_s_encoded(language: :english)
+    bucket = s.get_bucket(:public)
+    handle = bucket.write_file_v1("my_save", s)
+    handle.write
+end
+```
+
+$B_1$ adds some logging:
+
+```ruby
+def upload_saves(save)
+    puts "Uploading saves..."
+    s = save.to_s_encoded(language: :english)
+    bucket = s.get_bucket(:public)
+    handle = bucket.write_file_v1("my_save", s)
+    handle.write
+end
+```
+
+$B_2$ then adds some more lines for uploading the french version:
+
+```ruby
+def upload_saves(save)
+    s = save.to_s_encoded(language: :french)
+    bucket = s.get_bucket(:public)
+    handle = bucket.write_file_v1("my_save", s)
+    handle.write
+    puts "Uploading saves..."
+    s = save.to_s_encoded(language: :english)
+    bucket = s.get_bucket(:public)
+    handle = bucket.write_file_v1("my_save", s)
+    handle.write
+end
+```
+
+$C$ however fixes a bug in the upload, changing it to use the v2 write file API.
+
+```ruby
+def upload_saves(save)
+    s = save.to_s_encoded(language: :english)
+    bucket = s.get_bucket(:public)
+    handle = bucket.write_file_v2("my_save", s)
+    handle.write
+end
+```
+
+In this scenario, the delta $A \rightarrow B_2$ can either be:
+
+```diff
+@@ -1,0 +2,5 @@
++    s = save.to_s_encoded(language: :french)
++    bucket = s.get_bucket(:public)
++    handle = bucket.write_file_v1("my_save", s)
++    handle.write
++    puts "Uploading saves..."
+```
+
+or
+
+```diff
+@@ -1,1 +1,1 @@
+-    s = save.to_s_encoded(language: :english)
++    s = save.to_s_encoded(language: :french)
+@@ -5,0 +5,5 @@
++    puts "Uploading saves..."
++    s = save.to_s_encoded(language: :english)
++    bucket = s.get_bucket(:public)
++    handle = bucket.write_file_v1("my_save", s)
++    handle.write
+```
+
+among other possibilities, but these two allow options show how we could end up
+after the merged result being either:
+
+```ruby
+def upload_saves(save)
+    s = save.to_s_encoded(language: :french)
+    bucket = s.get_bucket(:public)
+    handle = bucket.write_file_v2("my_save", s)
+    handle.write
+    puts "Uploading saves..."
+    s = save.to_s_encoded(language: :english)
+    bucket = s.get_bucket(:public)
+    handle = bucket.write_file_v1("my_save", s)
+    handle.write
+end
+```
+
+or
+
+```ruby
+def upload_saves(save)
+    s = save.to_s_encoded(language: :french)
+    bucket = s.get_bucket(:public)
+    handle = bucket.write_file_v1("my_save", s)
+    handle.write
+    puts "Uploading saves..."
+    s = save.to_s_encoded(language: :english)
+    bucket = s.get_bucket(:public)
+    handle = bucket.write_file_v2("my_save", s)
+    handle.write
+end
+```
+
+Darcs and Pijul would consistently conclude that the English upload should be
+the one that the fix applies to, but in the context of the bug fix, we really
+want to end up with the resulting file to be:
+
+```ruby
+def upload_saves(save)
+    s = save.to_s_encoded(language: :french)
+    bucket = s.get_bucket(:public)
+    handle = bucket.write_file_v2("my_save", s)
+    handle.write
+    puts "Uploading saves..."
+    s = save.to_s_encoded(language: :english)
+    bucket = s.get_bucket(:public)
+    handle = bucket.write_file_v2("my_save", s)
+    handle.write
+end
+```
+</details>
+</article>
+
+## Should this be a conflict?
+
+While the line tracking answer `abcxxazc` is quite agreeable, in some of these
+scenarios the desired semantics of the resulting file needs to be considered.
+`azcxxabc` or `azcxxazc` could be the preferred outcome.
+
+As such, it makes me wonder, if a merge algorithm that cares about semantics
+should produce a conflicted file that presents the different semantically
+possible options to the user. IE:
+
+```
+a
+>>>>>
+z
+=====
+b
+<<<<<
+c
+x
+x
+a
+>>>>>
+z
+=====
+b
+<<<<<
+c
+```

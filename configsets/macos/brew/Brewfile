@@ -5,8 +5,11 @@ tap "music-assistant/tap"
 brew "bazel"
 brew "cmake"
 
+# Tooling
+brew "mise"
+
 # JavaScript
-brew "nvm"
+# brew "nvm"
 
 # Version control
 brew "gh"
