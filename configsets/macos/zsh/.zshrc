@@ -5,11 +5,16 @@ then
     eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
 
-if [ -e $HOME/.nvm ]
+# if [ -e $HOME/.nvm ]
+# then
+#     export NVM_DIR="$HOME/.nvm"
+#     [ -s "$HOMEBREW_PREFIX/opt/nvm/nvm.sh" ] && \. "$HOMEBREW_PREFIX/opt/nvm/nvm.sh" # This loads nvm
+#     [ -s "$HOMEBREW_PREFIX/opt/nvm/etc/bash_completion.d/nvm" ] && \. "$HOMEBREW_PREFIX/opt/nvm/etc/bash_completion.d/nvm" # This loads nvm bash_completion
+# fi
+
+if type -a mise >&2;
 then
-    export NVM_DIR="$HOME/.nvm"
-    [ -s "$HOMEBREW_PREFIX/opt/nvm/nvm.sh" ] && \. "$HOMEBREW_PREFIX/opt/nvm/nvm.sh" # This loads nvm
-    [ -s "$HOMEBREW_PREFIX/opt/nvm/etc/bash_completion.d/nvm" ] && \. "$HOMEBREW_PREFIX/opt/nvm/etc/bash_completion.d/nvm" # This loads nvm bash_completion
+    echo 'eval "$(mise activate zsh)"' >> ~/.zshrc
 fi
 
 export PROMPT='%(?.%F{green}√.%F{red}X)%f %1~ > '

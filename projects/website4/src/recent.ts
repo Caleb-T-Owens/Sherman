@@ -2,6 +2,13 @@ import type { RSSFeedItem } from "@astrojs/rss";
 
 export const recent: RSSFeedItem[] = [
   {
+    title: "Should badmerge conflict?",
+    description:
+      "Questioning whether the \"badmerge\" scenario should end up in some sort of conflicting state rather than merging cleanly.",
+    pubDate: new Date("May 31 2026"),
+    link: "/tech/should-badmerge-conflict",
+  },
+  {
     title: "Playing Beta Minecraft",
     description:
       "How I set up Minecraft Beta 1.7.3 on macOS with the Babric mod loader.",
