@@ -2,6 +2,13 @@ import type { RSSFeedItem } from "@astrojs/rss";
 
 export const recent: RSSFeedItem[] = [
   {
+    title: "The Uncherrypick Identity Crisis",
+    description:
+      "How replaying a cherry-pick can accidentally drop a change that should have survived",
+    pubDate: new Date("Jun 3 2026"),
+    link: "/tech/uncherrypick-identity-crisis",
+  },
+  {
     title: "Should badmerge conflict?",
     description:
       "Questioning whether the \"badmerge\" scenario should end up in some sort of conflicting state rather than merging cleanly.",
