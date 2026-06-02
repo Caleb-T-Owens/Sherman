@@ -1,0 +1,74 @@
+---
+layout: ../../layouts/MainLayout.astro
+title: "The Uncherrypick Identity Crisis - Caleb Owens"
+canonicalUrl: https://cto.je/tech/uncherrypick-identity-crisis
+description:
+  How replaying a cherry-pick can accidentally drop a change that should have survived
+---
+
+import LastUpdated from "../../components/LastUpdated.astro";
+
+<article>
+
+# The Uncherrypick Identity Crisis
+
+<LastUpdated filePath="src/pages/tech/uncherrypick-identity-crisis.mdx" />
+
+This was a scenario presented to me at the Mercurial Sprint days that poses a
+subtle problem to VCSes like [JJ](https://docs.jj-vcs.dev/latest/) and
+[GitButler](https://gitbutler.com) that choose to constantly replay history.
+
+We start with a small commit graph that looks like:
+
+```
+* B
+| * C
+|/
+* A
+```
+
+Let's imagine they have the file contents as follows:
+
+```
+A: a
+B: ab
+C: abc
+```
+
+We can imagine this scenario as having some bug fix in $B$, while $C$ contains
+both the same bug fix and an additional feature.
+
+In our scenario, we then perform two operations:
+- Rebase $C$ on top of $B$, to get $C'$
+- Rebase $C'$ back on top of $A$, to get $C''$
+
+After the first step, we achieve a history $A \larr B \larr C'$, where the
+contents of $C'$ are `abc` as expected.
+
+The problem appears when we cherry-pick $C'$ back onto $A$. In that operation,
+the merge base is still $B$: one side removes `b` to get back to $A$, while the
+other side adds only `c` to get from $B$ to $C'$. The three-way merge combines
+those changes and produces `ac`, not `abc`.
+
+That is surprising because the two rebases look like they should cancel out. We
+started with $C$, moved it onto $B$, then moved it back onto $A$; but the result
+is no longer equal to $C$.
+
+This example shows that when performing the cherry-pick in a VCS that makes use
+of three-way merges, `merge(l=A, base=B, r=merge(l=B, base=A, r=C))` does not
+always equal $C$.
+
+If we go back to imagining that the content `b` was some sort of bug fix, then
+we have potentially introduced a regression by reverting what should have
+otherwise been an identity operation.
+
+This is something that affects both [Git](https://git-scm.com) and
+[Mercurial](https://www.mercurial-scm.org), but is not so much of a concern
+since users rarely do this by hand. However, in a VCS like JJ or GitButler we
+encourage users to drag and drop changes about the place with the promise of
+some notion of consistency and reversibility in these operations.
+
+As a result, there is really an onus on us to take scenarios like this seriously
+and to try and define better primitives that can avoid pitfalls like this.
+
+</article>

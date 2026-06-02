@@ -12,7 +12,6 @@
 
 * {
   box-sizing: border-box;
-  font-family: georgia, "times new roman", times, serif;
 }
 
 html, body {
@@ -27,6 +26,7 @@ html {
   background-color: var(--color-background);
   color: var(--color-text);
   font-size: 18px;
+  font-family: georgia, "times new roman", times, serif;
 }
 
 html.font-large {
