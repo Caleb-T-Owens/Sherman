@@ -2,6 +2,12 @@ import type { RSSFeedItem } from "@astrojs/rss";
 
 export const recent: RSSFeedItem[] = [
   {
+    title: "Merging Sets",
+    description: "A small exploration into defining a merge on sets from some first principles.",
+    pubDate: new Date("Jun 6 2026"),
+    link: "/tech/merging-sets"
+  },
+  {
     title: "The Uncherrypick Identity Crisis",
     description:
       "How replaying a cherry-pick can accidentally drop a change that should have survived",

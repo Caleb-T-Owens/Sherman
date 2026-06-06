@@ -17,6 +17,11 @@ export default defineConfig({
       },
     },
     remarkPlugins: [remarkMath],
-    rehypePlugins: [rehypeKatex],
+    rehypePlugins: [[rehypeKatex, {
+      macros: {
+        "\\sand": "\\cap",
+        "\\sor": "\\cup"
+      }
+    }]],
   },
 });

@@ -1,0 +1,346 @@
+---
+layout: ../../layouts/MainLayout.astro
+title: "Merging Sets - Caleb Owens"
+canonicalUrl: https://cto.je/tech/merging-sets
+description:
+  A small exploration into defining a merge on sets from some first principles.
+---
+
+import LastUpdated from "../../components/LastUpdated.astro";
+import MergeGraph from "../../components/MergeGraph.astro";
+
+<article>
+
+# Merging Sets
+
+<LastUpdated filePath="src/pages/tech/merging-sets.mdx" />
+
+I find the problem set of representing conflicts fascinating. I would love to
+have reliable structures and an algebra around it that would enable us to safely
+reason about merges in the abstract.
+
+Something that has been fun to play with has been trying to define a merge
+operation on sets from some sort of first principles. This has limited immediate
+use for VCS like [GitButler](https://gitbutler.com), but might have a thread
+that can be followed to a fuller representation.
+
+In the following examples, I'm concerned with defining a basic merge with a base
+and two sides that produces an output set. I'll be drawing examples in the
+following shape where I want to find the merged result of $B$ and $C$. I'm
+imagining the "contents" of each of these nodes as a set.
+
+<MergeGraph
+  a="A"
+  b="B"
+  c="C"
+  m="M"
+/>
+
+The rules for a merge when only one side has made a change is pretty
+unambiguous, where we are only interested in the changed version. In this
+exploration, if the same change has been made to both sides, I'm taking one of
+the sides. This is generally the most practical approach since presenting same
+side conflicts to the user is generally impractical. It should however be noted,
+that it's this absorption that is what can result in the [uncherrypick identity
+problem](/tech/uncherrypick-identity-crisis).
+
+<details>
+<summary>If $A = B = C$, then $M$ = $A$</summary>
+
+<MergeGraph
+  a="\{a\}"
+  b="\{a\}"
+  c="\{a\}"
+  m="\{a\}"
+  showLabels
+/>
+
+</details>
+<details>
+<summary>If $A = C$ and $A \neq B$, then $M = B$</summary>
+
+$B$ adds an item to its set:
+
+<MergeGraph
+  a="\{a\}"
+  b="\{a, b\}"
+  c="\{a\}"
+  m="\{a, b\}"
+  showLabels
+/>
+
+$B$ removes an item from its set:
+
+<MergeGraph
+  a="\{a\}"
+  b="\{\}"
+  c="\{a\}"
+  m="\{\}"
+  showLabels
+/>
+
+$B$ replaces an item in its set:
+
+<MergeGraph
+  a="\{a\}"
+  b="\{b\}"
+  c="\{a\}"
+  m="\{b\}"
+  showLabels
+/>
+</details>
+<details>
+<summary>If $C = B$, then $M = C$</summary>
+
+$B$ and $C$ both add the same items to their sets.
+
+<MergeGraph
+  a="\{a\}"
+  b="\{a, b\}"
+  c="\{a, b\}"
+  m="\{a, b\}"
+  showLabels
+/>
+
+$B$ and $C$ both remove the same items from their sets.
+
+<MergeGraph
+  a="\{a\}"
+  b="\{\}"
+  c="\{\}"
+  m="\{\}"
+  showLabels
+/>
+
+$B$ and $C$ both replace the same items from their sets.
+
+<MergeGraph
+  a="\{a\}"
+  b="\{b\}"
+  c="\{b\}"
+  m="\{b\}"
+  showLabels
+/>
+
+By extension, if $A = B = C$, then $M = A$
+
+<MergeGraph
+  a="\{a\}"
+  b="\{a\}"
+  c="\{a\}"
+  m="\{a\}"
+  showLabels
+/>
+</details>
+
+It's a little more interesting what $M$ should be when $A \neq B$ and $A \neq
+C$, but it in some ways it is also kind of a natural extension of the $A = C$
+and $A \neq B$ cases. I've listed a reasonably complete set of permutations with
+what I think would be the expected results.
+
+<details>
+<summary>Scenarios when $A \neq B$ and $A \neq C$</summary>
+
+$B$ adds an item to its set, $C$ adds an item to its set:
+
+<MergeGraph
+  a="\{a\}"
+  b="\{a, b\}"
+  c="\{a, c\}"
+  m="\{a, b, c\}"
+  showLabels
+/>
+
+$B$ adds an item to its set, $C$ removes an item from its set:
+
+<MergeGraph
+  a="\{a\}"
+  b="\{a, b\}"
+  c="\{\}"
+  m="\{b\}"
+  showLabels
+/>
+
+$B$ adds an item to its set, $C$ replaces its item with that same item (absorption case):
+
+<MergeGraph
+  a="\{a\}"
+  b="\{a, b\}"
+  c="\{b\}"
+  m="\{b\}"
+  showLabels
+/>
+
+$B$ and $C$ each remove an item from the set.
+
+<MergeGraph
+  a="\{a, b\}"
+  b="\{a\}"
+  c="\{b\}"
+  m="\{\}"
+  showLabels
+/>
+
+$B$ and $C$ both replace the base item with different items, absorbing the
+shared removal.
+
+<MergeGraph
+  a="\{a\}"
+  b="\{b\}"
+  c="\{c\}"
+  m="\{b, c\}"
+  showLabels
+/>
+</details>
+
+While we're listing our dreams, we can also think about what some desirable
+properties of a merge function would be:
+- $m(B, C) = m(C, B)$
+- With $A$ as a base, $B$, $C$, and $D$ as children,
+  - $m(m(B, C), D) = m(m(B, D), C)$
+  - $m(B, C, D) = m(m(B, C), D)$
+
+## Deriving a merge from deltas
+
+Another way to think about what $M$ should contain is in terms of the set of
+deltas that when applied together constitute the merged result. This looks like:
+
+<MergeGraph
+  a="\{\delta_O^A\}"
+  b="\{\delta_O^A, \delta_A^B\}"
+  c="\{\delta_O^A, \delta_A^C\}"
+  m="\{\delta_O^A, \delta_A^B, \delta_A^C\}"
+  showLabels
+/>
+
+With our sets, what does a delta look like? A delta needs to be able to describe
+how to get from an arbitrary set to another arbitrary set. Perhaps I've been
+brainwashed by working with text diffing for too long, but the first thing that
+came to me was to define a delta as a series of additions and removals.
+
+I started by defining the set $Removals$ that represents the elements that would need
+to be removed in order to go from $A$ to $B$, and $Additions$ which represents
+all the elements that would need to be added in order to go from $A$ to $B$.
+Together they make up a complete delta.
+
+We can define $Removals$ as $A \sand B'$, and $Additions$ as $B \sand A'$.
+
+With our delta, we can then concern ourselves with applying it to a set. We can
+do so by doing $(A \sand Removals') \sor Additions$. When expanded, we would
+expect to see that applying $\delta_A^B$ to $A$ would simplify down to $B$,
+which is indeed what we get.
+
+$$
+\begin{align*}
+  & (A \sand Removals') \sor Additions\\
+= & (A \sand (A \sand B')') \sor (B \sand A')\\
+= & (A \sand (A' \sor B)) \sor (B \sand A')\\
+= & (A \sand A') \sor (A \sand B) \sor (B \sand A')\\
+= & (A \sand B) \sor (B \sand A')\\
+= & B \sand (A \sor A')\\
+= & B
+\end{align*}
+$$
+
+## Merging
+
+I now have a way of describing $\delta_A^B$ and $\delta_A^C$, so how can I apply
+both of them to $A$ simultaneously?
+
+One interesting property of these two deltas is that the union of the removals
+and the union of the additions are mutually exclusive.
+
+$$
+\begin{align*}
+  & (Removals_B \sor Removals_C) \sand (Additions_B \sor Additions_C)\\
+= & ((A \sand B') \sor (A \sand C')) \sand ((A' \sand B) \sor (A' \sand C))\\
+= & (A \sand (B' \sor C')) \sand (A' \sand (B \sor C))\\
+= & \empty \sand (B' \sor C') \sand (B \sor C)\\
+= & \empty\\
+\end{align*}
+$$
+
+Despite this fact, my first attempt was to still try and model the merge by
+first combining two deltas, and applying them together with $(A \sand
+(Removals_B \sor Removals_C)') \sor Additions_B \sor Additions_C$. This
+simplifies down quite nicely and does fulfil our listed scenarios.
+
+$$
+\begin{align*}
+  & (A \sand (Removals_B \sor Removals_C)') \sor Additions_B \sor Additions_C\\
+= & (A \sand ((A \sand B') \sor (A \sand C'))') \sor (A' \sand B) \sor (A' \sand C)\\
+= & (A \sand (A' \sor B) \sand (A' \sor C)) \sor (A' \sand B) \sor (A' \sand C)\\
+= & (B \sand C) \sor (A' \sand B) \sor (A' \sand C)\\
+= & (B \sand C) \sor (A' \sand (B \sor C))\\
+\end{align*}
+$$
+
+With the two sets being mutually exclusive, it means that applying the two
+deltas sequentially to $A$, or simply applying $\delta_A^C$ to $B$, should
+provide the same result, which it indeed does.
+
+$$
+\begin{align*}
+  & (B \sand Removals_C') \sor Additions_C\\
+= & (B \sand (A \sand C')') \sor (A' \sand C)\\
+= & (B \sand (A' \sor C)) \sor (A' \sand C)\\
+= & (B \sand A') \sor (B \sand C) \sor (A' \sand C)\\
+= & (B \sand C) \sor (A' \sand (B \sor C))\\
+\end{align*}
+$$
+
+With our simplified expression, we can see that our first requirement $m(B, C) =
+m(C, B)$ holds due to $(B \sand C)$ and $(B \sor C)$ both commuting. Further,
+due to the mutually exclusive nature of the removals and additions, $m(m(B, C),
+D) = m(m(B, D), C) = m(B, C, D)$ also falls out.
+
+## Absorption and Badmerge
+
+Something that is very apparent is that we run into the [uncherrypick identity
+issue](/tech/uncherrypick-identity-crisis) I described before. Unless we change
+the expected outcomes or have a richer underlying representation of a set, we're
+however not going to avoid this issue.
+
+It's not quite all doom and gloom though. What is very nice is it becomes very
+clear _where_ the terms crop up! The overlap between any of the Addition terms
+or between any of the Removal terms will result in absorption.
+
+This approach is also susceptible to the
+[badmerge](/tech/should-badmerge-conflict) scenario.
+
+I am hopeful that there might be some structure that operates similarly to a set
+while still answering some of the open questions that we have, which is part of
+what makes exploring topics like this interesting.
+
+## Potential use cases for this set merge
+
+VCSes like [Git](https://git-scm.com) and
+[Mercurial](https://www.mercurial-scm.org) are both susceptible to absorption
+and the badmerge scenarios, but their occurrence in practice is rare, so using
+systems that have these properties is not unconscionable.
+
+One use case I imagine benefiting from exploring using sets like this would be
+local-first software.
+[LWW-Sets](https://en.wikipedia.org/wiki/Conflict-free_replicated_data_type) are
+a common favourite in the space, but can often result in a loss of work if an
+unfavourable race is won. An interesting alternative would be exploring whether
+we can represent these conflicts as a set of potential options.
+
+We can imagine that a user has defined their favourite colour as "Green", which
+we store as the set $\{Green\}$. They then change it to $\{Blue\}$ on their
+phone, and $\{Red\}$ on their laptop. When they both merge histories, they end
+up with the set $\{Blue, Red\}$. The set would get presented as the user as some
+conflict that they ought to resolve. The benefit of doing this is that if yet
+another device had a different unsynced change, we can still go ahead and merge
+that as well, so we don't need to stop and actively resolve any conflicts.
+
+The behaviour of the set could also be extended to a mergeable map structure for
+storing collections of unordered data.
+
+## Acknowledgements
+
+Thanks to my Dad for going back and forth on some of these ideas with me. Also
+thanks to the folks at the Mercurial sprint where some of these ideas were
+seeded.
+
+</article>
