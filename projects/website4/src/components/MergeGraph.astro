@@ -1,0 +1,40 @@
+---
+import { undefined } from "astro:schema";
+import katex from "katex"
+
+interface Props {
+  a: string;
+  b: string;
+  c: string;
+  m: string;
+  showLabels?: boolean
+}
+
+const { a, b, c, m, showLabels } = Astro.props;
+
+let html;
+
+if (showLabels) {
+    html = katex.renderToString(`
+\\begin{array}{ccccc}
+         &           & B = ${b} &           &           \\\\
+         & \\nearrow &          & \\searrow &           \\\\
+A = ${a} &           &          &           & M = ${m}  \\\\
+         & \\searrow &          & \\nearrow &           \\\\
+         &           & C = ${c} &           &           \\\\
+\\end{array}
+    `)
+} else {
+    html = katex.renderToString(`
+\\begin{array}{ccccc}
+     &           & ${b} &           &     \\\\
+     & \\nearrow &      & \\searrow &     \\\\
+${a} &           &      &           & ${m}\\\\
+     & \\searrow &      & \\nearrow &     \\\\
+     &           & ${c} &           &     \\\\
+\\end{array}
+    `)
+}
+---
+
+<span class="katex-display" set:html={html}></div>
