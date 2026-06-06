@@ -6,15 +6,10 @@
     "svelte.plugin.svelte.defaultScriptLanguage": "ts",
     "prettier.useEditorConfig": false,
     "editor.formatOnSave": true,
-    "typescript.updateImportsOnFileMove.enabled": "always",
+    "js/ts.updateImportsOnFileMove.enabled": "always",
     "workbench.activityBar.location": "top",
     "security.promptForLocalFileProtocolHandling": false,
-    "typescript.preferences.importModuleSpecifier": "non-relative",
-    "typescript.inlayHints.functionLikeReturnTypes.enabled": true,
-    "typescript.inlayHints.parameterTypes.enabled": true,
-    "typescript.inlayHints.variableTypes.enabled": true,
-    "typescript.inlayHints.propertyDeclarationTypes.enabled": true,
-    "javascript.preferences.importModuleSpecifier": "non-relative",
+    "js/ts.preferences.importModuleSpecifier": "non-relative",
     "gitlens.advanced.blame.customArguments": ["-C", "-C", "-C"],
     "[ruby]": {
         "editor.tabSize": 2
@@ -24,7 +19,7 @@
     "rust-analyzer.check.features": "all",
     "eslint.format.enable": true,
     "prettier.tabWidth": 4,
-    "typescript.tsserver.experimental.enableProjectDiagnostics": true,
+    "ts/ts.tsserver.experimental.enableProjectDiagnostics": true,
     "editor.autoClosingBrackets": "never",
     "editor.autoClosingQuotes": "never",
     "editor.autoClosingDelete": "never",
@@ -99,5 +94,20 @@
     "[erb]": {
         "editor.defaultFormatter": "Shopify.ruby-lsp"
     },
-    "chat.commandCenter.enabled": false
+    "chat.commandCenter.enabled": false,
+    "cSpell.userWords": [],
+    "window.systemColorTheme": "auto",
+    "workbench.preferredDarkColorTheme": "GitHub Dark Default",
+    "workbench.preferredLightColorTheme": "GitHub Light Colorblind (Beta)",
+    "workbench.preferredHighContrastColorTheme": "GitHub Dark High Contrast",
+    "workbench.preferredHighContrastLightColorTheme": "GitHub Light High Contrast",
+    "window.autoDetectColorScheme": true,
+    "cSpell.customDictionaries": {
+        "big-dict": {
+            "name": "big-dict",
+            "path": "~/dictionary.txt",
+            "description": "Big dictionary of words",
+            "addWords": true
+        }
+    }
 }

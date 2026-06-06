@@ -15,6 +15,9 @@ import MergeGraph from "../../components/MergeGraph.astro";
 
 <LastUpdated filePath="src/pages/tech/merging-sets.mdx" />
 
+Some complementary code that implements the following logic in TypeScript can be
+[found here](https://github.com/Caleb-T-Owens/sets).
+
 I find the problem set of representing conflicts fascinating. I would love to
 have reliable structures and an algebra around it that would enable us to safely
 reason about merges in the abstract.
@@ -335,7 +338,8 @@ another device had a different unsynced change, we can still go ahead and merge
 that as well, so we don't need to stop and actively resolve any conflicts.
 
 The behaviour of the set could also be extended to a mergeable map structure for
-storing collections of unordered data.
+storing collections of unordered data, though, I'll pursue that further another
+time.
 
 ## Acknowledgements
 
