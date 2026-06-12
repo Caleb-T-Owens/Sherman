@@ -1,0 +1,130 @@
+---
+import katex from "katex";
+import { layoutGraph, type GraphNode, type Cell } from "../lib/commitGraph";
+
+interface Props {
+  nodes: GraphNode[];
+}
+
+const { nodes } = Astro.props;
+const { rows } = layoutGraph(nodes);
+
+// Cells are drawn in a 10x10 viewBox stretched to the cell size. Exact corner
+// pairs get a quadratic curve; anything else is straight strokes through the
+// center, matching git-log's sharp junctions.
+function cellPath(cell: Cell): string {
+  const has = (s: string) => cell.segments.includes(s as Cell["segments"][number]);
+  if (cell.cross) return "M 5 0 V 10 M 0 5 H 3 M 7 5 H 10";
+  if (cell.segments.length === 2 && !cell.node) {
+    if (has("N") && has("E")) return "M 5 0 Q 5 5 10 5";
+    if (has("N") && has("W")) return "M 5 0 Q 5 5 0 5";
+    if (has("S") && has("E")) return "M 10 5 Q 5 5 5 10";
+    if (has("S") && has("W")) return "M 0 5 Q 5 5 5 10";
+  }
+  const parts: string[] = [];
+  if (has("N") && has("S")) parts.push("M 5 0 V 10");
+  else if (has("N")) parts.push("M 5 5 V 0");
+  else if (has("S")) parts.push("M 5 5 V 10");
+  if (has("E") && has("W")) parts.push("M 0 5 H 10");
+  else if (has("E")) parts.push("M 5 5 H 10");
+  else if (has("W")) parts.push("M 5 5 H 0");
+  return parts.join(" ");
+}
+---
+
+<div class="commit-graph">
+  <div class="cg-graph">
+    {
+      rows.map((row) => (
+        <div class:list={["cg-row", row.kind === "link" ? "cg-link" : "cg-node"]}>
+          {row.cells.map((cell) => (
+            <div class="cg-cell">
+              {cell.segments.length > 0 && (
+                <svg viewBox="0 0 10 10" preserveAspectRatio="none" aria-hidden="true">
+                  <path d={cellPath(cell)} vector-effect="non-scaling-stroke" />
+                </svg>
+              )}
+              {cell.node && <span class="cg-dot" />}
+            </div>
+          ))}
+          {row.kind === "node" && (
+            <div
+              class="cg-label"
+              set:html={katex.renderToString(row.node.label ?? row.node.id)}
+            />
+          )}
+        </div>
+      ))
+    }
+  </div>
+</div>
+
+<style>
+  .commit-graph {
+    display: flex;
+    overflow-x: auto;
+    margin: 1.5rem 0;
+  }
+
+  /* Auto margins on a flex item center it while there is free space and
+     fall back to start-alignment when the diagram overflows and scrolls. */
+  .cg-graph {
+    margin-inline: auto;
+  }
+
+  .cg-row {
+    display: flex;
+    align-items: stretch;
+  }
+
+  .cg-node {
+    min-height: 1.9rem;
+  }
+
+  .cg-link {
+    height: 1rem;
+  }
+
+  /* Every row carries the full set of lane cells at a fixed width, so the
+     lanes line up across rows without any per-cell placement. Sized with
+     width rather than flex-basis: WebKit ignores flex-basis when computing
+     the row's intrinsic width, which broke shrink-to-fit centering. */
+  .cg-cell {
+    position: relative;
+    flex: 0 0 auto;
+    width: 1.1rem;
+  }
+
+  .cg-cell svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  .cg-cell path {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.5px;
+  }
+
+  .cg-dot {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: currentColor;
+  }
+
+  .cg-label {
+    display: flex;
+    align-items: center;
+    padding: 0.2rem 0 0.2rem 0.6rem;
+    /* Never wrap math mid-expression; the container scrolls instead. */
+    white-space: nowrap;
+  }
+</style>
