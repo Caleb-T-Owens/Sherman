@@ -1,0 +1,148 @@
+---
+layout: ../../layouts/MainLayout.astro
+title: "GitButler Graph Workspaces - Caleb Owens"
+canonicalUrl: https://cto.je/tech/gitbutler-graph-workspaces
+description:
+  GitButler Graph Workspaces
+---
+
+import LastUpdated from "../../components/LastUpdated.astro";
+import CommitGraph from "../../components/CommitGraph.astro";
+
+<article>
+
+# GitButler Graph Workspaces
+
+<LastUpdated filePath="src/pages/tech/gitbutler-graph-workspaces.mdx" />
+
+From a workflow perspective, it seems like we're starting to converge on notions
+of what is a stack and what might be considered a "workspace". This document
+outlines some theory behind finding and discovering what we want to display.
+
+# Modes of operation
+
+The app has a key piece of metadata to define the world called `target_sha`.
+This is a lazy pointer that is the cut-off point for our world view.
+
+The app however might not have one set. This occurs if the user has yet to
+specify their `target_ref`, which is the branch that they consider the main
+branch that their work gets merged into. In most users' cases, this is a
+`master` or `main` branch.
+
+If we do have a `target_ref` specified, and the `target_sha` has not been set,
+the first time we require a `target_sha`, we will fetch and persist it from
+whatever the `target_ref` points to.
+
+This means that we have two distinct modes:
+
+## Targeted
+
+In targeted mode, we've got a frame of reference which is the `target_sha`. The
+basic rule of thumb is that anything beneath the `target_sha` should not be
+displayed in the primary workspace view of the app.
+
+There are a couple concepts that we've found helpful to categorize the contents
+of your repo that are reachable from your current `HEAD`.
+
+### The workspace commit
+
+This is a commit with the title "GitButler Workspace Commit". This indicates the
+parents of it make up some set of independent stacks.
+
+### Above the workspace commit
+
+These are commits in the rev-set `HEAD ^workspace_commit`.
+
+### Stacks
+
+These are comprised of the commits in the rev-set `workspace_commit_parents ^target_sha`.
+
+More specifically, we consider the stacks beneath the workspace commit to be
+mutually exclusive sub-graphs of commits that don't have any incoming or outgoing
+edges to commits in other stacks.
+
+IE, in the following graph, we'd have two stacks
+
+<CommitGraph 
+    nodes={[
+        { id: "target_sha", parents: ["t2"], label: "\\text{target sha}" },
+        { id: "ws", parents: ["s1_1", "s1_2", "s2_1"], label: "WS" },
+        { id: "s1_1", parents: ["s1_3"], label: "S^1_1" },
+        { id: "s1_2", parents: ["s1_3"], label: "S^1_2" },
+        { id: "s1_3", parents: ["s1_4", "s1_5"], label: "S^1_3" },
+        { id: "s1_4", parents: ["t2"], label: "S^1_4" },
+        { id: "s1_5", parents: ["t2"], label: "S^1_5" },
+        { id: "t2", parents: ["t3"], label: "T^2" },
+        { id: "s2_1", parents: ["s2_2", "s2_3"], label: "S^2_1" },
+        { id: "s2_2", parents: ["s2_4"], label: "S^2_2" },
+        { id: "s2_3", parents: ["s2_4"], label: "S^2_3" },
+        { id: "s2_4", parents: ["t3"], label: "S^2_4" },
+        { id: "t3", parents: [], label: "T^3" },
+    ]}
+/>
+
+The $S^1$ family of commits makes up the first stack, and the $S^2$ family makes
+up the second stack.
+
+## Targetless
+
+In targetless mode, there are two sub-cases. You are either checked out on
+`refs/heads/gitbutler/workspace`, where you'll have the potential for some
+commits above the workspace commit, and a single stack that contains all
+commits, or you'll be in plain git mode, where we show a log of all your commits
+in one stack.
+
+# The workspace commit and the `refs/heads/gitbutler/workspace` ref
+
+If you are not on the `refs/heads/gitbutler/workspace` reference, we assume you
+don't have a workspace. In this case, we will consider you in a plain git mode.
+
+In plain git mode, if there is a target, there will be one stack that contains
+the commits `HEAD ^target_sha`. Otherwise, we will have one stack that contains
+all the commits under `HEAD`.
+
+When you're on `refs/heads/gitbutler/workspace`, there is a real question around
+how hard we should try to find your workspace commit. There are a couple
+options:
+
+- Only look at the HEAD commit
+- Look at the linear run of commits starting at HEAD. If there is a merge
+  commit, we stop.
+- Look at all commits in some (probably depth-first?) traversal, and take the first
+  workspace commit as the workspace commit.
+
+If we fail to find a workspace commit, then we also end up with one stack that
+contains the commits `HEAD ^target_sha`.
+
+# Commits above the workspace commit
+
+If we are not able to find a workspace commit, this list will be empty.
+
+If we can find the workspace commit, we should consider all commits in the
+rev-set `HEAD ^target_sha ^workspace_commit` "above the workspace commit".
+
+# Stacks
+
+When we have a valid workspace commit, as described in the above `Stacks`
+section, we will then identify stacks using that definition.
+
+# Future definitions around content that is not reachable from `HEAD`
+
+I think there is a reasonable approach where we can apply the mutually-exclusive
+sub-graph algorithm to all local references that are in the rev-set `all
+^target_sha`, but we probably don't want to do that yet.
+
+# Current metadata situation
+
+Currently, the metadata is only storing metadata against stacks when `HEAD`
+points to a workspace commit and we're on the workspace branch.
+
+This means that in the "commits above the workspace commit" scenario, we might
+mis-identify metadata around the stacks.
+
+We're likely going to need to spend some time thinking about how we handle
+disambiguating what references are in or outside of the workspace, and what
+order references should take, since reference ordering is significant in
+GitButler.
+
+</article>
