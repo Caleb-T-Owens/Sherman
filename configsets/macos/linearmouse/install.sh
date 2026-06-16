@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# Dependency brew
-(cd $HOME/Sherman/configsets/macos/brew && make)
-
 # Install
 
 if [ ! -d $HOME/.config/linearmouse ]
@@ -11,7 +8,7 @@ then
     mkdir $HOME/.config/linearmouse
 fi
 
-# We want to clean out the alacritty folder
+# We want to clean out the linearmouse folder
 echo "Removing old configs"
 if [ -e $HOME/.config/linearmouse/linearmouse.json ]
 then
