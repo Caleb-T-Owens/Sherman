@@ -1,0 +1,21 @@
+# anti — debian desktop
+
+```deps
+shared/git
+shared/neovim
+shared/rustup
+shared/ripgrep
+shared/patc
+shared/claude-code
+debian/bash
+debian/dmenu
+debian/dwm
+debian/xorg
+debian/xinit-config
+debian/st
+shared/action-clone-projects
+shared/action-memory-bootstrap
+shared/action-sync-buildables
+debian/action-aptfile-sync
+shared/action-sync-notes
+```

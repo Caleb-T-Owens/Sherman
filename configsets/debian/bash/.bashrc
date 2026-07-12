@@ -121,7 +121,10 @@ source ~/Sherman/bin/utils/base.sh
 alias vim="nvim"
 
 sherman () {
-  source $HOME/Sherman/bin/sherman
+  "$HOME/Sherman/bin/sherman" "$@" || return
+  if [ "$#" -eq 0 ] || [ "$1" = apply ] || [ "${3:-}" = apply ]; then
+    source "$HOME/.bashrc"
+  fi
 }
 
 # NVM
