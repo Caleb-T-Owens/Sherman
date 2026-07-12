@@ -14,7 +14,7 @@ fi
 
 if type -a mise >&2;
 then
-    echo 'eval "$(mise activate zsh)"' >> ~/.zshrc
+    eval "$(mise activate zsh)"
 fi
 
 export PROMPT='%(?.%F{green}√.%F{red}X)%f %1~ > '
@@ -61,3 +61,5 @@ ls_inner() {
     fi
 }
 alias ls="ls_inner"
+
+export BUT_THEME=light
