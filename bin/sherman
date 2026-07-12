@@ -1,19 +1,22 @@
-#!/bin/bash
+#!/bin/sh
+# Self-bootstrapping entry point for sherman.  Compiles the tool on every run
+# (needs only cc — Xcode CLT or build-essential), then applies the env named
+# in CURRENT_ENV.
+#   bin/sherman            -> apply
+#   bin/sherman status     -> show the plan
+#   bin/sherman -j 1 apply -> serial run
+set -e
 
-source $HOME/Sherman/bin/utils/base.sh
+dir="$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)"
+src="$dir/projects/sherman"
+bin="$src/sherman-bin"
 
-pushd $SHERMAN_DIR/configsets/
+echo "sherman: building..." >&2
+tmp="$bin.$$"
+trap 'rm -f "$tmp"' EXIT HUP INT TERM
+cc -std=c11 -O2 -Wall -Wextra -o "$tmp" "$src"/*.c
+mv "$tmp" "$bin"
+trap - EXIT HUP INT TERM
 
-make -f "Makefile.$SHERMAN_ENV"
-make unlock -f "Makefile.$SHERMAN_ENV"
-
-popd
-
-if [ $SHERMAN_PLATFORM = macos ]
-then
-    source "$HOME/.zshrc"
-else
-    source "$HOME/.bashrc"
-fi
-
-echo "Complete!"
+[ $# -eq 0 ] && set -- apply
+SHERMAN_DIR="$dir" exec "$bin" "$@"
