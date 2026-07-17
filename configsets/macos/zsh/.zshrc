@@ -63,3 +63,4 @@ ls_inner() {
 alias ls="ls_inner"
 
 export BUT_THEME=light
+export EDITOR=nvim
