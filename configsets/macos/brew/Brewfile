@@ -7,6 +7,7 @@ brew "cmake"
 
 # Tooling
 brew "mise"
+brew "cliproxyapi"
 
 # JavaScript
 # brew "nvm"
@@ -33,7 +34,7 @@ brew "rbenv"
 brew "go"
 
 # Deployment software
-brew "aws/tap/copilot-cli"
+brew "aws/tap/copilot-cli", trusted: true
 brew "awscli"
 brew "pscale"
 
@@ -70,7 +71,7 @@ cask "gnucash"
 #its' better
 
 # Music companion
-cask "music-assistant/tap/companion"
+cask "music-assistant/tap/music-assistant", trusted: true
 
 # Ansible
 brew "pipx"

@@ -1,0 +1,17 @@
+#!/bin/sh
+
+model="${SOL_MODEL:-gpt-5.6-sol}"
+sonnet_model="${SOL_SONNET_MODEL:-gpt-5.6-terra}"
+haiku_model="${SOL_HAIKU_MODEL:-gpt-5.6-luna}"
+base_url="${SOL_BASE_URL:-http://127.0.0.1:8317}"
+auth_token="${SOL_AUTH_TOKEN:-sol-local}"
+
+export ANTHROPIC_BASE_URL="$base_url"
+export ANTHROPIC_AUTH_TOKEN="$auth_token"
+export ANTHROPIC_DEFAULT_FABLE_MODEL="$model"
+export ANTHROPIC_DEFAULT_OPUS_MODEL="$model"
+export ANTHROPIC_DEFAULT_SONNET_MODEL="$sonnet_model"
+export ANTHROPIC_DEFAULT_HAIKU_MODEL="$haiku_model"
+export CLAUDE_CODE_SUBAGENT_MODEL=opus
+
+exec claude --model opus "$@"
