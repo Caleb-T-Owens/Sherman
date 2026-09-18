@@ -9,4 +9,5 @@ macos:macos/brew
 
 ```change
 copy init.lua $HOME/.config/nvim/init.lua
+copy lua $HOME/.config/nvim/lua
 ```
