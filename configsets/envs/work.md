@@ -15,6 +15,7 @@ shared/neovim
 shared/tmux
 shared/bun
 shared/rustup
+shared/hermes
 shared/patc
 shared/pi
 shared/action-clone-projects

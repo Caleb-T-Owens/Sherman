@@ -49,6 +49,11 @@ then
     [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
 fi
 
+if [ -e $HOME/.ghcup ]
+then
+    export PATH="$HOME/.ghcup/bin:$PATH"
+fi
+
 # Local bin seems like a good idea.
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="/Users/calebowens/.bun/bin:$PATH"
@@ -64,3 +69,5 @@ alias ls="ls_inner"
 
 export BUT_THEME=light
 export EDITOR=nvim
+
+set -o emacs

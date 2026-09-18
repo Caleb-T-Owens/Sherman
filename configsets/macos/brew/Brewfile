@@ -1,5 +1,5 @@
 tap "aws/tap"
-tap "music-assistant/tap"
+# tap "music-assistant/tap"
 
 # C/C++ tools
 brew "bazel"
@@ -7,7 +7,9 @@ brew "cmake"
 
 # Tooling
 brew "mise"
-brew "cliproxyapi"
+# brew "cliproxyapi"
+cask "codexbar"
+brew "hermes-agent"
 
 # JavaScript
 # brew "nvm"
@@ -34,8 +36,8 @@ brew "rbenv"
 brew "go"
 
 # Deployment software
-brew "aws/tap/copilot-cli", trusted: true
-brew "awscli"
+# brew "aws/tap/copilot-cli", trusted: true
+# brew "awscli"
 brew "pscale"
 
 # Editors and terminals
@@ -60,18 +62,18 @@ cask "codex"
 cask "halloy"
 
 # Fancy mouse movment
-cask "linearmouse"
+# cask "linearmouse"
 
 # Monitor control
 cask "MonitorControl"
 
 # Money money money
-cask "gnucash"
+# cask "gnucash"
 
 #its' better
 
 # Music companion
-cask "music-assistant/tap/music-assistant", trusted: true
+# cask "music-assistant/tap/music-assistant", trusted: true
 
 # Ansible
 brew "pipx"
@@ -90,3 +92,7 @@ cask "spotify"
 
 # Utils
 cask "espanso"
+
+# Haskell
+brew "ghcup"
+brew "z3"
