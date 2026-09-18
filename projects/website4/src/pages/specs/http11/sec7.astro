@@ -1,0 +1,98 @@
+---
+import MainLayout from "../../../layouts/MainLayout.astro";
+
+const title = "HTTP/1.1: Entity";
+---
+
+<MainLayout
+  title={`${title} - Caleb Owens`}
+  canonicalUrl="https://cto.je/specs/http11/sec7/"
+  description="RFC 2616: Hypertext Transfer Protocol -- HTTP/1.1, imported for reference."
+>
+  <article>
+<address>part of <a rev='Section' href="/specs/http11/">Hypertext Transfer Protocol -- HTTP/1.1</a><br />
+RFC 2616 Fielding, et al.</address>
+<h2><a id='sec7'>7</a> Entity</h2>
+<p>
+   Request and Response messages MAY transfer an entity if not otherwise
+   restricted by the request method or response status code. An entity
+   consists of entity-header fields and an entity-body, although some
+   responses will only include the entity-headers.
+</p>
+<p>
+   In this section, both sender and recipient refer to either the client
+   or the server, depending on who sends and who receives the entity.
+</p>
+<h3><a id='sec7.1'>7.1</a> Entity Header Fields</h3>
+<p>
+   Entity-header fields define metainformation about the entity-body or,
+   if no body is present, about the resource identified by the request.
+   Some of this metainformation is OPTIONAL; some might be REQUIRED by
+   portions of this specification.
+</p>
+<pre>       entity-header  = Allow                    ; Section 14.7
+                      | Content-Encoding         ; Section <a rel='xref' href="/specs/http11/sec14#sec14.11">14.11</a>
+                      | Content-Language         ; Section <a rel='xref' href="/specs/http11/sec14#sec14.12">14.12</a>
+                      | Content-Length           ; Section <a rel='xref' href="/specs/http11/sec14#sec14.13">14.13</a>
+                      | Content-Location         ; Section <a rel='xref' href="/specs/http11/sec14#sec14.14">14.14</a>
+                      | Content-MD5              ; Section <a rel='xref' href="/specs/http11/sec14#sec14.15">14.15</a>
+                      | Content-Range            ; Section <a rel='xref' href="/specs/http11/sec14#sec14.16">14.16</a>
+                      | Content-Type             ; Section <a rel='xref' href="/specs/http11/sec14#sec14.17">14.17</a>
+                      | Expires                  ; Section <a rel='xref' href="/specs/http11/sec14#sec14.21">14.21</a>
+                      | Last-Modified            ; Section <a rel='xref' href="/specs/http11/sec14#sec14.29">14.29</a>
+                      | extension-header
+</pre>
+<pre>       extension-header = message-header
+</pre>
+<p>
+   The extension-header mechanism allows additional entity-header fields
+   to be defined without changing the protocol, but these fields cannot
+   be assumed to be recognizable by the recipient. Unrecognized header
+   fields SHOULD be ignored by the recipient and MUST be forwarded by
+   transparent proxies.
+</p>
+<h3><a id='sec7.2'>7.2</a> Entity Body</h3>
+<p>
+   The entity-body (if any) sent with an HTTP request or response is in
+   a format and encoding defined by the entity-header fields.
+</p>
+<pre>       entity-body    = *OCTET
+</pre>
+<p>
+   An entity-body is only present in a message when a message-body is
+   present, as described in section 4.3. The entity-body is obtained
+   from the message-body by decoding any Transfer-Encoding that might
+   have been applied to ensure safe and proper transfer of the message.
+</p>
+<h3><a id='sec7.2.1'>7.2.1</a> Type</h3>
+<p>
+   When an entity-body is included with a message, the data type of that
+   body is determined via the header fields Content-Type and Content-
+   Encoding. These define a two-layer, ordered encoding model:
+</p>
+<pre>       entity-body := Content-Encoding( Content-Type( data ) )
+</pre>
+<p>
+   Content-Type specifies the media type of the underlying data.
+   Content-Encoding may be used to indicate any additional content
+   codings applied to the data, usually for the purpose of data
+   compression, that are a property of the requested resource. There is
+   no default encoding.
+</p>
+<p>
+   Any HTTP/1.1 message containing an entity-body SHOULD include a
+   Content-Type header field defining the media type of that body. If
+   and only if the media type is not given by a Content-Type field, the
+   recipient MAY attempt to guess the media type via inspection of its
+   content and/or the name extension(s) of the URI used to identify the
+   resource. If the media type remains unknown, the recipient SHOULD
+   treat it as type "application/octet-stream".
+</p>
+<h3><a id='sec7.2.2'>7.2.2</a> Entity Length</h3>
+<p>
+   The entity-length of a message is the length of the message-body
+   before any transfer-codings have been applied. Section 4.4 defines
+   how the transfer-length of a message-body is determined.
+</p>
+  </article>
+</MainLayout>

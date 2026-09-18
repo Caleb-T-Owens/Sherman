@@ -1,0 +1,609 @@
+---
+import MainLayout from "../../../layouts/MainLayout.astro";
+
+const title = "HTTP/1.1: Appendices";
+---
+
+<MainLayout
+  title={`${title} - Caleb Owens`}
+  canonicalUrl="https://cto.je/specs/http11/sec19/"
+  description="RFC 2616: Hypertext Transfer Protocol -- HTTP/1.1, imported for reference."
+>
+  <article>
+<address>part of <a rev='Section' href="/specs/http11/">Hypertext Transfer Protocol -- HTTP/1.1</a><br />
+RFC 2616 Fielding, et al.</address>
+<h2><a id='sec19'>19</a> Appendices</h2>
+<h3><a id='sec19.1'>19.1</a> Internet Media Type message/http and application/http</h3>
+<p>
+   In addition to defining the HTTP/1.1 protocol, this document serves
+   as the specification for the Internet media type "message/http" and
+   "application/http". The message/http type can be used to enclose a
+   single HTTP request or response message, provided that it obeys the
+   MIME restrictions for all "message" types regarding line length and
+   encodings. The application/http type can be used to enclose a
+   pipeline of one or more HTTP request or response messages (not
+   intermixed). The following is to be registered with IANA <a rel='bibref' href="/specs/http11/sec17#bib17">[17]</a>.
+</p>
+<pre>       Media Type name:         message
+       Media subtype name:      http
+       Required parameters:     none
+       Optional parameters:     version, msgtype
+        version: The HTTP-Version number of the enclosed message
+                 (e.g., "1.1"). If not present, the version can be
+                 determined from the first line of the body.
+        msgtype: The message type -- "request" or "response". If not
+                 present, the type can be determined from the first
+                 line of the body.
+       Encoding considerations: only "7bit", "8bit", or "binary" are
+                                permitted
+       Security considerations: none
+</pre>
+<pre>       Media Type name:         application
+       Media subtype name:      http
+       Required parameters:     none
+       Optional parameters:     version, msgtype
+        version: The HTTP-Version number of the enclosed messages
+                 (e.g., "1.1"). If not present, the version can be
+                 determined from the first line of the body.
+        msgtype: The message type -- "request" or "response". If not
+                 present, the type can be determined from the first
+                 line of the body.
+       Encoding considerations: HTTP messages enclosed by this type
+                 are in "binary" format; use of an appropriate
+                 Content-Transfer-Encoding is required when
+                 transmitted via E-mail.
+       Security considerations: none
+</pre>
+<h3><a id='sec19.2'>19.2</a> Internet Media Type multipart/byteranges</h3>
+<p>
+   When an HTTP 206 (Partial Content) response message includes the
+   content of multiple ranges (a response to a request for multiple
+   non-overlapping ranges), these are transmitted as a multipart
+   message-body. The media type for this purpose is called
+   "multipart/byteranges".
+</p>
+<p>
+   The multipart/byteranges media type includes two or more parts, each
+   with its own Content-Type and Content-Range fields. The required
+   boundary parameter specifies the boundary string used to separate
+   each body-part.
+</p>
+<pre>       Media Type name:         multipart
+       Media subtype name:      byteranges
+       Required parameters:     boundary
+       Optional parameters:     none
+       Encoding considerations: only "7bit", "8bit", or "binary" are
+                                permitted
+       Security considerations: none
+</pre>
+<p>
+   For example:
+</p>
+<p>
+   HTTP/1.1 206 Partial Content
+   Date: Wed, 15 Nov 1995 06:25:24 GMT
+   Last-Modified: Wed, 15 Nov 1995 04:58:08 GMT
+   Content-type: multipart/byteranges; boundary=THIS_STRING_SEPARATES
+</p>
+<p>
+   --THIS_STRING_SEPARATES
+   Content-type: application/pdf
+   Content-range: bytes 500-999/8000
+</p>
+<p>
+   ...the first range...
+   --THIS_STRING_SEPARATES
+   Content-type: application/pdf
+   Content-range: bytes 7000-7999/8000
+</p>
+<p>
+   ...the second range
+   --THIS_STRING_SEPARATES--
+</p>
+<pre>      Notes:
+</pre>
+<pre>      1) Additional CRLFs may precede the first boundary string in the
+         entity.
+</pre>
+<pre>      2) Although RFC 2046 [40] permits the boundary string to be
+         quoted, some existing implementations handle a quoted boundary
+         string incorrectly.
+</pre>
+<pre>      3) A number of browsers and servers were coded to an early draft
+         of the byteranges specification to use a media type of
+         multipart/x-byteranges, which is almost, but not quite
+         compatible with the version documented in HTTP/1.1.
+</pre>
+<h3><a id='sec19.3'>19.3</a> Tolerant Applications</h3>
+<p>
+   Although this document specifies the requirements for the generation
+   of HTTP/1.1 messages, not all applications will be correct in their
+   implementation. We therefore recommend that operational applications
+   be tolerant of deviations whenever those deviations can be
+   interpreted unambiguously.
+</p>
+<p>
+   Clients SHOULD be tolerant in parsing the Status-Line and servers
+   tolerant when parsing the Request-Line. In particular, they SHOULD
+   accept any amount of SP or HT characters between fields, even though
+   only a single SP is required.
+</p>
+<p>
+   The line terminator for message-header fields is the sequence CRLF.
+   However, we recommend that applications, when parsing such headers,
+   recognize a single LF as a line terminator and ignore the leading CR.
+</p>
+<p>
+   The character set of an entity-body SHOULD be labeled as the lowest
+   common denominator of the character codes used within that body, with
+   the exception that not labeling the entity is preferred over labeling
+   the entity with the labels US-ASCII or ISO-8859-1. See section <a rel='xref' href="/specs/http11/sec3#sec3.7.1">3.7.1</a>
+   and <a rel='xref' href="/specs/http11/sec3#sec3.4.1">3.4.1</a>.
+</p>
+<p>
+   Additional rules for requirements on parsing and encoding of dates
+   and other potential problems with date encodings include:
+</p>
+<pre>      - HTTP/1.1 clients and caches SHOULD assume that an RFC-850 date
+        which appears to be more than 50 years in the future is in fact
+        in the past (this helps solve the "year 2000" problem).
+</pre>
+<pre>      - An HTTP/1.1 implementation MAY internally represent a parsed
+        Expires date as earlier than the proper value, but MUST NOT
+        internally represent a parsed Expires date as later than the
+        proper value.
+</pre>
+<pre>      - All expiration-related calculations MUST be done in GMT. The
+        local time zone MUST NOT influence the calculation or comparison
+        of an age or expiration time.
+</pre>
+<pre>      - If an HTTP header incorrectly carries a date value with a time
+        zone other than GMT, it MUST be converted into GMT using the
+        most conservative possible conversion.
+</pre>
+<h3><a id='sec19.4'>19.4</a> Differences Between HTTP Entities and RFC 2045 Entities</h3>
+<p>
+   HTTP/1.1 uses many of the constructs defined for Internet Mail (RFC
+   822 [9]) and the Multipurpose Internet Mail Extensions (MIME [7]) to
+   allow entities to be transmitted in an open variety of
+   representations and with extensible mechanisms. However, RFC 2045
+   discusses mail, and HTTP has a few features that are different from
+   those described in RFC 2045. These differences were carefully chosen
+   to optimize performance over binary connections, to allow greater
+   freedom in the use of new media types, to make date comparisons
+   easier, and to acknowledge the practice of some early HTTP servers
+   and clients.
+</p>
+<p>
+   This appendix describes specific areas where HTTP differs from RFC
+   2045. Proxies and gateways to strict MIME environments SHOULD be
+   aware of these differences and provide the appropriate conversions
+   where necessary. Proxies and gateways from MIME environments to HTTP
+   also need to be aware of the differences because some conversions
+   might be required.
+</p>
+<h3><a id='sec19.4.1'>19.4.1</a> MIME-Version</h3>
+<p>
+   HTTP is not a MIME-compliant protocol. However, HTTP/1.1 messages MAY
+   include a single MIME-Version general-header field to indicate what
+   version of the MIME protocol was used to construct the message. Use
+   of the MIME-Version header field indicates that the message is in
+   full compliance with the MIME protocol (as defined in RFC 2045<a rel='bibref' href="/specs/http11/sec17#bib7">[7]</a>).
+   Proxies/gateways are responsible for ensuring full compliance (where
+   possible) when exporting HTTP messages to strict MIME environments.
+</p>
+<pre>       MIME-Version   = "MIME-Version" ":" 1*DIGIT "." 1*DIGIT
+</pre>
+<p>
+   MIME version "1.0" is the default for use in HTTP/1.1. However,
+   HTTP/1.1 message parsing and semantics are defined by this document
+   and not the MIME specification.
+</p>
+<h3><a id='sec19.4.2'>19.4.2</a> Conversion to Canonical Form</h3>
+<p>
+   RFC 2045 <a rel='bibref' href="/specs/http11/sec17#bib7">[7]</a> requires that an Internet mail entity be converted to
+   canonical form prior to being transferred, as described in section 4
+   of RFC 2049 <a rel='bibref' href="/specs/http11/sec17#bib48">[48]</a>. Section <a rel='xref' href="/specs/http11/sec3#sec3.7.1">3.7.1</a> of this document describes the forms
+   allowed for subtypes of the "text" media type when transmitted over
+   HTTP. RFC 2046 requires that content with a type of "text" represent
+   line breaks as CRLF and forbids the use of CR or LF outside of line
+</p>
+<p>
+   break sequences. HTTP allows CRLF, bare CR, and bare LF to indicate a
+   line break within text content when a message is transmitted over
+   HTTP.
+</p>
+<p>
+   Where it is possible, a proxy or gateway from HTTP to a strict MIME
+   environment SHOULD translate all line breaks within the text media
+   types described in section <a rel='xref' href="/specs/http11/sec3#sec3.7.1">3.7.1</a> of this document to the RFC 2049
+   canonical form of CRLF. Note, however, that this might be complicated
+   by the presence of a Content-Encoding and by the fact that HTTP
+   allows the use of some character sets which do not use octets 13 and
+   10 to represent CR and LF, as is the case for some multi-byte
+   character sets.
+</p>
+<p>
+   Implementors should note that conversion will break any cryptographic
+   checksums applied to the original content unless the original content
+   is already in canonical form. Therefore, the canonical form is
+   recommended for any content that uses such checksums in HTTP.
+</p>
+<h3><a id='sec19.4.3'>19.4.3</a> Conversion of Date Formats</h3>
+<p>
+   HTTP/1.1 uses a restricted set of date formats (section <a rel='xref' href="/specs/http11/sec3#sec3.3.1">3.3.1</a>) to
+   simplify the process of date comparison. Proxies and gateways from
+   other protocols SHOULD ensure that any Date header field present in a
+   message conforms to one of the HTTP/1.1 formats and rewrite the date
+   if necessary.
+</p>
+<h3><a id='sec19.4.4'>19.4.4</a> Introduction of Content-Encoding</h3>
+<p>
+   RFC 2045 does not include any concept equivalent to HTTP/1.1's
+   Content-Encoding header field. Since this acts as a modifier on the
+   media type, proxies and gateways from HTTP to MIME-compliant
+   protocols MUST either change the value of the Content-Type header
+   field or decode the entity-body before forwarding the message. (Some
+   experimental applications of Content-Type for Internet mail have used
+   a media-type parameter of ";conversions=&lt;content-coding>" to perform
+   a function equivalent to Content-Encoding. However, this parameter is
+   not part of RFC 2045.)
+</p>
+<h3><a id='sec19.4.5'>19.4.5</a> No Content-Transfer-Encoding</h3>
+<p>
+   HTTP does not use the Content-Transfer-Encoding (CTE) field of RFC
+   2045. Proxies and gateways from MIME-compliant protocols to HTTP MUST
+   remove any non-identity CTE ("quoted-printable" or "base64") encoding
+   prior to delivering the response message to an HTTP client.
+</p>
+<p>
+   Proxies and gateways from HTTP to MIME-compliant protocols are
+   responsible for ensuring that the message is in the correct format
+   and encoding for safe transport on that protocol, where "safe
+</p>
+<p>
+   transport" is defined by the limitations of the protocol being used.
+   Such a proxy or gateway SHOULD label the data with an appropriate
+   Content-Transfer-Encoding if doing so will improve the likelihood of
+   safe transport over the destination protocol.
+</p>
+<h3><a id='sec19.4.6'>19.4.6</a> Introduction of Transfer-Encoding</h3>
+<p>
+   HTTP/1.1 introduces the Transfer-Encoding header field (section
+   14.41). Proxies/gateways MUST remove any transfer-coding prior to
+   forwarding a message via a MIME-compliant protocol.
+</p>
+<p>
+   A process for decoding the "chunked" transfer-coding (section <a rel='xref' href="/specs/http11/sec3#sec3.6">3.6</a>)
+   can be represented in pseudo-code as:
+</p>
+<pre>       length := 0
+       read chunk-size, chunk-extension (if any) and CRLF
+       while (chunk-size > 0) &#123;
+          read chunk-data and CRLF
+          append chunk-data to entity-body
+          length := length + chunk-size
+          read chunk-size and CRLF
+       &#125;
+       read entity-header
+       while (entity-header not empty) &#123;
+          append entity-header to existing header fields
+          read entity-header
+       &#125;
+       Content-Length := length
+       Remove "chunked" from Transfer-Encoding
+</pre>
+<h3><a id='sec19.4.7'>19.4.7</a> MHTML and Line Length Limitations</h3>
+<p>
+   HTTP implementations which share code with MHTML <a rel='bibref' href="/specs/http11/sec17#bib45">[45]</a> implementations
+   need to be aware of MIME line length limitations. Since HTTP does not
+   have this limitation, HTTP does not fold long lines. MHTML messages
+   being transported by HTTP follow all conventions of MHTML, including
+   line length limitations and folding, canonicalization, etc., since
+   HTTP transports all message-bodies as payload (see section <a rel='xref' href="/specs/http11/sec3#sec3.7.2">3.7.2</a>) and
+   does not interpret the content or any MIME header lines that might be
+   contained therein.
+</p>
+<h3><a id='sec19.5'>19.5</a> Additional Features</h3>
+<p>
+   RFC 1945 and RFC 2068 document protocol elements used by some
+   existing HTTP implementations, but not consistently and correctly
+   across most HTTP/1.1 applications. Implementors are advised to be
+   aware of these features, but cannot rely upon their presence in, or
+   interoperability with, other HTTP/1.1 applications. Some of these
+</p>
+<p>
+   describe proposed experimental features, and some describe features
+   that experimental deployment found lacking that are now addressed in
+   the base HTTP/1.1 specification.
+</p>
+<p>
+   A number of other headers, such as Content-Disposition and Title,
+   from SMTP and MIME are also often implemented (see RFC 2076 [37]).
+</p>
+<h3><a id='sec19.5.1'>19.5.1</a> Content-Disposition</h3>
+<p>
+   The Content-Disposition response-header field has been proposed as a
+   means for the origin server to suggest a default filename if the user
+   requests that the content is saved to a file. This usage is derived
+   from the definition of Content-Disposition in RFC 1806 <a rel='bibref' href="/specs/http11/sec17#bib35">[35]</a>.
+</p>
+<pre>        content-disposition = "Content-Disposition" ":"
+                              disposition-type *( ";" disposition-parm )
+        disposition-type = "attachment" | disp-extension-token
+        disposition-parm = filename-parm | disp-extension-parm
+        filename-parm = "filename" "=" quoted-string
+        disp-extension-token = token
+        disp-extension-parm = token "=" ( token | quoted-string )
+</pre>
+<p>
+   An example is
+</p>
+<pre>        Content-Disposition: attachment; filename="fname.ext"
+</pre>
+<p>
+   The receiving user agent SHOULD NOT respect any directory path
+   information present in the filename-parm parameter, which is the only
+   parameter believed to apply to HTTP implementations at this time. The
+   filename SHOULD be treated as a terminal component only.
+</p>
+<p>
+   If this header is used in a response with the application/octet-
+   stream content-type, the implied suggestion is that the user agent
+   should not display the response, but directly enter a `save response
+   as...' dialog.
+</p>
+<p>
+   See section <a rel='xref' href="/specs/http11/sec15#sec15.5">15.5</a> for Content-Disposition security issues.
+</p>
+<h3><a id='sec19.6'>19.6</a> Compatibility with Previous Versions</h3>
+<p>
+   It is beyond the scope of a protocol specification to mandate
+   compliance with previous versions. HTTP/1.1 was deliberately
+   designed, however, to make supporting previous versions easy. It is
+   worth noting that, at the time of composing this specification
+   (1996), we would expect commercial HTTP/1.1 servers to:
+</p>
+<pre>      - recognize the format of the Request-Line for HTTP/0.9, 1.0, and
+        <a rel='xref' href="/specs/http11/sec1#sec1.1">1.1</a> requests;
+</pre>
+<pre>      - understand any valid request in the format of HTTP/0.9, 1.0, or
+        <a rel='xref' href="/specs/http11/sec1#sec1.1">1.1</a>;
+</pre>
+<pre>      - respond appropriately with a message in the same major version
+        used by the client.
+</pre>
+<p>
+   And we would expect HTTP/1.1 clients to:
+</p>
+<pre>      - recognize the format of the Status-Line for HTTP/1.0 and 1.1
+        responses;
+</pre>
+<pre>      - understand any valid response in the format of HTTP/0.9, 1.0, or
+        <a rel='xref' href="/specs/http11/sec1#sec1.1">1.1</a>.
+</pre>
+<p>
+   For most implementations of HTTP/1.0, each connection is established
+   by the client prior to the request and closed by the server after
+   sending the response. Some implementations implement the Keep-Alive
+   version of persistent connections described in section <a rel='xref' href="/specs/http11/sec19#sec19.7.1">19.7.1</a> of RFC
+   2068 <a rel='bibref' href="/specs/http11/sec17#bib33">[33]</a>.
+</p>
+<h3><a id='sec19.6.1'>19.6.1</a> Changes from HTTP/1.0</h3>
+<p>
+   This section summarizes major differences between versions HTTP/1.0
+   and HTTP/1.1.
+</p>
+<h3><a id='sec19.6.1.1'>19.6.1.1</a> Changes to Simplify Multi-homed Web Servers and Conserve IP</h3>
+<pre>         Addresses
+</pre>
+<p>
+   The requirements that clients and servers support the Host request-
+   header, report an error if the Host request-header (section 14.23) is
+   missing from an HTTP/1.1 request, and accept absolute URIs (section
+   <a rel='xref' href="/specs/http11/sec5#sec5.1.2">5.1.2</a>) are among the most important changes defined by this
+   specification.
+</p>
+<p>
+   Older HTTP/1.0 clients assumed a one-to-one relationship of IP
+   addresses and servers; there was no other established mechanism for
+   distinguishing the intended server of a request than the IP address
+   to which that request was directed. The changes outlined above will
+   allow the Internet, once older HTTP clients are no longer common, to
+   support multiple Web sites from a single IP address, greatly
+   simplifying large operational Web servers, where allocation of many
+   IP addresses to a single host has created serious problems. The
+   Internet will also be able to recover the IP addresses that have been
+   allocated for the sole purpose of allowing special-purpose domain
+   names to be used in root-level HTTP URLs. Given the rate of growth of
+   the Web, and the number of servers already deployed, it is extremely
+</p>
+<p>
+   important that all implementations of HTTP (including updates to
+   existing HTTP/1.0 applications) correctly implement these
+   requirements:
+</p>
+<pre>      - Both clients and servers MUST support the Host request-header.
+</pre>
+<pre>      - A client that sends an HTTP/1.1 request MUST send a Host header.
+</pre>
+<pre>      - Servers MUST report a 400 (Bad Request) error if an HTTP/1.1
+        request does not include a Host request-header.
+</pre>
+<pre>      - Servers MUST accept absolute URIs.
+</pre>
+<h3><a id='sec19.6.2'>19.6.2</a> Compatibility with HTTP/1.0 Persistent Connections</h3>
+<p>
+   Some clients and servers might wish to be compatible with some
+   previous implementations of persistent connections in HTTP/1.0
+   clients and servers. Persistent connections in HTTP/1.0 are
+   explicitly negotiated as they are not the default behavior. HTTP/1.0
+   experimental implementations of persistent connections are faulty,
+   and the new facilities in HTTP/1.1 are designed to rectify these
+   problems. The problem was that some existing <a rel='xref' href="/specs/http11/sec1#sec1.0">1.0</a> clients may be
+   sending Keep-Alive to a proxy server that doesn't understand
+   Connection, which would then erroneously forward it to the next
+   inbound server, which would establish the Keep-Alive connection and
+   result in a hung HTTP/1.0 proxy waiting for the close on the
+   response. The result is that HTTP/1.0 clients must be prevented from
+   using Keep-Alive when talking to proxies.
+</p>
+<p>
+   However, talking to proxies is the most important use of persistent
+   connections, so that prohibition is clearly unacceptable. Therefore,
+   we need some other mechanism for indicating a persistent connection
+   is desired, which is safe to use even when talking to an old proxy
+   that ignores Connection. Persistent connections are the default for
+   HTTP/1.1 messages; we introduce a new keyword (Connection: close) for
+   declaring non-persistence. See section <a rel='xref' href="/specs/http11/sec14#sec14.10">14.10</a>.
+</p>
+<p>
+   The original HTTP/1.0 form of persistent connections (the Connection:
+   Keep-Alive and Keep-Alive header) is documented in RFC 2068. [33]
+</p>
+<h3><a id='sec19.6.3'>19.6.3</a> Changes from RFC 2068</h3>
+<p>
+   This specification has been carefully audited to correct and
+   disambiguate key word usage; RFC 2068 had many problems in respect to
+   the conventions laid out in RFC 2119 <a rel='bibref' href="/specs/http11/sec17#bib34">[34]</a>.
+</p>
+<p>
+   Clarified which error code should be used for inbound server failures
+   (e.g. DNS failures). (Section 10.5.5).
+</p>
+<p>
+   CREATE had a race that required an Etag be sent when a resource is
+   first created. (Section 10.2.2).
+</p>
+<p>
+   Content-Base was deleted from the specification: it was not
+   implemented widely, and there is no simple, safe way to introduce it
+   without a robust extension mechanism. In addition, it is used in a
+   similar, but not identical fashion in MHTML <a rel='bibref' href="/specs/http11/sec17#bib45">[45]</a>.
+</p>
+<p>
+   Transfer-coding and message lengths all interact in ways that
+   required fixing exactly when chunked encoding is used (to allow for
+   transfer encoding that may not be self delimiting); it was important
+   to straighten out exactly how message lengths are computed. (Sections
+   <a rel='xref' href="/specs/http11/sec3#sec3.6">3.6</a>, <a rel='xref' href="/specs/http11/sec4#sec4.4">4.4</a>, <a rel='xref' href="/specs/http11/sec7#sec7.2.2">7.2.2</a>, <a rel='xref' href="/specs/http11/sec13#sec13.5.2">13.5.2</a>, <a rel='xref' href="/specs/http11/sec14#sec14.13">14.13</a>, <a rel='xref' href="/specs/http11/sec14#sec14.16">14.16</a>)
+</p>
+<p>
+   A content-coding of "identity" was introduced, to solve problems
+   discovered in caching. (section 3.5)
+</p>
+<p>
+   Quality Values of zero should indicate that "I don't want something"
+   to allow clients to refuse a representation. (Section 3.9)
+</p>
+<p>
+   The use and interpretation of HTTP version numbers has been clarified
+   by RFC 2145. Require proxies to upgrade requests to highest protocol
+   version they support to deal with problems discovered in HTTP/1.0
+   implementations (Section <a rel='xref' href="/specs/http11/sec3#sec3.1">3.1</a>)
+</p>
+<p>
+   Charset wildcarding is introduced to avoid explosion of character set
+   names in accept headers. (Section 14.2)
+</p>
+<p>
+   A case was missed in the Cache-Control model of HTTP/1.1; s-maxage
+   was introduced to add this missing case. (Sections 13.4, 14.8, 14.9,
+   <a rel='xref' href="/specs/http11/sec14#sec14.9.3">14.9.3</a>)
+</p>
+<p>
+   The Cache-Control: max-age directive was not properly defined for
+   responses. (Section 14.9.3)
+</p>
+<p>
+   There are situations where a server (especially a proxy) does not
+   know the full length of a response but is capable of serving a
+   byterange request. We therefore need a mechanism to allow byteranges
+   with a content-range not indicating the full length of the message.
+   (Section <a rel='xref' href="/specs/http11/sec14#sec14.16">14.16</a>)
+</p>
+<p>
+   Range request responses would become very verbose if all meta-data
+   were always returned; by allowing the server to only send needed
+   headers in a 206 response, this problem can be avoided. (Section
+   <a rel='xref' href="/specs/http11/sec10#sec10.2.7">10.2.7</a>, <a rel='xref' href="/specs/http11/sec13#sec13.5.3">13.5.3</a>, and <a rel='xref' href="/specs/http11/sec14#sec14.27">14.27</a>)
+</p>
+<p>
+   Fix problem with unsatisfiable range requests; there are two cases:
+   syntactic problems, and range doesn't exist in the document. The 416
+   status code was needed to resolve this ambiguity needed to indicate
+   an error for a byte range request that falls outside of the actual
+   contents of a document. (Section <a rel='xref' href="/specs/http11/sec10#sec10.4.17">10.4.17</a>, <a rel='xref' href="/specs/http11/sec14#sec14.16">14.16</a>)
+</p>
+<p>
+   Rewrite of message transmission requirements to make it much harder
+   for implementors to get it wrong, as the consequences of errors here
+   can have significant impact on the Internet, and to deal with the
+   following problems:
+</p>
+<pre>      1. Changing "HTTP/1.1 or later" to "HTTP/1.1", in contexts where
+         this was incorrectly placing a requirement on the behavior of
+         an implementation of a future version of HTTP/1.x
+</pre>
+<pre>      2. Made it clear that user-agents should retry requests, not
+         "clients" in general.
+</pre>
+<pre>      3. Converted requirements for clients to ignore unexpected 100
+         (Continue) responses, and for proxies to forward 100 responses,
+         into a general requirement for 1xx responses.
+</pre>
+<pre>      4. Modified some TCP-specific language, to make it clearer that
+         non-TCP transports are possible for HTTP.
+</pre>
+<pre>      5. Require that the origin server MUST NOT wait for the request
+         body before it sends a required 100 (Continue) response.
+</pre>
+<pre>      6. Allow, rather than require, a server to omit 100 (Continue) if
+         it has already seen some of the request body.
+</pre>
+<pre>      7. Allow servers to defend against denial-of-service attacks and
+         broken clients.
+</pre>
+<p>
+   This change adds the Expect header and 417 status code. The message
+   transmission requirements fixes are in sections 8.2, 10.4.18,
+   <a rel='xref' href="/specs/http11/sec8#sec8.1.2.2">8.1.2.2</a>, <a rel='xref' href="/specs/http11/sec13#sec13.11">13.11</a>, and <a rel='xref' href="/specs/http11/sec14#sec14.20">14.20</a>.
+</p>
+<p>
+   Proxies should be able to add Content-Length when appropriate.
+   (Section 13.5.2)
+</p>
+<p>
+   Clean up confusion between 403 and 404 responses. (Section <a rel='xref' href="/specs/http11/sec10#sec10.4.4">10.4.4</a>,
+   10.4.5, and 10.4.11)
+</p>
+<p>
+   Warnings could be cached incorrectly, or not updated appropriately.
+   (Section 13.1.2, 13.2.4, 13.5.2, 13.5.3, 14.9.3, and 14.46) Warning
+   also needed to be a general header, as PUT or other methods may have
+   need for it in requests.
+</p>
+<p>
+   Transfer-coding had significant problems, particularly with
+   interactions with chunked encoding. The solution is that transfer-
+   codings become as full fledged as content-codings. This involves
+   adding an IANA registry for transfer-codings (separate from content
+   codings), a new header field (TE) and enabling trailer headers in the
+   future. Transfer encoding is a major performance benefit, so it was
+   worth fixing <a rel='bibref' href="/specs/http11/sec17#bib39">[39]</a>. TE also solves another, obscure, downward
+   interoperability problem that could have occurred due to interactions
+   between authentication trailers, chunked encoding and HTTP/1.0
+   clients.(Section <a rel='xref' href="/specs/http11/sec3#sec3.6">3.6</a>, <a rel='xref' href="/specs/http11/sec3#sec3.6.1">3.6.1</a>, and <a rel='xref' href="/specs/http11/sec14#sec14.39">14.39</a>)
+</p>
+<p>
+   The PATCH, LINK, UNLINK methods were defined but not commonly
+   implemented in previous versions of this specification. See RFC 2068
+   <a rel='bibref' href="/specs/http11/sec17#bib33">[33]</a>.
+</p>
+<p>
+   The Alternates, Content-Version, Derived-From, Link, URI, Public and
+   Content-Base header fields were defined in previous versions of this
+   specification, but not commonly implemented. See RFC 2068 <a rel='bibref' href="/specs/http11/sec17#bib33">[33]</a>.
+</p>
+  </article>
+</MainLayout>

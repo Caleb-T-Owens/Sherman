@@ -1,0 +1,195 @@
+---
+import MainLayout from "../../../layouts/MainLayout.astro";
+
+const title = "HTTP/1.1: Notational Conventions and Generic Grammar";
+---
+
+<MainLayout
+  title={`${title} - Caleb Owens`}
+  canonicalUrl="https://cto.je/specs/http11/sec2/"
+  description="RFC 2616: Hypertext Transfer Protocol -- HTTP/1.1, imported for reference."
+>
+  <article>
+<address>part of <a rev='Section' href="/specs/http11/">Hypertext Transfer Protocol -- HTTP/1.1</a><br />
+RFC 2616 Fielding, et al.</address>
+<h2><a id='sec2'>2</a> Notational Conventions and Generic Grammar</h2>
+<h3><a id='sec2.1'>2.1</a> Augmented BNF</h3>
+<p>
+   All of the mechanisms specified in this document are described in
+   both prose and an augmented Backus-Naur Form (BNF) similar to that
+   used by RFC 822 <a rel='bibref' href="/specs/http11/sec17#bib9">[9]</a>. Implementors will need to be familiar with the
+   notation in order to understand this specification. The augmented BNF
+   includes the following constructs:
+</p>
+<dl>
+ <dt>   name = definition
+</dt> <dd>      The name of a rule is simply the name itself (without any
+      enclosing "&lt;" and ">") and is separated from its definition by the
+      equal "=" character. White space is only significant in that
+      indentation of continuation lines is used to indicate a rule
+      definition that spans more than one line. Certain basic rules are
+      in uppercase, such as SP, LWS, HT, CRLF, DIGIT, ALPHA, etc. Angle
+      brackets are used within definitions whenever their presence will
+      facilitate discerning the use of rule names.
+</dd>
+ <dt>   "literal"
+</dt> <dd>      Quotation marks surround literal text. Unless stated otherwise,
+      the text is case-insensitive.
+</dd>
+ <dt>   rule1 | rule2
+</dt> <dd>      Elements separated by a bar ("|") are alternatives, e.g., "yes |
+      no" will accept yes or no.
+</dd>
+ <dt>   (rule1 rule2)
+</dt> <dd>      Elements enclosed in parentheses are treated as a single element.
+      Thus, "(elem (foo | bar) elem)" allows the token sequences "elem
+      foo elem" and "elem bar elem".
+</dd>
+ <dt>   *rule
+</dt> <dd>      The character "*" preceding an element indicates repetition. The
+      full form is "&lt;n>*&lt;m>element" indicating at least &lt;n> and at most
+      &lt;m> occurrences of element. Default values are 0 and infinity so
+      that "*(element)" allows any number, including zero; "1*element"
+      requires at least one; and "1*2element" allows one or two.
+</dd>
+ <dt>   [rule]
+</dt> <dd>      Square brackets enclose optional elements; "[foo bar]" is
+      equivalent to "*1(foo bar)".
+</dd>
+ <dt>   N rule
+</dt> <dd>      Specific repetition: "&lt;n>(element)" is equivalent to
+      "&lt;n>*&lt;n>(element)"; that is, exactly &lt;n> occurrences of (element).
+      Thus 2DIGIT is a 2-digit number, and 3ALPHA is a string of three
+      alphabetic characters.
+</dd>
+ <dt>   #rule
+</dt> <dd>      A construct "#" is defined, similar to "*", for defining lists of
+      elements. The full form is "&lt;n>#&lt;m>element" indicating at least
+      &lt;n> and at most &lt;m> elements, each separated by one or more commas
+      (",") and OPTIONAL linear white space (LWS). This makes the usual
+      form of lists very easy; a rule such as
+<pre>         ( *LWS element *( *LWS "," *LWS element ))
+</pre>      can be shown as
+<pre>         1#element
+</pre>      Wherever this construct is used, null elements are allowed, but do
+      not contribute to the count of elements present. That is,
+      "(element), , (element) " is permitted, but counts as only two
+      elements. Therefore, where at least one element is required, at
+      least one non-null element MUST be present. Default values are 0
+      and infinity so that "#element" allows any number, including zero;
+      "1#element" requires at least one; and "1#2element" allows one or
+      two.
+</dd>
+ <dt>   ; comment
+</dt> <dd>      A semi-colon, set off some distance to the right of rule text,
+      starts a comment that continues to the end of line. This is a
+      simple way of including useful notes in parallel with the
+      specifications.
+</dd>
+ <dt>   implied *LWS
+</dt> <dd>      The grammar described by this specification is word-based. Except
+      where noted otherwise, linear white space (LWS) can be included
+      between any two adjacent words (token or quoted-string), and
+      between adjacent words and separators, without changing the
+      interpretation of a field. At least one delimiter (LWS and/or
+</dd>
+ <dt></dt> <dd>      separators) MUST exist between any two tokens (for the definition
+      of "token" below), since they would otherwise be interpreted as a
+      single token.
+</dd>
+</dl>
+<h3><a id='sec2.2'>2.2</a> Basic Rules</h3>
+<p>
+   The following rules are used throughout this specification to
+   describe basic parsing constructs. The US-ASCII coded character set
+   is defined by ANSI X3.4-1986 <a rel='bibref' href="/specs/http11/sec17#bib21">[21]</a>.
+</p>
+<pre>       OCTET          = &lt;any 8-bit sequence of data>
+       CHAR           = &lt;any US-ASCII character (octets 0 - 127)>
+       UPALPHA        = &lt;any US-ASCII uppercase letter "A".."Z">
+       LOALPHA        = &lt;any US-ASCII lowercase letter "a".."z">
+       ALPHA          = UPALPHA | LOALPHA
+       DIGIT          = &lt;any US-ASCII digit "0".."9">
+       CTL            = &lt;any US-ASCII control character
+                        (octets 0 - 31) and DEL (127)>
+       CR             = &lt;US-ASCII CR, carriage return (13)>
+       LF             = &lt;US-ASCII LF, linefeed (10)>
+       SP             = &lt;US-ASCII SP, space (32)>
+       HT             = &lt;US-ASCII HT, horizontal-tab (9)>
+       &lt;">            = &lt;US-ASCII double-quote mark (34)>
+</pre>
+<p>
+   HTTP/1.1 defines the sequence CR LF as the end-of-line marker for all
+   protocol elements except the entity-body (see appendix 19.3 for
+   tolerant applications). The end-of-line marker within an entity-body
+   is defined by its associated media type, as described in section <a rel='xref' href="/specs/http11/sec3#sec3.7">3.7</a>.
+</p>
+<pre>       CRLF           = CR LF
+</pre>
+<p>
+   HTTP/1.1 header field values can be folded onto multiple lines if the
+   continuation line begins with a space or horizontal tab. All linear
+   white space, including folding, has the same semantics as SP. A
+   recipient MAY replace any linear white space with a single SP before
+   interpreting the field value or forwarding the message downstream.
+</p>
+<pre>       LWS            = [CRLF] 1*( SP | HT )
+</pre>
+<p>
+   The TEXT rule is only used for descriptive field contents and values
+   that are not intended to be interpreted by the message parser. Words
+   of *TEXT MAY contain characters from character sets other than ISO-
+   8859-1 <a rel='bibref' href="/specs/http11/sec17#bib22">[22]</a> only when encoded according to the rules of RFC 2047
+   <a rel='bibref' href="/specs/http11/sec17#bib14">[14]</a>.
+</p>
+<pre>       TEXT           = &lt;any OCTET except CTLs,
+                        but including LWS>
+</pre>
+<p>
+   A CRLF is allowed in the definition of TEXT only as part of a header
+   field continuation. It is expected that the folding LWS will be
+   replaced with a single SP before interpretation of the TEXT value.
+</p>
+<p>
+   Hexadecimal numeric characters are used in several protocol elements.
+</p>
+<pre>       HEX            = "A" | "B" | "C" | "D" | "E" | "F"
+                      | "a" | "b" | "c" | "d" | "e" | "f" | DIGIT
+</pre>
+<p>
+   Many HTTP/1.1 header field values consist of words separated by LWS
+   or special characters. These special characters MUST be in a quoted
+   string to be used within a parameter value (as defined in section
+   <a rel='xref' href="/specs/http11/sec3#sec3.6">3.6</a>).
+</p>
+<pre>       token          = 1*&lt;any CHAR except CTLs or separators>
+       separators     = "(" | ")" | "&lt;" | ">" | "@"
+                      | "," | ";" | ":" | "\" | &lt;">
+                      | "/" | "[" | "]" | "?" | "="
+                      | "&#123;" | "&#125;" | SP | HT
+</pre>
+<p>
+   Comments can be included in some HTTP header fields by surrounding
+   the comment text with parentheses. Comments are only allowed in
+   fields containing "comment" as part of their field value definition.
+   In all other fields, parentheses are considered part of the field
+   value.
+</p>
+<pre>       comment        = "(" *( ctext | quoted-pair | comment ) ")"
+       ctext          = &lt;any TEXT excluding "(" and ")">
+</pre>
+<p>
+   A string of text is parsed as a single word if it is quoted using
+   double-quote marks.
+</p>
+<pre>       quoted-string  = ( &lt;"> *(qdtext | quoted-pair ) &lt;"> )
+       qdtext         = &lt;any TEXT except &lt;">>
+</pre>
+<p>
+   The backslash character ("\") MAY be used as a single-character
+   quoting mechanism only within quoted-string and comment constructs.
+</p>
+<pre>       quoted-pair    = "\" CHAR
+</pre>
+  </article>
+</MainLayout>

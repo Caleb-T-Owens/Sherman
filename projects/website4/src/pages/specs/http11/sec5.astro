@@ -1,0 +1,217 @@
+---
+import MainLayout from "../../../layouts/MainLayout.astro";
+
+const title = "HTTP/1.1: Request";
+---
+
+<MainLayout
+  title={`${title} - Caleb Owens`}
+  canonicalUrl="https://cto.je/specs/http11/sec5/"
+  description="RFC 2616: Hypertext Transfer Protocol -- HTTP/1.1, imported for reference."
+>
+  <article>
+<address>part of <a rev='Section' href="/specs/http11/">Hypertext Transfer Protocol -- HTTP/1.1</a><br />
+RFC 2616 Fielding, et al.</address>
+<h2><a id='sec5'>5</a> Request</h2>
+<p>
+   A request message from a client to a server includes, within the
+   first line of that message, the method to be applied to the resource,
+   the identifier of the resource, and the protocol version in use.
+</p>
+<pre>        Request       = Request-Line              ; Section 5.1
+                        *(( general-header        ; Section <a rel='xref' href="/specs/http11/sec4#sec4.5">4.5</a>
+                         | request-header         ; Section <a rel='xref' href="/specs/http11/sec5#sec5.3">5.3</a>
+                         | entity-header ) CRLF)  ; Section <a rel='xref' href="/specs/http11/sec7#sec7.1">7.1</a>
+                        CRLF
+                        [ message-body ]          ; Section <a rel='xref' href="/specs/http11/sec4#sec4.3">4.3</a>
+</pre>
+<h3><a id='sec5.1'>5.1</a> Request-Line</h3>
+<p>
+   The Request-Line begins with a method token, followed by the
+   Request-URI and the protocol version, and ending with CRLF. The
+   elements are separated by SP characters. No CR or LF is allowed
+   except in the final CRLF sequence.
+</p>
+<pre>        Request-Line   = Method SP Request-URI SP HTTP-Version CRLF
+</pre>
+<h3><a id='sec5.1.1'>5.1.1</a> Method</h3>
+<p>
+   The Method  token indicates the method to be performed on the
+   resource identified by the Request-URI. The method is case-sensitive.
+</p>
+<pre>       Method         = "OPTIONS"                ; Section 9.2
+                      | "GET"                    ; Section <a rel='xref' href="/specs/http11/sec9#sec9.3">9.3</a>
+                      | "HEAD"                   ; Section <a rel='xref' href="/specs/http11/sec9#sec9.4">9.4</a>
+                      | "POST"                   ; Section <a rel='xref' href="/specs/http11/sec9#sec9.5">9.5</a>
+                      | "PUT"                    ; Section <a rel='xref' href="/specs/http11/sec9#sec9.6">9.6</a>
+                      | "DELETE"                 ; Section <a rel='xref' href="/specs/http11/sec9#sec9.7">9.7</a>
+                      | "TRACE"                  ; Section <a rel='xref' href="/specs/http11/sec9#sec9.8">9.8</a>
+                      | "CONNECT"                ; Section <a rel='xref' href="/specs/http11/sec9#sec9.9">9.9</a>
+                      | extension-method
+       extension-method = token
+</pre>
+<p>
+   The list of methods allowed by a resource can be specified in an
+   Allow header field (section 14.7). The return code of the response
+   always notifies the client whether a method is currently allowed on a
+   resource, since the set of allowed methods can change dynamically. An
+   origin server SHOULD return the status code 405 (Method Not Allowed)
+   if the method is known by the origin server but not allowed for the
+   requested resource, and 501 (Not Implemented) if the method is
+   unrecognized or not implemented by the origin server. The methods GET
+   and HEAD MUST be supported by all general-purpose servers. All other
+   methods are OPTIONAL; however, if the above methods are implemented,
+   they MUST be implemented with the same semantics as those specified
+   in section 9.
+</p>
+<h3><a id='sec5.1.2'>5.1.2</a> Request-URI</h3>
+<p>
+   The Request-URI is a Uniform Resource Identifier (section <a rel='xref' href="/specs/http11/sec3#sec3.2">3.2</a>) and
+   identifies the resource upon which to apply the request.
+</p>
+<pre>       Request-URI    = "*" | absoluteURI | abs_path | authority
+</pre>
+<p>
+   The four options for Request-URI are dependent on the nature of the
+   request. The asterisk "*" means that the request does not apply to a
+   particular resource, but to the server itself, and is only allowed
+   when the method used does not necessarily apply to a resource. One
+   example would be
+</p>
+<pre>       OPTIONS * HTTP/1.1
+</pre>
+<p>
+   The absoluteURI form is REQUIRED when the request is being made to a
+   proxy. The proxy is requested to forward the request or service it
+   from a valid cache, and return the response. Note that the proxy MAY
+   forward the request on to another proxy or directly to the server
+</p>
+<p>
+   specified by the absoluteURI. In order to avoid request loops, a
+   proxy MUST be able to recognize all of its server names, including
+   any aliases, local variations, and the numeric IP address. An example
+   Request-Line would be:
+</p>
+<pre>       GET http://www.w3.org/pub/WWW/TheProject.html HTTP/1.1
+</pre>
+<p>
+   To allow for transition to absoluteURIs in all requests in future
+   versions of HTTP, all HTTP/1.1 servers MUST accept the absoluteURI
+   form in requests, even though HTTP/1.1 clients will only generate
+   them in requests to proxies.
+</p>
+<p>
+   The authority form is only used by the CONNECT method (section <a rel='xref' href="/specs/http11/sec9#sec9.9">9.9</a>).
+</p>
+<p>
+   The most common form of Request-URI is that used to identify a
+   resource on an origin server or gateway. In this case the absolute
+   path of the URI MUST be transmitted (see section <a rel='xref' href="/specs/http11/sec3#sec3.2.1">3.2.1</a>, abs_path) as
+   the Request-URI, and the network location of the URI (authority) MUST
+   be transmitted in a Host header field. For example, a client wishing
+   to retrieve the resource above directly from the origin server would
+   create a TCP connection to port 80 of the host "www.w3.org" and send
+   the lines:
+</p>
+<pre>       GET /pub/WWW/TheProject.html HTTP/1.1
+       Host: www.w3.org
+</pre>
+<p>
+   followed by the remainder of the Request. Note that the absolute path
+   cannot be empty; if none is present in the original URI, it MUST be
+   given as "/" (the server root).
+</p>
+<p>
+   The Request-URI is transmitted in the format specified in section
+   3.2.1. If the Request-URI is encoded using the "% HEX HEX" encoding
+   <a rel='bibref' href="/specs/http11/sec17#bib42">[42]</a>, the origin server MUST decode the Request-URI in order to
+   properly interpret the request. Servers SHOULD respond to invalid
+   Request-URIs with an appropriate status code.
+</p>
+<p>
+   A transparent proxy MUST NOT rewrite the "abs_path" part of the
+   received Request-URI when forwarding it to the next inbound server,
+   except as noted above to replace a null abs_path with "/".
+</p>
+<pre>      Note: The "no rewrite" rule prevents the proxy from changing the
+      meaning of the request when the origin server is improperly using
+      a non-reserved URI character for a reserved purpose.  Implementors
+      should be aware that some pre-HTTP/1.1 proxies have been known to
+      rewrite the Request-URI.
+</pre>
+<h3><a id='sec5.2'>5.2</a> The Resource Identified by a Request</h3>
+<p>
+   The exact resource identified by an Internet request is determined by
+   examining both the Request-URI and the Host header field.
+</p>
+<p>
+   An origin server that does not allow resources to differ by the
+   requested host MAY ignore the Host header field value when
+   determining the resource identified by an HTTP/1.1 request. (But see
+   section <a rel='xref' href="/specs/http11/sec19#sec19.6.1.1">19.6.1.1</a> for other requirements on Host support in HTTP/1.1.)
+</p>
+<p>
+   An origin server that does differentiate resources based on the host
+   requested (sometimes referred to as virtual hosts or vanity host
+   names) MUST use the following rules for determining the requested
+   resource on an HTTP/1.1 request:
+</p>
+<p>
+   1. If Request-URI is an absoluteURI, the host is part of the
+     Request-URI. Any Host header field value in the request MUST be
+     ignored.
+</p>
+<p>
+   2. If the Request-URI is not an absoluteURI, and the request includes
+     a Host header field, the host is determined by the Host header
+     field value.
+</p>
+<p>
+   3. If the host as determined by rule 1 or 2 is not a valid host on
+     the server, the response MUST be a 400 (Bad Request) error message.
+</p>
+<p>
+   Recipients of an HTTP/1.0 request that lacks a Host header field MAY
+   attempt to use heuristics (e.g., examination of the URI path for
+   something unique to a particular host) in order to determine what
+   exact resource is being requested.
+</p>
+<h3><a id='sec5.3'>5.3</a> Request Header Fields</h3>
+<p>
+   The request-header fields allow the client to pass additional
+   information about the request, and about the client itself, to the
+   server. These fields act as request modifiers, with semantics
+   equivalent to the parameters on a programming language method
+   invocation.
+</p>
+<pre>       request-header = Accept                   ; Section 14.1
+                      | Accept-Charset           ; Section <a rel='xref' href="/specs/http11/sec14#sec14.2">14.2</a>
+                      | Accept-Encoding          ; Section <a rel='xref' href="/specs/http11/sec14#sec14.3">14.3</a>
+                      | Accept-Language          ; Section <a rel='xref' href="/specs/http11/sec14#sec14.4">14.4</a>
+                      | Authorization            ; Section <a rel='xref' href="/specs/http11/sec14#sec14.8">14.8</a>
+                      | Expect                   ; Section <a rel='xref' href="/specs/http11/sec14#sec14.20">14.20</a>
+                      | From                     ; Section <a rel='xref' href="/specs/http11/sec14#sec14.22">14.22</a>
+                      | Host                     ; Section <a rel='xref' href="/specs/http11/sec14#sec14.23">14.23</a>
+                      | If-Match                 ; Section <a rel='xref' href="/specs/http11/sec14#sec14.24">14.24</a>
+</pre>
+<pre>                      | If-Modified-Since        ; Section 14.25
+                      | If-None-Match            ; Section <a rel='xref' href="/specs/http11/sec14#sec14.26">14.26</a>
+                      | If-Range                 ; Section <a rel='xref' href="/specs/http11/sec14#sec14.27">14.27</a>
+                      | If-Unmodified-Since      ; Section <a rel='xref' href="/specs/http11/sec14#sec14.28">14.28</a>
+                      | Max-Forwards             ; Section <a rel='xref' href="/specs/http11/sec14#sec14.31">14.31</a>
+                      | Proxy-Authorization      ; Section <a rel='xref' href="/specs/http11/sec14#sec14.34">14.34</a>
+                      | Range                    ; Section <a rel='xref' href="/specs/http11/sec14#sec14.35">14.35</a>
+                      | Referer                  ; Section <a rel='xref' href="/specs/http11/sec14#sec14.36">14.36</a>
+                      | TE                       ; Section <a rel='xref' href="/specs/http11/sec14#sec14.39">14.39</a>
+                      | User-Agent               ; Section <a rel='xref' href="/specs/http11/sec14#sec14.43">14.43</a>
+</pre>
+<p>
+   Request-header field names can be extended reliably only in
+   combination with a change in the protocol version. However, new or
+   experimental header fields MAY be given the semantics of request-
+   header fields if all parties in the communication recognize them to
+   be request-header fields. Unrecognized header fields are treated as
+   entity-header fields.
+</p>
+  </article>
+</MainLayout>

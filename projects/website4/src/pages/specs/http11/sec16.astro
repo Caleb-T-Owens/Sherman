@@ -1,0 +1,96 @@
+---
+import MainLayout from "../../../layouts/MainLayout.astro";
+
+const title = "HTTP/1.1: Acknowledgments";
+---
+
+<MainLayout
+  title={`${title} - Caleb Owens`}
+  canonicalUrl="https://cto.je/specs/http11/sec16/"
+  description="RFC 2616: Hypertext Transfer Protocol -- HTTP/1.1, imported for reference."
+>
+  <article>
+<address>part of <a rev='Section' href="/specs/http11/">Hypertext Transfer Protocol -- HTTP/1.1</a><br />
+RFC 2616 Fielding, et al.</address>
+<h2><a id='sec16'>16</a> Acknowledgments</h2>
+<p>
+   This specification makes heavy use of the augmented BNF and generic
+   constructs defined by David H. Crocker for RFC 822 [9]. Similarly, it
+   reuses many of the definitions provided by Nathaniel Borenstein and
+   Ned Freed for MIME <a rel='bibref' href="/specs/http11/sec17#bib7">[7]</a>. We hope that their inclusion in this
+   specification will help reduce past confusion over the relationship
+   between HTTP and Internet mail message formats.
+</p>
+<p>
+   The HTTP protocol has evolved considerably over the years. It has
+   benefited from a large and active developer community--the many
+   people who have participated on the www-talk mailing list--and it is
+   that community which has been most responsible for the success of
+   HTTP and of the World-Wide Web in general. Marc Andreessen, Robert
+   Cailliau, Daniel W. Connolly, Bob Denny, John Franks, Jean-Francois
+   Groff, Phillip M. Hallam-Baker, Hakon W. Lie, Ari Luotonen, Rob
+   McCool, Lou Montulli, Dave Raggett, Tony Sanders, and Marc
+   VanHeyningen deserve special recognition for their efforts in
+   defining early aspects of the protocol.
+</p>
+<p>
+   This document has benefited greatly from the comments of all those
+   participating in the HTTP-WG. In addition to those already mentioned,
+   the following individuals have contributed to this specification:
+</p>
+<pre>       Gary Adams                  Ross Patterson
+       Harald Tveit Alvestrand     Albert Lunde
+       Keith Ball                  John C. Mallery
+       Brian Behlendorf            Jean-Philippe Martin-Flatin
+       Paul Burchard               Mitra
+       Maurizio Codogno            David Morris
+       Mike Cowlishaw              Gavin Nicol
+       Roman Czyborra              Bill Perry
+       Michael A. Dolan            Jeffrey Perry
+       David J. Fiander            Scott Powers
+       Alan Freier                 Owen Rees
+       Marc Hedlund                Luigi Rizzo
+       Greg Herlihy                David Robinson
+       Koen Holtman                Marc Salomon
+       Alex Hopmann                Rich Salz
+       Bob Jernigan                Allan M. Schiffman
+       Shel Kaphan                 Jim Seidman
+       Rohit Khare                 Chuck Shotton
+       John Klensin                Eric W. Sink
+       Martijn Koster              Simon E. Spero
+       Alexei Kosut                Richard N. Taylor
+       David M. Kristol            Robert S. Thau
+       Daniel LaLiberte            Bill (BearHeart) Weinman
+       Ben Laurie                  Francois Yergeau
+       Paul J. Leach               Mary Ellen Zurko
+       Daniel DuBois               Josh Cohen
+</pre>
+<p>
+   Much of the content and presentation of the caching design is due to
+   suggestions and comments from individuals including: Shel Kaphan,
+   Paul Leach, Koen Holtman, David Morris, and Larry Masinter.
+</p>
+<p>
+   Most of the specification of ranges is based on work originally done
+   by Ari Luotonen and John Franks, with additional input from Steve
+   Zilles.
+</p>
+<p>
+   Thanks to the "cave men" of Palo Alto. You know who you are.
+</p>
+<p>
+   Jim Gettys (the current editor of this document) wishes particularly
+   to thank Roy Fielding, the previous editor of this document, along
+   with John Klensin, Jeff Mogul, Paul Leach, Dave Kristol, Koen
+   Holtman, John Franks, Josh Cohen, Alex Hopmann, Scott Lawrence, and
+   Larry Masinter for their help. And thanks go particularly to Jeff
+   Mogul and Scott Lawrence for performing the "MUST/MAY/SHOULD" audit.
+</p>
+<p>
+   The Apache Group, Anselm Baird-Smith, author of Jigsaw, and Henrik
+   Frystyk implemented RFC 2068 early, and we wish to thank them for the
+   discovery of many of the problems that this document attempts to
+   rectify.
+</p>
+  </article>
+</MainLayout>

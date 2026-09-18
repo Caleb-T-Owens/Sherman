@@ -1,0 +1,27 @@
+---
+import MainLayout from "../../../layouts/MainLayout.astro";
+
+const title = "HTTP/1.1: Access Authentication";
+---
+
+<MainLayout
+  title={`${title} - Caleb Owens`}
+  canonicalUrl="https://cto.je/specs/http11/sec11/"
+  description="RFC 2616: Hypertext Transfer Protocol -- HTTP/1.1, imported for reference."
+>
+  <article>
+<address>part of <a rev='Section' href="/specs/http11/">Hypertext Transfer Protocol -- HTTP/1.1</a><br />
+RFC 2616 Fielding, et al.</address>
+<h2><a id='sec11'>11</a> Access Authentication</h2>
+<p>
+   HTTP provides several OPTIONAL challenge-response authentication
+   mechanisms which can be used by a server to challenge a client
+   request and by a client to provide authentication information. The
+   general framework for access authentication, and the specification of
+   "basic" and "digest" authentication, are specified in "HTTP
+   Authentication: Basic and Digest Access Authentication" <a rel='bibref' href="/specs/http11/sec17#bib43">[43]</a>. This
+   specification adopts the definitions of "challenge" and "credentials"
+   from that specification.
+</p>
+  </article>
+</MainLayout>

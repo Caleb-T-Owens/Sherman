@@ -1,0 +1,501 @@
+---
+import MainLayout from "../../../layouts/MainLayout.astro";
+
+const title = "Hypertext Transfer Protocol -- HTTP/1.1";
+---
+
+<MainLayout
+  title={`${title} - Caleb Owens`}
+  canonicalUrl="https://cto.je/specs/http11/"
+  description="RFC 2616: Hypertext Transfer Protocol -- HTTP/1.1, imported for reference."
+>
+  <article>
+<pre>
+Network Working Group                                      R. Fielding
+Request for Comments: 2616                                   UC Irvine
+Obsoletes: 2068                                              J. Gettys
+Category: Standards Track                                   Compaq/W3C
+                                                              J. Mogul
+                                                                Compaq
+                                                            H. Frystyk
+                                                               W3C/MIT
+                                                           L. Masinter
+                                                                 Xerox
+                                                              P. Leach
+                                                             Microsoft
+                                                        T. Berners-Lee
+                                                               W3C/MIT
+                                                             June 1999
+</pre>
+<h1>
+                Hypertext Transfer Protocol -- HTTP/1.1
+</h1>
+<h2>
+Status of this Memo
+</h2>
+<p>
+   This document specifies an Internet standards track protocol for the
+   Internet community, and requests discussion and suggestions for
+   improvements.  Please refer to the current edition of the "Internet
+   Official Protocol Standards" (STD 1) for the standardization state
+   and status of this protocol.  Distribution of this memo is unlimited.
+</p>
+<h2>
+Copyright Notice
+</h2>
+<p>
+   Copyright (C) The Internet Society (1999).  All Rights Reserved.
+</p>
+<h2>
+Abstract
+</h2>
+<p>
+   The Hypertext Transfer Protocol (HTTP) is an application-level
+   protocol for distributed, collaborative, hypermedia information
+   systems. It is a generic, stateless, protocol which can be used for
+   many tasks beyond its use for hypertext, such as name servers and
+   distributed object management systems, through extension of its
+   request methods, error codes and headers <a rel='bibref' href="/specs/http11/sec17#bib47">[47]</a>. A feature of HTTP is
+   the typing and negotiation of data representation, allowing systems
+   to be built independently of the data being transferred.
+</p>
+<p>
+   HTTP has been in use by the World-Wide Web global information
+   initiative since 1990. This specification defines the protocol
+   referred to as "HTTP/1.1", and is an update to RFC 2068 <a rel='bibref' href="/specs/http11/sec17#bib33">[33]</a>.
+</p>
+<div class='toc'><h2>Table of Contents</h2
+><ol>
+
+   <li><span><a rel='Section' href="/specs/http11/sec1#sec1">Introduction </a> ... 1</span>
+<ol>
+
+      <li><span><a rel='Section' href="/specs/http11/sec1#sec1.1">Purpose</a> ... 1.1</span></li>
+      <li><span><a rel='Section' href="/specs/http11/sec1#sec1.2">Requirements </a> ... 1.2</span></li>
+      <li><span><a rel='Section' href="/specs/http11/sec1#sec1.3">Terminology </a> ... 1.3</span></li>
+      <li><span><a rel='Section' href="/specs/http11/sec1#sec1.4">Overall Operation </a> ... 1.4</span></li>
+</ol>
+</li>
+   <li><span><a rel='Section' href="/specs/http11/sec2#sec2">Notational Conventions and Generic Grammar </a> ... 2</span>
+<ol>
+
+      <li><span><a rel='Section' href="/specs/http11/sec2#sec2.1">Augmented BNF </a> ... 2.1</span></li>
+      <li><span><a rel='Section' href="/specs/http11/sec2#sec2.2">Basic Rules </a> ... 2.2</span></li>
+</ol>
+</li>
+   <li><span><a rel='Section' href="/specs/http11/sec3#sec3">Protocol Parameters </a> ... 3</span>
+<ol>
+
+      <li><span><a rel='Section' href="/specs/http11/sec3#sec3.1">HTTP Version </a> ... 3.1</span></li>
+      <li><span><a rel='Section' href="/specs/http11/sec3#sec3.2">Uniform Resource Identifiers </a> ... 3.2</span>
+<ol>
+
+         <li><span><a rel='Section' href="/specs/http11/sec3#sec3.2.1">General Syntax </a> ... 3.2.1</span></li>
+         <li><span><a rel='Section' href="/specs/http11/sec3#sec3.2.2">http URL </a> ... 3.2.2</span></li>
+         <li><span><a rel='Section' href="/specs/http11/sec3#sec3.2.3">URI Comparison </a> ... 3.2.3</span></li>
+</ol>
+</li>
+      <li><span><a rel='Section' href="/specs/http11/sec3#sec3.3">Date/Time Formats </a> ... 3.3</span>
+<ol>
+
+         <li><span><a rel='Section' href="/specs/http11/sec3#sec3.3.1">Full Date </a> ... 3.3.1</span></li>
+         <li><span><a rel='Section' href="/specs/http11/sec3#sec3.3.2">Delta Seconds </a> ... 3.3.2</span></li>
+</ol>
+</li>
+      <li><span><a rel='Section' href="/specs/http11/sec3#sec3.4">Character Sets </a> ... 3.4</span>
+<ol>
+
+         <li><span><a rel='Section' href="/specs/http11/sec3#sec3.4.1">Missing Charset </a> ... 3.4.1</span></li>
+</ol>
+</li>
+      <li><span><a rel='Section' href="/specs/http11/sec3#sec3.5">Content Codings </a> ... 3.5</span></li>
+      <li><span><a rel='Section' href="/specs/http11/sec3#sec3.6">Transfer Codings </a> ... 3.6</span>
+<ol>
+
+         <li><span><a rel='Section' href="/specs/http11/sec3#sec3.6.1">Chunked Transfer Coding </a> ... 3.6.1</span></li>
+</ol>
+</li>
+      <li><span><a rel='Section' href="/specs/http11/sec3#sec3.7">Media Types </a> ... 3.7</span>
+<ol>
+
+         <li><span><a rel='Section' href="/specs/http11/sec3#sec3.7.1">Canonicalization and Text Defaults </a> ... 3.7.1</span></li>
+         <li><span><a rel='Section' href="/specs/http11/sec3#sec3.7.2">Multipart Types </a> ... 3.7.2</span></li>
+</ol>
+</li>
+      <li><span><a rel='Section' href="/specs/http11/sec3#sec3.8">Product Tokens </a> ... 3.8</span></li>
+      <li><span><a rel='Section' href="/specs/http11/sec3#sec3.9">Quality Values </a> ... 3.9</span></li>
+      <li><span><a rel='Section' href="/specs/http11/sec3#sec3.10">Language Tags </a> ... 3.10</span></li>
+      <li><span><a rel='Section' href="/specs/http11/sec3#sec3.11">Entity Tags </a> ... 3.11</span></li>
+      <li><span><a rel='Section' href="/specs/http11/sec3#sec3.12">Range Units </a> ... 3.12</span></li>
+</ol>
+</li>
+   <li><span><a rel='Section' href="/specs/http11/sec4#sec4">HTTP Message </a> ... 4</span>
+<ol>
+
+      <li><span><a rel='Section' href="/specs/http11/sec4#sec4.1">Message Types </a> ... 4.1</span></li>
+      <li><span><a rel='Section' href="/specs/http11/sec4#sec4.2">Message Headers </a> ... 4.2</span></li>
+      <li><span><a rel='Section' href="/specs/http11/sec4#sec4.3">Message Body </a> ... 4.3</span></li>
+      <li><span><a rel='Section' href="/specs/http11/sec4#sec4.4">Message Length </a> ... 4.4</span></li>
+      <li><span><a rel='Section' href="/specs/http11/sec4#sec4.5">General Header Fields </a> ... 4.5</span></li>
+</ol>
+</li>
+   <li><span><a rel='Section' href="/specs/http11/sec5#sec5">Request </a> ... 5</span>
+<ol>
+
+      <li><span><a rel='Section' href="/specs/http11/sec5#sec5.1">Request-Line </a> ... 5.1</span>
+<ol>
+
+         <li><span><a rel='Section' href="/specs/http11/sec5#sec5.1.1">Method </a> ... 5.1.1</span></li>
+         <li><span><a rel='Section' href="/specs/http11/sec5#sec5.1.2">Request-URI </a> ... 5.1.2</span></li>
+</ol>
+</li>
+      <li><span><a rel='Section' href="/specs/http11/sec5#sec5.2">The Resource Identified by a Request </a> ... 5.2</span></li>
+      <li><span><a rel='Section' href="/specs/http11/sec5#sec5.3">Request Header Fields </a> ... 5.3</span></li>
+</ol>
+</li>
+   <li><span><a rel='Section' href="/specs/http11/sec6#sec6">Response </a> ... 6</span>
+<ol>
+
+      <li><span><a rel='Section' href="/specs/http11/sec6#sec6.1">Status-Line </a> ... 6.1</span>
+<ol>
+
+         <li><span><a rel='Section' href="/specs/http11/sec6#sec6.1.1">Status Code and Reason Phrase </a> ... 6.1.1</span></li>
+</ol>
+</li>
+      <li><span><a rel='Section' href="/specs/http11/sec6#sec6.2">Response Header Fields </a> ... 6.2</span></li>
+</ol>
+</li>
+   <li><span><a rel='Section' href="/specs/http11/sec7#sec7">Entity </a> ... 7</span>
+<ol>
+
+      <li><span><a rel='Section' href="/specs/http11/sec7#sec7.1">Entity Header Fields </a> ... 7.1</span></li>
+      <li><span><a rel='Section' href="/specs/http11/sec7#sec7.2">Entity Body </a> ... 7.2</span>
+<ol>
+
+         <li><span><a rel='Section' href="/specs/http11/sec7#sec7.2.1">Type </a> ... 7.2.1</span></li>
+         <li><span><a rel='Section' href="/specs/http11/sec7#sec7.2.2">Entity Length </a> ... 7.2.2</span></li>
+</ol>
+</li>
+</ol>
+</li>
+   <li><span><a rel='Section' href="/specs/http11/sec8#sec8">Connections </a> ... 8</span>
+<ol>
+
+      <li><span><a rel='Section' href="/specs/http11/sec8#sec8.1">Persistent Connections </a> ... 8.1</span>
+<ol>
+
+         <li><span><a rel='Section' href="/specs/http11/sec8#sec8.1.1">Purpose </a> ... 8.1.1</span></li>
+         <li><span><a rel='Section' href="/specs/http11/sec8#sec8.1.2">Overall Operation </a> ... 8.1.2</span></li>
+         <li><span><a rel='Section' href="/specs/http11/sec8#sec8.1.3">Proxy Servers </a> ... 8.1.3</span></li>
+         <li><span><a rel='Section' href="/specs/http11/sec8#sec8.1.4">Practical Considerations </a> ... 8.1.4</span></li>
+</ol>
+</li>
+      <li><span><a rel='Section' href="/specs/http11/sec8#sec8.2">Message Transmission Requirements </a> ... 8.2</span>
+<ol>
+
+         <li><span><a rel='Section' href="/specs/http11/sec8#sec8.2.1">Persistent Connections and Flow Control </a> ... 8.2.1</span></li>
+         <li><span><a rel='Section' href="/specs/http11/sec8#sec8.2.2">Monitoring Connections for Error Status Messages </a> ... 8.2.2</span></li>
+         <li><span><a rel='Section' href="/specs/http11/sec8#sec8.2.3">Use of the 100 (Continue) Status </a> ... 8.2.3</span></li>
+         <li><span><a rel='Section' href="/specs/http11/sec8#sec8.2.4">Client Behavior if Server Prematurely Closes Connection </a> ... 8.2.4</span></li>
+</ol>
+</li>
+</ol>
+</li>
+   <li><span><a rel='Section' href="/specs/http11/sec9#sec9">Method Definitions </a> ... 9</span>
+<ol>
+
+      <li><span><a rel='Section' href="/specs/http11/sec9#sec9.1">Safe and Idempotent Methods </a> ... 9.1</span>
+<ol>
+
+         <li><span><a rel='Section' href="/specs/http11/sec9#sec9.1.1">Safe Methods </a> ... 9.1.1</span></li>
+         <li><span><a rel='Section' href="/specs/http11/sec9#sec9.1.2">Idempotent Methods </a> ... 9.1.2</span></li>
+</ol>
+</li>
+      <li><span><a rel='Section' href="/specs/http11/sec9#sec9.2">OPTIONS </a> ... 9.2</span></li>
+      <li><span><a rel='Section' href="/specs/http11/sec9#sec9.3">GET </a> ... 9.3</span></li>
+      <li><span><a rel='Section' href="/specs/http11/sec9#sec9.4">HEAD </a> ... 9.4</span></li>
+      <li><span><a rel='Section' href="/specs/http11/sec9#sec9.5">POST </a> ... 9.5</span></li>
+      <li><span><a rel='Section' href="/specs/http11/sec9#sec9.6">PUT </a> ... 9.6</span></li>
+      <li><span><a rel='Section' href="/specs/http11/sec9#sec9.7">DELETE </a> ... 9.7</span></li>
+      <li><span><a rel='Section' href="/specs/http11/sec9#sec9.8">TRACE </a> ... 9.8</span></li>
+      <li><span><a rel='Section' href="/specs/http11/sec9#sec9.9">CONNECT </a> ... 9.9</span></li>
+</ol>
+</li>
+   <li><span><a rel='Section' href="/specs/http11/sec10#sec10">Status Code Definitions </a> ... 10</span>
+<ol>
+
+      <li><span><a rel='Section' href="/specs/http11/sec10#sec10.1">Informational 1xx </a> ... 10.1</span>
+<ol>
+
+         <li><span><a rel='Section' href="/specs/http11/sec10#sec10.1.1">100 Continue </a> ... 10.1.1</span></li>
+         <li><span><a rel='Section' href="/specs/http11/sec10#sec10.1.2">101 Switching Protocols </a> ... 10.1.2</span></li>
+</ol>
+</li>
+      <li><span><a rel='Section' href="/specs/http11/sec10#sec10.2">Successful 2xx </a> ... 10.2</span>
+<ol>
+
+         <li><span><a rel='Section' href="/specs/http11/sec10#sec10.2.1">200 OK </a> ... 10.2.1</span></li>
+         <li><span><a rel='Section' href="/specs/http11/sec10#sec10.2.2">201 Created </a> ... 10.2.2</span></li>
+         <li><span><a rel='Section' href="/specs/http11/sec10#sec10.2.3">202 Accepted </a> ... 10.2.3</span></li>
+         <li><span><a rel='Section' href="/specs/http11/sec10#sec10.2.4">203 Non-Authoritative Information </a> ... 10.2.4</span></li>
+         <li><span><a rel='Section' href="/specs/http11/sec10#sec10.2.5">204 No Content </a> ... 10.2.5</span></li>
+         <li><span><a rel='Section' href="/specs/http11/sec10#sec10.2.6">205 Reset Content </a> ... 10.2.6</span></li>
+         <li><span><a rel='Section' href="/specs/http11/sec10#sec10.2.7">206 Partial Content </a> ... 10.2.7</span></li>
+</ol>
+</li>
+      <li><span><a rel='Section' href="/specs/http11/sec10#sec10.3">Redirection 3xx </a> ... 10.3</span>
+<ol>
+
+         <li><span><a rel='Section' href="/specs/http11/sec10#sec10.3.1">300 Multiple Choices </a> ... 10.3.1</span></li>
+         <li><span><a rel='Section' href="/specs/http11/sec10#sec10.3.2">301 Moved Permanently </a> ... 10.3.2</span></li>
+         <li><span><a rel='Section' href="/specs/http11/sec10#sec10.3.3">302 Found </a> ... 10.3.3</span></li>
+         <li><span><a rel='Section' href="/specs/http11/sec10#sec10.3.4">303 See Other </a> ... 10.3.4</span></li>
+         <li><span><a rel='Section' href="/specs/http11/sec10#sec10.3.5">304 Not Modified </a> ... 10.3.5</span></li>
+         <li><span><a rel='Section' href="/specs/http11/sec10#sec10.3.6">305 Use Proxy </a> ... 10.3.6</span></li>
+         <li><span><a rel='Section' href="/specs/http11/sec10#sec10.3.7">306 (Unused) </a> ... 10.3.7</span></li>
+         <li><span><a rel='Section' href="/specs/http11/sec10#sec10.3.8">307 Temporary Redirect </a> ... 10.3.8</span></li>
+</ol>
+</li>
+      <li><span><a rel='Section' href="/specs/http11/sec10#sec10.4">Client Error 4xx </a> ... 10.4</span>
+<ol>
+
+         <li><span><a rel='Section' href="/specs/http11/sec10#sec10.4.1">400 Bad Request </a> ... 10.4.1</span></li>
+         <li><span><a rel='Section' href="/specs/http11/sec10#sec10.4.2">401 Unauthorized </a> ... 10.4.2</span></li>
+         <li><span><a rel='Section' href="/specs/http11/sec10#sec10.4.3">402 Payment Required </a> ... 10.4.3</span></li>
+         <li><span><a rel='Section' href="/specs/http11/sec10#sec10.4.4">403 Forbidden </a> ... 10.4.4</span></li>
+         <li><span><a rel='Section' href="/specs/http11/sec10#sec10.4.5">404 Not Found </a> ... 10.4.5</span></li>
+         <li><span><a rel='Section' href="/specs/http11/sec10#sec10.4.6">405 Method Not Allowed </a> ... 10.4.6</span></li>
+         <li><span><a rel='Section' href="/specs/http11/sec10#sec10.4.7">406 Not Acceptable </a> ... 10.4.7</span></li>
+         <li><span><a rel='Section' href="/specs/http11/sec10#sec10.4.8">407 Proxy Authentication Required </a> ... 10.4.8</span></li>
+         <li><span><a rel='Section' href="/specs/http11/sec10#sec10.4.9">408 Request Timeout </a> ... 10.4.9</span></li>
+         <li><span><a rel='Section' href="/specs/http11/sec10#sec10.4.10">409 Conflict </a> ... 10.4.10</span></li>
+         <li><span><a rel='Section' href="/specs/http11/sec10#sec10.4.11">410 Gone </a> ... 10.4.11</span></li>
+         <li><span><a rel='Section' href="/specs/http11/sec10#sec10.4.12">411 Length Required </a> ... 10.4.12</span></li>
+         <li><span><a rel='Section' href="/specs/http11/sec10#sec10.4.13">412 Precondition Failed </a> ... 10.4.13</span></li>
+         <li><span><a rel='Section' href="/specs/http11/sec10#sec10.4.14">413 Request Entity Too Large </a> ... 10.4.14</span></li>
+         <li><span><a rel='Section' href="/specs/http11/sec10#sec10.4.15">414 Request-URI Too Long </a> ... 10.4.15</span></li>
+         <li><span><a rel='Section' href="/specs/http11/sec10#sec10.4.16">415 Unsupported Media Type </a> ... 10.4.16</span></li>
+         <li><span><a rel='Section' href="/specs/http11/sec10#sec10.4.17">416 Requested Range Not Satisfiable </a> ... 10.4.17</span></li>
+         <li><span><a rel='Section' href="/specs/http11/sec10#sec10.4.18">417 Expectation Failed </a> ... 10.4.18</span></li>
+</ol>
+</li>
+      <li><span><a rel='Section' href="/specs/http11/sec10#sec10.5">Server Error 5xx </a> ... 10.5</span>
+<ol>
+
+         <li><span><a rel='Section' href="/specs/http11/sec10#sec10.5.1">500 Internal Server Error </a> ... 10.5.1</span></li>
+         <li><span><a rel='Section' href="/specs/http11/sec10#sec10.5.2">501 Not Implemented </a> ... 10.5.2</span></li>
+         <li><span><a rel='Section' href="/specs/http11/sec10#sec10.5.3">502 Bad Gateway </a> ... 10.5.3</span></li>
+         <li><span><a rel='Section' href="/specs/http11/sec10#sec10.5.4">503 Service Unavailable </a> ... 10.5.4</span></li>
+         <li><span><a rel='Section' href="/specs/http11/sec10#sec10.5.5">504 Gateway Timeout </a> ... 10.5.5</span></li>
+         <li><span><a rel='Section' href="/specs/http11/sec10#sec10.5.6">505 HTTP Version Not Supported </a> ... 10.5.6</span></li>
+</ol>
+</li>
+</ol>
+</li>
+   <li><span><a rel='Section' href="/specs/http11/sec11#sec11">Access Authentication </a> ... 11</span></li>
+   <li><span><a rel='Section' href="/specs/http11/sec12#sec12">Content Negotiation </a> ... 12</span>
+<ol>
+
+      <li><span><a rel='Section' href="/specs/http11/sec12#sec12.1">Server-driven Negotiation </a> ... 12.1</span></li>
+      <li><span><a rel='Section' href="/specs/http11/sec12#sec12.2">Agent-driven Negotiation </a> ... 12.2</span></li>
+      <li><span><a rel='Section' href="/specs/http11/sec12#sec12.3">Transparent Negotiation </a> ... 12.3</span></li>
+</ol>
+</li>
+   <li><span><a rel='Section' href="/specs/http11/sec13#sec13">Caching in HTTP </a> ... 13</span>
+<ol>
+<li><span>@@ missing</span>
+
+<ol>
+
+         <li><span><a rel='Section' href="/specs/http11/sec13#sec13.1.1">Cache Correctness </a> ... 13.1.1</span></li>
+         <li><span><a rel='Section' href="/specs/http11/sec13#sec13.1.2">Warnings </a> ... 13.1.2</span></li>
+         <li><span><a rel='Section' href="/specs/http11/sec13#sec13.1.3">Cache-control Mechanisms </a> ... 13.1.3</span></li>
+         <li><span><a rel='Section' href="/specs/http11/sec13#sec13.1.4">Explicit User Agent Warnings </a> ... 13.1.4</span></li>
+         <li><span><a rel='Section' href="/specs/http11/sec13#sec13.1.5">Exceptions to the Rules and Warnings </a> ... 13.1.5</span></li>
+         <li><span><a rel='Section' href="/specs/http11/sec13#sec13.1.6">Client-controlled Behavior </a> ... 13.1.6</span></li>
+</ol>
+</li>
+      <li><span><a rel='Section' href="/specs/http11/sec13#sec13.2">Expiration Model </a> ... 13.2</span>
+<ol>
+
+         <li><span><a rel='Section' href="/specs/http11/sec13#sec13.2.1">Server-Specified Expiration </a> ... 13.2.1</span></li>
+         <li><span><a rel='Section' href="/specs/http11/sec13#sec13.2.2">Heuristic Expiration </a> ... 13.2.2</span></li>
+         <li><span><a rel='Section' href="/specs/http11/sec13#sec13.2.3">Age Calculations </a> ... 13.2.3</span></li>
+         <li><span><a rel='Section' href="/specs/http11/sec13#sec13.2.4">Expiration Calculations </a> ... 13.2.4</span></li>
+         <li><span><a rel='Section' href="/specs/http11/sec13#sec13.2.5">Disambiguating Expiration Values </a> ... 13.2.5</span></li>
+         <li><span><a rel='Section' href="/specs/http11/sec13#sec13.2.6">Disambiguating Multiple Responses </a> ... 13.2.6</span></li>
+</ol>
+</li>
+      <li><span><a rel='Section' href="/specs/http11/sec13#sec13.3">Validation Model </a> ... 13.3</span>
+<ol>
+
+         <li><span><a rel='Section' href="/specs/http11/sec13#sec13.3.1">Last-Modified Dates </a> ... 13.3.1</span></li>
+         <li><span><a rel='Section' href="/specs/http11/sec13#sec13.3.2">Entity Tag Cache Validators </a> ... 13.3.2</span></li>
+         <li><span><a rel='Section' href="/specs/http11/sec13#sec13.3.3">Weak and Strong Validators </a> ... 13.3.3</span></li>
+         <li><span><a rel='Section' href="/specs/http11/sec13#sec13.3.4">Rules for When to Use Entity Tags and Last-Modified Dates</a> ... 13.3.4</span></li>
+         <li><span><a rel='Section' href="/specs/http11/sec13#sec13.3.5">Non-validating Conditionals </a> ... 13.3.5</span></li>
+</ol>
+</li>
+      <li><span><a rel='Section' href="/specs/http11/sec13#sec13.4">Response Cacheability </a> ... 13.4</span></li>
+      <li><span><a rel='Section' href="/specs/http11/sec13#sec13.5">Constructing Responses From Caches </a> ... 13.5</span>
+<ol>
+
+         <li><span><a rel='Section' href="/specs/http11/sec13#sec13.5.1">End-to-end and Hop-by-hop Headers </a> ... 13.5.1</span></li>
+         <li><span><a rel='Section' href="/specs/http11/sec13#sec13.5.2">Non-modifiable Headers </a> ... 13.5.2</span></li>
+         <li><span><a rel='Section' href="/specs/http11/sec13#sec13.5.3">Combining Headers </a> ... 13.5.3</span></li>
+         <li><span><a rel='Section' href="/specs/http11/sec13#sec13.5.4">Combining Byte Ranges </a> ... 13.5.4</span></li>
+</ol>
+</li>
+      <li><span><a rel='Section' href="/specs/http11/sec13#sec13.6">Caching Negotiated Responses </a> ... 13.6</span></li>
+      <li><span><a rel='Section' href="/specs/http11/sec13#sec13.7">Shared and Non-Shared Caches </a> ... 13.7</span></li>
+      <li><span><a rel='Section' href="/specs/http11/sec13#sec13.8">Errors or Incomplete Response Cache Behavior </a> ... 13.8</span></li>
+      <li><span><a rel='Section' href="/specs/http11/sec13#sec13.9">Side Effects of GET and HEAD </a> ... 13.9</span></li>
+      <li><span><a rel='Section' href="/specs/http11/sec13#sec13.10">Invalidation After Updates or Deletions </a> ... 13.10</span></li>
+      <li><span><a rel='Section' href="/specs/http11/sec13#sec13.11">Write-Through Mandatory </a> ... 13.11</span></li>
+      <li><span><a rel='Section' href="/specs/http11/sec13#sec13.12">Cache Replacement </a> ... 13.12</span></li>
+      <li><span><a rel='Section' href="/specs/http11/sec13#sec13.13">History Lists </a> ... 13.13</span></li>
+</ol>
+</li>
+   <li><span><a rel='Section' href="/specs/http11/sec14#sec14">Header Field Definitions </a> ... 14</span>
+<ol>
+
+      <li><span><a rel='Section' href="/specs/http11/sec14#sec14.1">Accept </a> ... 14.1</span></li>
+      <li><span><a rel='Section' href="/specs/http11/sec14#sec14.2">Accept-Charset </a> ... 14.2</span></li>
+      <li><span><a rel='Section' href="/specs/http11/sec14#sec14.3">Accept-Encoding </a> ... 14.3</span></li>
+      <li><span><a rel='Section' href="/specs/http11/sec14#sec14.4">Accept-Language </a> ... 14.4</span></li>
+      <li><span><a rel='Section' href="/specs/http11/sec14#sec14.5">Accept-Ranges </a> ... 14.5</span></li>
+      <li><span><a rel='Section' href="/specs/http11/sec14#sec14.6">Age </a> ... 14.6</span></li>
+      <li><span><a rel='Section' href="/specs/http11/sec14#sec14.7">Allow </a> ... 14.7</span></li>
+      <li><span><a rel='Section' href="/specs/http11/sec14#sec14.8">Authorization </a> ... 14.8</span></li>
+      <li><span><a rel='Section' href="/specs/http11/sec14#sec14.9">Cache-Control </a> ... 14.9</span>
+<ol>
+
+         <li><span><a rel='Section' href="/specs/http11/sec14#sec14.9.1">What is Cacheable </a> ... 14.9.1</span></li>
+         <li><span><a rel='Section' href="/specs/http11/sec14#sec14.9.2">What May be Stored by Caches </a> ... 14.9.2</span></li>
+         <li><span><a rel='Section' href="/specs/http11/sec14#sec14.9.3">Modifications of the Basic Expiration Mechanism </a> ... 14.9.3</span></li>
+         <li><span><a rel='Section' href="/specs/http11/sec14#sec14.9.4">Cache Revalidation and Reload Controls </a> ... 14.9.4</span></li>
+         <li><span><a rel='Section' href="/specs/http11/sec14#sec14.9.5">No-Transform Directive </a> ... 14.9.5</span></li>
+         <li><span><a rel='Section' href="/specs/http11/sec14#sec14.9.6">Cache Control Extensions </a> ... 14.9.6</span></li>
+</ol>
+</li>
+      <li><span><a rel='Section' href="/specs/http11/sec14#sec14.10">Connection </a> ... 14.10</span></li>
+      <li><span><a rel='Section' href="/specs/http11/sec14#sec14.11">Content-Encoding </a> ... 14.11</span></li>
+      <li><span><a rel='Section' href="/specs/http11/sec14#sec14.12">Content-Language </a> ... 14.12</span></li>
+      <li><span><a rel='Section' href="/specs/http11/sec14#sec14.13">Content-Length </a> ... 14.13</span></li>
+      <li><span><a rel='Section' href="/specs/http11/sec14#sec14.14">Content-Location </a> ... 14.14</span></li>
+      <li><span><a rel='Section' href="/specs/http11/sec14#sec14.15">Content-MD5 </a> ... 14.15</span></li>
+      <li><span><a rel='Section' href="/specs/http11/sec14#sec14.16">Content-Range </a> ... 14.16</span></li>
+      <li><span><a rel='Section' href="/specs/http11/sec14#sec14.17">Content-Type </a> ... 14.17</span></li>
+      <li><span><a rel='Section' href="/specs/http11/sec14#sec14.18">Date </a> ... 14.18</span>
+<ol>
+
+         <li><span><a rel='Section' href="/specs/http11/sec14#sec14.18.1">Clockless Origin Server Operation </a> ... 14.18.1</span></li>
+</ol>
+</li>
+      <li><span><a rel='Section' href="/specs/http11/sec14#sec14.19">ETag </a> ... 14.19</span></li>
+      <li><span><a rel='Section' href="/specs/http11/sec14#sec14.20">Expect </a> ... 14.20</span></li>
+      <li><span><a rel='Section' href="/specs/http11/sec14#sec14.21">Expires </a> ... 14.21</span></li>
+      <li><span><a rel='Section' href="/specs/http11/sec14#sec14.22">From </a> ... 14.22</span></li>
+      <li><span><a rel='Section' href="/specs/http11/sec14#sec14.23">Host </a> ... 14.23</span></li>
+      <li><span><a rel='Section' href="/specs/http11/sec14#sec14.24">If-Match </a> ... 14.24</span></li>
+      <li><span><a rel='Section' href="/specs/http11/sec14#sec14.25">If-Modified-Since </a> ... 14.25</span></li>
+      <li><span><a rel='Section' href="/specs/http11/sec14#sec14.26">If-None-Match </a> ... 14.26</span></li>
+      <li><span><a rel='Section' href="/specs/http11/sec14#sec14.27">If-Range </a> ... 14.27</span></li>
+      <li><span><a rel='Section' href="/specs/http11/sec14#sec14.28">If-Unmodified-Since </a> ... 14.28</span></li>
+      <li><span><a rel='Section' href="/specs/http11/sec14#sec14.29">Last-Modified </a> ... 14.29</span></li>
+      <li><span><a rel='Section' href="/specs/http11/sec14#sec14.30">Location </a> ... 14.30</span></li>
+      <li><span><a rel='Section' href="/specs/http11/sec14#sec14.31">Max-Forwards </a> ... 14.31</span></li>
+      <li><span><a rel='Section' href="/specs/http11/sec14#sec14.32">Pragma </a> ... 14.32</span></li>
+      <li><span><a rel='Section' href="/specs/http11/sec14#sec14.33">Proxy-Authenticate </a> ... 14.33</span></li>
+      <li><span><a rel='Section' href="/specs/http11/sec14#sec14.34">Proxy-Authorization </a> ... 14.34</span></li>
+      <li><span><a rel='Section' href="/specs/http11/sec14#sec14.35">Range </a> ... 14.35</span>
+<ol>
+
+         <li><span><a rel='Section' href="/specs/http11/sec14#sec14.35.1">Byte Ranges </a> ... 14.35.1</span></li>
+         <li><span><a rel='Section' href="/specs/http11/sec14#sec14.35.2">Range Retrieval Requests </a> ... 14.35.2</span></li>
+</ol>
+</li>
+      <li><span><a rel='Section' href="/specs/http11/sec14#sec14.36">Referer </a> ... 14.36</span></li>
+      <li><span><a rel='Section' href="/specs/http11/sec14#sec14.37">Retry-After </a> ... 14.37</span></li>
+      <li><span><a rel='Section' href="/specs/http11/sec14#sec14.38">Server </a> ... 14.38</span></li>
+      <li><span><a rel='Section' href="/specs/http11/sec14#sec14.39">TE </a> ... 14.39</span></li>
+      <li><span><a rel='Section' href="/specs/http11/sec14#sec14.40">Trailer </a> ... 14.40</span></li>
+      <li><span><a rel='Section' href="/specs/http11/sec14#sec14.41">Transfer-Encoding</a> ... 14.41</span></li>
+      <li><span><a rel='Section' href="/specs/http11/sec14#sec14.42">Upgrade </a> ... 14.42</span></li>
+      <li><span><a rel='Section' href="/specs/http11/sec14#sec14.43">User-Agent </a> ... 14.43</span></li>
+      <li><span><a rel='Section' href="/specs/http11/sec14#sec14.44">Vary </a> ... 14.44</span></li>
+      <li><span><a rel='Section' href="/specs/http11/sec14#sec14.45">Via </a> ... 14.45</span></li>
+      <li><span><a rel='Section' href="/specs/http11/sec14#sec14.46">Warning </a> ... 14.46</span></li>
+      <li><span><a rel='Section' href="/specs/http11/sec14#sec14.47">WWW-Authenticate </a> ... 14.47</span></li>
+</ol>
+</li>
+   <li><span><a rel='Section' href="/specs/http11/sec15#sec15">Security Considerations </a> ... 15</span>
+<ol>
+
+      <li><span><a rel='Section' href="/specs/http11/sec15#sec15.1">Personal Information</a> ... 15.1</span>
+<ol>
+
+         <li><span><a rel='Section' href="/specs/http11/sec15#sec15.1.1">Abuse of Server Log Information </a> ... 15.1.1</span></li>
+         <li><span><a rel='Section' href="/specs/http11/sec15#sec15.1.2">Transfer of Sensitive Information </a> ... 15.1.2</span></li>
+         <li><span><a rel='Section' href="/specs/http11/sec15#sec15.1.3">Encoding Sensitive Information in URI's </a> ... 15.1.3</span></li>
+         <li><span><a rel='Section' href="/specs/http11/sec15#sec15.1.4">Privacy Issues Connected to Accept Headers </a> ... 15.1.4</span></li>
+</ol>
+</li>
+      <li><span><a rel='Section' href="/specs/http11/sec15#sec15.2">Attacks Based On File and Path Names </a> ... 15.2</span></li>
+      <li><span><a rel='Section' href="/specs/http11/sec15#sec15.3">DNS Spoofing </a> ... 15.3</span></li>
+      <li><span><a rel='Section' href="/specs/http11/sec15#sec15.4">Location Headers and Spoofing </a> ... 15.4</span></li>
+      <li><span><a rel='Section' href="/specs/http11/sec15#sec15.5">Content-Disposition Issues </a> ... 15.5</span></li>
+      <li><span><a rel='Section' href="/specs/http11/sec15#sec15.6">Authentication Credentials and Idle Clients </a> ... 15.6</span></li>
+      <li><span><a rel='Section' href="/specs/http11/sec15#sec15.7">Proxies and Caching </a> ... 15.7</span>
+<ol>
+
+         <li><span><a rel='Section' href="/specs/http11/sec15#sec15.7.1">Denial of Service Attacks on Proxies</a> ... 15.7.1</span></li>
+</ol>
+</li>
+</ol>
+</li>
+   <li><span><a rel='Section' href="/specs/http11/sec16#sec16">Acknowledgments </a> ... 16</span></li>
+   <li><span><a rel='Section' href="/specs/http11/sec17#sec17">References </a> ... 17</span></li>
+   <li><span><a rel='Section' href="/specs/http11/sec18#sec18">Authors' Addresses </a> ... 18</span></li>
+   <li><span><a rel='Section' href="/specs/http11/sec19#sec19">Appendices </a> ... 19</span>
+<ol>
+
+      <li><span><a rel='Section' href="/specs/http11/sec19#sec19.1">Internet Media Type message/http and application/http </a> ... 19.1</span></li>
+      <li><span><a rel='Section' href="/specs/http11/sec19#sec19.2">Internet Media Type multipart/byteranges </a> ... 19.2</span></li>
+      <li><span><a rel='Section' href="/specs/http11/sec19#sec19.3">Tolerant Applications </a> ... 19.3</span></li>
+      <li><span><a rel='Section' href="/specs/http11/sec19#sec19.4">Differences Between HTTP Entities and RFC 2045 Entities </a> ... 19.4</span>
+<ol>
+
+         <li><span><a rel='Section' href="/specs/http11/sec19#sec19.4.1">MIME-Version </a> ... 19.4.1</span></li>
+         <li><span><a rel='Section' href="/specs/http11/sec19#sec19.4.2">Conversion to Canonical Form </a> ... 19.4.2</span></li>
+         <li><span><a rel='Section' href="/specs/http11/sec19#sec19.4.3">Conversion of Date Formats </a> ... 19.4.3</span></li>
+         <li><span><a rel='Section' href="/specs/http11/sec19#sec19.4.4">Introduction of Content-Encoding </a> ... 19.4.4</span></li>
+         <li><span><a rel='Section' href="/specs/http11/sec19#sec19.4.5">No Content-Transfer-Encoding </a> ... 19.4.5</span></li>
+         <li><span><a rel='Section' href="/specs/http11/sec19#sec19.4.6">Introduction of Transfer-Encoding </a> ... 19.4.6</span></li>
+         <li><span><a rel='Section' href="/specs/http11/sec19#sec19.4.7">MHTML and Line Length Limitations </a> ... 19.4.7</span></li>
+</ol>
+</li>
+      <li><span><a rel='Section' href="/specs/http11/sec19#sec19.5">Additional Features </a> ... 19.5</span>
+<ol>
+
+         <li><span><a rel='Section' href="/specs/http11/sec19#sec19.5.1">Content-Disposition </a> ... 19.5.1</span></li>
+</ol>
+</li>
+      <li><span><a rel='Section' href="/specs/http11/sec19#sec19.6">Compatibility with Previous Versions </a> ... 19.6</span>
+<ol>
+
+         <li><span><a rel='Section' href="/specs/http11/sec19#sec19.6.1">Changes from HTTP/1</a> ... 19.6.1</span></li>
+         <li><span><a rel='Section' href="/specs/http11/sec19#sec19.6.2">Compatibility with HTTP/1</a> ... 19.6.2</span></li>
+         <li><span><a rel='Section' href="/specs/http11/sec19#sec19.6.3">Changes from RFC 2068 </a> ... 19.6.3</span></li>
+</ol>
+</li>
+</ol>
+</li>
+   <li><span><a rel='Section' href="/specs/http11/sec20#sec20">Index </a> ... 20</span></li>
+   <li><span><a rel='Section' href="/specs/http11/sec21#sec21">Full Copyright Statement </a> ... 21</span></li></ol></div
+><address>
+derived from <cite><a rel='derived-from' href='http://www.ietf.org/rfc/rfc2616.txt'>HTTP/1.1</a></cite>, Internet RFC 2616, Fielding, et al.<br class=''/>
+using <a href='http://dev.w3.org/cvsweb/2001/rfc2html/'>rfc2html</a> Revision: 1.8  Date: 2004/09/01 13:21:38  by <a href="https://www.w3.org/People/Connolly/">Dan Connolly</a>
+</address>
+  </article>
+</MainLayout>

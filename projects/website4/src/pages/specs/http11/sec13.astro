@@ -1,0 +1,1348 @@
+---
+import MainLayout from "../../../layouts/MainLayout.astro";
+
+const title = "HTTP/1.1: Caching in HTTP";
+---
+
+<MainLayout
+  title={`${title} - Caleb Owens`}
+  canonicalUrl="https://cto.je/specs/http11/sec13/"
+  description="RFC 2616: Hypertext Transfer Protocol -- HTTP/1.1, imported for reference."
+>
+  <article>
+<address>part of <a rev='Section' href="/specs/http11/">Hypertext Transfer Protocol -- HTTP/1.1</a><br />
+RFC 2616 Fielding, et al.</address>
+<h2><a id='sec13'>13</a> Caching in HTTP</h2>
+<p>
+   HTTP is typically used for distributed information systems, where
+   performance can be improved by the use of response caches. The
+   HTTP/1.1 protocol includes a number of elements intended to make
+   caching work as well as possible. Because these elements are
+   inextricable from other aspects of the protocol, and because they
+   interact with each other, it is useful to describe the basic caching
+   design of HTTP separately from the detailed descriptions of methods,
+   headers, response codes, etc.
+</p>
+<p>
+   Caching would be useless if it did not significantly improve
+   performance. The goal of caching in HTTP/1.1 is to eliminate the need
+   to send requests in many cases, and to eliminate the need to send
+   full responses in many other cases. The former reduces the number of
+   network round-trips required for many operations; we use an
+   "expiration" mechanism for this purpose (see section <a rel='xref' href="/specs/http11/sec13#sec13.2">13.2</a>). The
+   latter reduces network bandwidth requirements; we use a "validation"
+   mechanism for this purpose (see section <a rel='xref' href="/specs/http11/sec13#sec13.3">13.3</a>).
+</p>
+<p>
+   Requirements for performance, availability, and disconnected
+   operation require us to be able to relax the goal of semantic
+   transparency. The HTTP/1.1 protocol allows origin servers, caches,
+</p>
+<p>
+   and clients to explicitly reduce transparency when necessary.
+   However, because non-transparent operation may confuse non-expert
+   users, and might be incompatible with certain server applications
+   (such as those for ordering merchandise), the protocol requires that
+   transparency be relaxed
+</p>
+<pre>      - only by an explicit protocol-level request when relaxed by
+        client or origin server
+</pre>
+<pre>      - only with an explicit warning to the end user when relaxed by
+        cache or client
+</pre>
+<p>
+   Therefore, the HTTP/1.1 protocol provides these important elements:
+</p>
+<pre>      1. Protocol features that provide full semantic transparency when
+         this is required by all parties.
+</pre>
+<pre>      2. Protocol features that allow an origin server or user agent to
+         explicitly request and control non-transparent operation.
+</pre>
+<pre>      3. Protocol features that allow a cache to attach warnings to
+         responses that do not preserve the requested approximation of
+         semantic transparency.
+</pre>
+<p>
+   A basic principle is that it must be possible for the clients to
+   detect any potential relaxation of semantic transparency.
+</p>
+<pre>      Note: The server, cache, or client implementor might be faced with
+      design decisions not explicitly discussed in this specification.
+      If a decision might affect semantic transparency, the implementor
+      ought to err on the side of maintaining transparency unless a
+      careful and complete analysis shows significant benefits in
+      breaking transparency.
+</pre>
+<h3><a id='sec13.1.1'>13.1.1</a> Cache Correctness</h3>
+<p>
+   A correct cache MUST respond to a request with the most up-to-date
+   response held by the cache that is appropriate to the request (see
+   sections <a rel='xref' href="/specs/http11/sec13#sec13.2.5">13.2.5</a>, <a rel='xref' href="/specs/http11/sec13#sec13.2.6">13.2.6</a>, and <a rel='xref' href="/specs/http11/sec13#sec13.12">13.12</a>) which meets one of the following
+   conditions:
+</p>
+<pre>      1. It has been checked for equivalence with what the origin server
+         would have returned by revalidating the response with the
+         origin server (section <a rel='xref' href="/specs/http11/sec13#sec13.3">13.3</a>);
+</pre>
+<pre>      2. It is "fresh enough" (see section 13.2). In the default case,
+         this means it meets the least restrictive freshness requirement
+         of the client, origin server, and cache (see section <a rel='xref' href="/specs/http11/sec14#sec14.9">14.9</a>); if
+         the origin server so specifies, it is the freshness requirement
+         of the origin server alone.
+</pre>
+<pre>         If a stored response is not "fresh enough" by the most
+         restrictive freshness requirement of both the client and the
+         origin server, in carefully considered circumstances the cache
+         MAY still return the response with the appropriate Warning
+         header (see section <a rel='xref' href="/specs/http11/sec13#sec13.1.5">13.1.5</a> and <a rel='xref' href="/specs/http11/sec14#sec14.46">14.46</a>), unless such a response
+         is prohibited (e.g., by a "no-store" cache-directive, or by a
+         "no-cache" cache-request-directive; see section <a rel='xref' href="/specs/http11/sec14#sec14.9">14.9</a>).
+</pre>
+<pre>      3. It is an appropriate 304 (Not Modified), 305 (Proxy Redirect),
+         or error (4xx or 5xx) response message.
+</pre>
+<p>
+   If the cache can not communicate with the origin server, then a
+   correct cache SHOULD respond as above if the response can be
+   correctly served from the cache; if not it MUST return an error or
+   warning indicating that there was a communication failure.
+</p>
+<p>
+   If a cache receives a response (either an entire response, or a 304
+   (Not Modified) response) that it would normally forward to the
+   requesting client, and the received response is no longer fresh, the
+   cache SHOULD forward it to the requesting client without adding a new
+   Warning (but without removing any existing Warning headers). A cache
+   SHOULD NOT attempt to revalidate a response simply because that
+   response became stale in transit; this might lead to an infinite
+   loop. A user agent that receives a stale response without a Warning
+   MAY display a warning indication to the user.
+</p>
+<h3><a id='sec13.1.2'>13.1.2</a> Warnings</h3>
+<p>
+   Whenever a cache returns a response that is neither first-hand nor
+   "fresh enough" (in the sense of condition 2 in section 13.1.1), it
+   MUST attach a warning to that effect, using a Warning general-header.
+   The Warning header and the currently defined warnings are described
+   in section <a rel='xref' href="/specs/http11/sec14#sec14.46">14.46</a>. The warning allows clients to take appropriate
+   action.
+</p>
+<p>
+   Warnings MAY be used for other purposes, both cache-related and
+   otherwise. The use of a warning, rather than an error status code,
+   distinguish these responses from true failures.
+</p>
+<p>
+   Warnings are assigned three digit warn-codes. The first digit
+   indicates whether the Warning MUST or MUST NOT be deleted from a
+   stored cache entry after a successful revalidation:
+</p>
+<p>
+   1xx  Warnings that describe the freshness or revalidation status of
+     the response, and so MUST be deleted after a successful
+     revalidation. 1XX warn-codes MAY be generated by a cache only when
+     validating a cached entry. It MUST NOT be generated by clients.
+</p>
+<p>
+   2xx  Warnings that describe some aspect of the entity body or entity
+     headers that is not rectified by a revalidation (for example, a
+     lossy compression of the entity bodies) and which MUST NOT be
+     deleted after a successful revalidation.
+</p>
+<p>
+   See section <a rel='xref' href="/specs/http11/sec14#sec14.46">14.46</a> for the definitions of the codes themselves.
+</p>
+<p>
+   HTTP/1.0 caches will cache all Warnings in responses, without
+   deleting the ones in the first category. Warnings in responses that
+   are passed to HTTP/1.0 caches carry an extra warning-date field,
+   which prevents a future HTTP/1.1 recipient from believing an
+   erroneously cached Warning.
+</p>
+<p>
+   Warnings also carry a warning text. The text MAY be in any
+   appropriate natural language (perhaps based on the client's Accept
+   headers), and include an OPTIONAL indication of what character set is
+   used.
+</p>
+<p>
+   Multiple warnings MAY be attached to a response (either by the origin
+   server or by a cache), including multiple warnings with the same code
+   number. For example, a server might provide the same warning with
+   texts in both English and Basque.
+</p>
+<p>
+   When multiple warnings are attached to a response, it might not be
+   practical or reasonable to display all of them to the user. This
+   version of HTTP does not specify strict priority rules for deciding
+   which warnings to display and in what order, but does suggest some
+   heuristics.
+</p>
+<h3><a id='sec13.1.3'>13.1.3</a> Cache-control Mechanisms</h3>
+<p>
+   The basic cache mechanisms in HTTP/1.1 (server-specified expiration
+   times and validators) are implicit directives to caches. In some
+   cases, a server or client might need to provide explicit directives
+   to the HTTP caches. We use the Cache-Control header for this purpose.
+</p>
+<p>
+   The Cache-Control header allows a client or server to transmit a
+   variety of directives in either requests or responses. These
+   directives typically override the default caching algorithms. As a
+   general rule, if there is any apparent conflict between header
+   values, the most restrictive interpretation is applied (that is, the
+   one that is most likely to preserve semantic transparency). However,
+</p>
+<p>
+   in some cases, cache-control directives are explicitly specified as
+   weakening the approximation of semantic transparency (for example,
+   "max-stale" or "public").
+</p>
+<p>
+   The cache-control directives are described in detail in section <a rel='xref' href="/specs/http11/sec14#sec14.9">14.9</a>.
+</p>
+<h3><a id='sec13.1.4'>13.1.4</a> Explicit User Agent Warnings</h3>
+<p>
+   Many user agents make it possible for users to override the basic
+   caching mechanisms. For example, the user agent might allow the user
+   to specify that cached entities (even explicitly stale ones) are
+   never validated. Or the user agent might habitually add "Cache-
+   Control: max-stale=3600" to every request. The user agent SHOULD NOT
+   default to either non-transparent behavior, or behavior that results
+   in abnormally ineffective caching, but MAY be explicitly configured
+   to do so by an explicit action of the user.
+</p>
+<p>
+   If the user has overridden the basic caching mechanisms, the user
+   agent SHOULD explicitly indicate to the user whenever this results in
+   the display of information that might not meet the server's
+   transparency requirements (in particular, if the displayed entity is
+   known to be stale). Since the protocol normally allows the user agent
+   to determine if responses are stale or not, this indication need only
+   be displayed when this actually happens. The indication need not be a
+   dialog box; it could be an icon (for example, a picture of a rotting
+   fish) or some other indicator.
+</p>
+<p>
+   If the user has overridden the caching mechanisms in a way that would
+   abnormally reduce the effectiveness of caches, the user agent SHOULD
+   continually indicate this state to the user (for example, by a
+   display of a picture of currency in flames) so that the user does not
+   inadvertently consume excess resources or suffer from excessive
+   latency.
+</p>
+<h3><a id='sec13.1.5'>13.1.5</a> Exceptions to the Rules and Warnings</h3>
+<p>
+   In some cases, the operator of a cache MAY choose to configure it to
+   return stale responses even when not requested by clients. This
+   decision ought not be made lightly, but may be necessary for reasons
+   of availability or performance, especially when the cache is poorly
+   connected to the origin server. Whenever a cache returns a stale
+   response, it MUST mark it as such (using a Warning header) enabling
+   the client software to alert the user that there might be a potential
+   problem.
+</p>
+<p>
+   It also allows the user agent to take steps to obtain a first-hand or
+   fresh response. For this reason, a cache SHOULD NOT return a stale
+   response if the client explicitly requests a first-hand or fresh one,
+   unless it is impossible to comply for technical or policy reasons.
+</p>
+<h3><a id='sec13.1.6'>13.1.6</a> Client-controlled Behavior</h3>
+<p>
+   While the origin server (and to a lesser extent, intermediate caches,
+   by their contribution to the age of a response) are the primary
+   source of expiration information, in some cases the client might need
+   to control a cache's decision about whether to return a cached
+   response without validating it. Clients do this using several
+   directives of the Cache-Control header.
+</p>
+<p>
+   A client's request MAY specify the maximum age it is willing to
+   accept of an unvalidated response; specifying a value of zero forces
+   the cache(s) to revalidate all responses. A client MAY also specify
+   the minimum time remaining before a response expires. Both of these
+   options increase constraints on the behavior of caches, and so cannot
+   further relax the cache's approximation of semantic transparency.
+</p>
+<p>
+   A client MAY also specify that it will accept stale responses, up to
+   some maximum amount of staleness. This loosens the constraints on the
+   caches, and so might violate the origin server's specified
+   constraints on semantic transparency, but might be necessary to
+   support disconnected operation, or high availability in the face of
+   poor connectivity.
+</p>
+<h3><a id='sec13.2'>13.2</a> Expiration Model</h3>
+<h3><a id='sec13.2.1'>13.2.1</a> Server-Specified Expiration</h3>
+<p>
+   HTTP caching works best when caches can entirely avoid making
+   requests to the origin server. The primary mechanism for avoiding
+   requests is for an origin server to provide an explicit expiration
+   time in the future, indicating that a response MAY be used to satisfy
+   subsequent requests. In other words, a cache can return a fresh
+   response without first contacting the server.
+</p>
+<p>
+   Our expectation is that servers will assign future explicit
+   expiration times to responses in the belief that the entity is not
+   likely to change, in a semantically significant way, before the
+   expiration time is reached. This normally preserves semantic
+   transparency, as long as the server's expiration times are carefully
+   chosen.
+</p>
+<p>
+   The expiration mechanism applies only to responses taken from a cache
+   and not to first-hand responses forwarded immediately to the
+   requesting client.
+</p>
+<p>
+   If an origin server wishes to force a semantically transparent cache
+   to validate every request, it MAY assign an explicit expiration time
+   in the past. This means that the response is always stale, and so the
+   cache SHOULD validate it before using it for subsequent requests. See
+   section <a rel='xref' href="/specs/http11/sec14#sec14.9.4">14.9.4</a> for a more restrictive way to force revalidation.
+</p>
+<p>
+   If an origin server wishes to force any HTTP/1.1 cache, no matter how
+   it is configured, to validate every request, it SHOULD use the "must-
+   revalidate" cache-control directive (see section <a rel='xref' href="/specs/http11/sec14#sec14.9">14.9</a>).
+</p>
+<p>
+   Servers specify explicit expiration times using either the Expires
+   header, or the max-age directive of the Cache-Control header.
+</p>
+<p>
+   An expiration time cannot be used to force a user agent to refresh
+   its display or reload a resource; its semantics apply only to caching
+   mechanisms, and such mechanisms need only check a resource's
+   expiration status when a new request for that resource is initiated.
+   See section <a rel='xref' href="/specs/http11/sec13#sec13.13">13.13</a> for an explanation of the difference between caches
+   and history mechanisms.
+</p>
+<h3><a id='sec13.2.2'>13.2.2</a> Heuristic Expiration</h3>
+<p>
+   Since origin servers do not always provide explicit expiration times,
+   HTTP caches typically assign heuristic expiration times, employing
+   algorithms that use other header values (such as the Last-Modified
+   time) to estimate a plausible expiration time. The HTTP/1.1
+   specification does not provide specific algorithms, but does impose
+   worst-case constraints on their results. Since heuristic expiration
+   times might compromise semantic transparency, they ought to used
+   cautiously, and we encourage origin servers to provide explicit
+   expiration times as much as possible.
+</p>
+<h3><a id='sec13.2.3'>13.2.3</a> Age Calculations</h3>
+<p>
+   In order to know if a cached entry is fresh, a cache needs to know if
+   its age exceeds its freshness lifetime. We discuss how to calculate
+   the latter in section <a rel='xref' href="/specs/http11/sec13#sec13.2.4">13.2.4</a>; this section describes how to calculate
+   the age of a response or cache entry.
+</p>
+<p>
+   In this discussion, we use the term "now" to mean "the current value
+   of the clock at the host performing the calculation." Hosts that use
+   HTTP, but especially hosts running origin servers and caches, SHOULD
+   use NTP <a rel='bibref' href="/specs/http11/sec17#bib28">[28]</a> or some similar protocol to synchronize their clocks to
+   a globally accurate time standard.
+</p>
+<p>
+   HTTP/1.1 requires origin servers to send a Date header, if possible,
+   with every response, giving the time at which the response was
+   generated (see section <a rel='xref' href="/specs/http11/sec14#sec14.18">14.18</a>). We use the term "date_value" to denote
+   the value of the Date header, in a form appropriate for arithmetic
+   operations.
+</p>
+<p>
+   HTTP/1.1 uses the Age response-header to convey the estimated age of
+   the response message when obtained from a cache. The Age field value
+   is the cache's estimate of the amount of time since the response was
+   generated or revalidated by the origin server.
+</p>
+<p>
+   In essence, the Age value is the sum of the time that the response
+   has been resident in each of the caches along the path from the
+   origin server, plus the amount of time it has been in transit along
+   network paths.
+</p>
+<p>
+   We use the term "age_value" to denote the value of the Age header, in
+   a form appropriate for arithmetic operations.
+</p>
+<p>
+   A response's age can be calculated in two entirely independent ways:
+</p>
+<pre>      1. now minus date_value, if the local clock is reasonably well
+         synchronized to the origin server's clock. If the result is
+         negative, the result is replaced by zero.
+</pre>
+<pre>      2. age_value, if all of the caches along the response path
+         implement HTTP/1.1.
+</pre>
+<p>
+   Given that we have two independent ways to compute the age of a
+   response when it is received, we can combine these as
+</p>
+<pre>       corrected_received_age = max(now - date_value, age_value)
+</pre>
+<p>
+   and as long as we have either nearly synchronized clocks or all-
+   HTTP/1.1 paths, one gets a reliable (conservative) result.
+</p>
+<p>
+   Because of network-imposed delays, some significant interval might
+   pass between the time that a server generates a response and the time
+   it is received at the next outbound cache or client. If uncorrected,
+   this delay could result in improperly low ages.
+</p>
+<p>
+   Because the request that resulted in the returned Age value must have
+   been initiated prior to that Age value's generation, we can correct
+   for delays imposed by the network by recording the time at which the
+   request was initiated. Then, when an Age value is received, it MUST
+   be interpreted relative to the time the request was initiated, not
+</p>
+<p>
+   the time that the response was received. This algorithm results in
+   conservative behavior no matter how much delay is experienced. So, we
+   compute:
+</p>
+<pre>      corrected_initial_age = corrected_received_age
+                            + (now - request_time)
+</pre>
+<p>
+   where "request_time" is the time (according to the local clock) when
+   the request that elicited this response was sent.
+</p>
+<p>
+   Summary of age calculation algorithm, when a cache receives a
+   response:
+</p>
+<pre>      /*
+       * age_value
+       *      is the value of Age: header received by the cache with
+       *              this response.
+       * date_value
+       *      is the value of the origin server's Date: header
+       * request_time
+       *      is the (local) time when the cache made the request
+       *              that resulted in this cached response
+       * response_time
+       *      is the (local) time when the cache received the
+       *              response
+       * now
+       *      is the current (local) time
+       */
+</pre>
+<pre>      apparent_age = max(0, response_time - date_value);
+      corrected_received_age = max(apparent_age, age_value);
+      response_delay = response_time - request_time;
+      corrected_initial_age = corrected_received_age + response_delay;
+      resident_time = now - response_time;
+      current_age   = corrected_initial_age + resident_time;
+</pre>
+<p>
+   The current_age of a cache entry is calculated by adding the amount
+   of time (in seconds) since the cache entry was last validated by the
+   origin server to the corrected_initial_age. When a response is
+   generated from a cache entry, the cache MUST include a single Age
+   header field in the response with a value equal to the cache entry's
+   current_age.
+</p>
+<p>
+   The presence of an Age header field in a response implies that a
+   response is not first-hand. However, the converse is not true, since
+   the lack of an Age header field in a response does not imply that the
+</p>
+<p>
+   response is first-hand unless all caches along the request path are
+   compliant with HTTP/1.1 (i.e., older HTTP caches did not implement
+   the Age header field).
+</p>
+<h3><a id='sec13.2.4'>13.2.4</a> Expiration Calculations</h3>
+<p>
+   In order to decide whether a response is fresh or stale, we need to
+   compare its freshness lifetime to its age. The age is calculated as
+   described in section <a rel='xref' href="/specs/http11/sec13#sec13.2.3">13.2.3</a>; this section describes how to calculate
+   the freshness lifetime, and to determine if a response has expired.
+   In the discussion below, the values can be represented in any form
+   appropriate for arithmetic operations.
+</p>
+<p>
+   We use the term "expires_value" to denote the value of the Expires
+   header. We use the term "max_age_value" to denote an appropriate
+   value of the number of seconds carried by the "max-age" directive of
+   the Cache-Control header in a response (see section <a rel='xref' href="/specs/http11/sec14#sec14.9.3">14.9.3</a>).
+</p>
+<p>
+   The max-age directive takes priority over Expires, so if max-age is
+   present in a response, the calculation is simply:
+</p>
+<pre>      freshness_lifetime = max_age_value
+</pre>
+<p>
+   Otherwise, if Expires is present in the response, the calculation is:
+</p>
+<pre>      freshness_lifetime = expires_value - date_value
+</pre>
+<p>
+   Note that neither of these calculations is vulnerable to clock skew,
+   since all of the information comes from the origin server.
+</p>
+<p>
+   If none of Expires, Cache-Control: max-age, or Cache-Control: s-
+   maxage (see section 14.9.3) appears in the response, and the response
+   does not include other restrictions on caching, the cache MAY compute
+   a freshness lifetime using a heuristic. The cache MUST attach Warning
+   113 to any response whose age is more than 24 hours if such warning
+   has not already been added.
+</p>
+<p>
+   Also, if the response does have a Last-Modified time, the heuristic
+   expiration value SHOULD be no more than some fraction of the interval
+   since that time. A typical setting of this fraction might be 10%.
+</p>
+<p>
+   The calculation to determine if a response has expired is quite
+   simple:
+</p>
+<pre>      response_is_fresh = (freshness_lifetime > current_age)
+</pre>
+<h3><a id='sec13.2.5'>13.2.5</a> Disambiguating Expiration Values</h3>
+<p>
+   Because expiration values are assigned optimistically, it is possible
+   for two caches to contain fresh values for the same resource that are
+   different.
+</p>
+<p>
+   If a client performing a retrieval receives a non-first-hand response
+   for a request that was already fresh in its own cache, and the Date
+   header in its existing cache entry is newer than the Date on the new
+   response, then the client MAY ignore the response. If so, it MAY
+   retry the request with a "Cache-Control: max-age=0" directive (see
+   section <a rel='xref' href="/specs/http11/sec14#sec14.9">14.9</a>), to force a check with the origin server.
+</p>
+<p>
+   If a cache has two fresh responses for the same representation with
+   different validators, it MUST use the one with the more recent Date
+   header. This situation might arise because the cache is pooling
+   responses from other caches, or because a client has asked for a
+   reload or a revalidation of an apparently fresh cache entry.
+</p>
+<h3><a id='sec13.2.6'>13.2.6</a> Disambiguating Multiple Responses</h3>
+<p>
+   Because a client might be receiving responses via multiple paths, so
+   that some responses flow through one set of caches and other
+   responses flow through a different set of caches, a client might
+   receive responses in an order different from that in which the origin
+   server sent them. We would like the client to use the most recently
+   generated response, even if older responses are still apparently
+   fresh.
+</p>
+<p>
+   Neither the entity tag nor the expiration value can impose an
+   ordering on responses, since it is possible that a later response
+   intentionally carries an earlier expiration time. The Date values are
+   ordered to a granularity of one second.
+</p>
+<p>
+   When a client tries to revalidate a cache entry, and the response it
+   receives contains a Date header that appears to be older than the one
+   for the existing entry, then the client SHOULD repeat the request
+   unconditionally, and include
+</p>
+<pre>       Cache-Control: max-age=0
+</pre>
+<p>
+   to force any intermediate caches to validate their copies directly
+   with the origin server, or
+</p>
+<pre>       Cache-Control: no-cache
+</pre>
+<p>
+   to force any intermediate caches to obtain a new copy from the origin
+   server.
+</p>
+<p>
+   If the Date values are equal, then the client MAY use either response
+   (or MAY, if it is being extremely prudent, request a new response).
+   Servers MUST NOT depend on clients being able to choose
+   deterministically between responses generated during the same second,
+   if their expiration times overlap.
+</p>
+<h3><a id='sec13.3'>13.3</a> Validation Model</h3>
+<p>
+   When a cache has a stale entry that it would like to use as a
+   response to a client's request, it first has to check with the origin
+   server (or possibly an intermediate cache with a fresh response) to
+   see if its cached entry is still usable. We call this "validating"
+   the cache entry. Since we do not want to have to pay the overhead of
+   retransmitting the full response if the cached entry is good, and we
+   do not want to pay the overhead of an extra round trip if the cached
+   entry is invalid, the HTTP/1.1 protocol supports the use of
+   conditional methods.
+</p>
+<p>
+   The key protocol features for supporting conditional methods are
+   those concerned with "cache validators." When an origin server
+   generates a full response, it attaches some sort of validator to it,
+   which is kept with the cache entry. When a client (user agent or
+   proxy cache) makes a conditional request for a resource for which it
+   has a cache entry, it includes the associated validator in the
+   request.
+</p>
+<p>
+   The server then checks that validator against the current validator
+   for the entity, and, if they match (see section 13.3.3), it responds
+   with a special status code (usually, 304 (Not Modified)) and no
+   entity-body. Otherwise, it returns a full response (including
+   entity-body). Thus, we avoid transmitting the full response if the
+   validator matches, and we avoid an extra round trip if it does not
+   match.
+</p>
+<p>
+   In HTTP/1.1, a conditional request looks exactly the same as a normal
+   request for the same resource, except that it carries a special
+   header (which includes the validator) that implicitly turns the
+   method (usually, GET) into a conditional.
+</p>
+<p>
+   The protocol includes both positive and negative senses of cache-
+   validating conditions. That is, it is possible to request either that
+   a method be performed if and only if a validator matches or if and
+   only if no validators match.
+</p>
+<pre>      Note: a response that lacks a validator may still be cached, and
+      served from cache until it expires, unless this is explicitly
+      prohibited by a cache-control directive. However, a cache cannot
+      do a conditional retrieval if it does not have a validator for the
+      entity, which means it will not be refreshable after it expires.
+</pre>
+<h3><a id='sec13.3.1'>13.3.1</a> Last-Modified Dates</h3>
+<p>
+   The Last-Modified entity-header field value is often used as a cache
+   validator. In simple terms, a cache entry is considered to be valid
+   if the entity has not been modified since the Last-Modified value.
+</p>
+<h3><a id='sec13.3.2'>13.3.2</a> Entity Tag Cache Validators</h3>
+<p>
+   The ETag response-header field value, an entity tag, provides for an
+   "opaque" cache validator. This might allow more reliable validation
+   in situations where it is inconvenient to store modification dates,
+   where the one-second resolution of HTTP date values is not
+   sufficient, or where the origin server wishes to avoid certain
+   paradoxes that might arise from the use of modification dates.
+</p>
+<p>
+   Entity Tags are described in section <a rel='xref' href="/specs/http11/sec3#sec3.11">3.11</a>. The headers used with
+   entity tags are described in sections 14.19, 14.24, 14.26 and 14.44.
+</p>
+<h3><a id='sec13.3.3'>13.3.3</a> Weak and Strong Validators</h3>
+<p>
+   Since both origin servers and caches will compare two validators to
+   decide if they represent the same or different entities, one normally
+   would expect that if the entity (the entity-body or any entity-
+   headers) changes in any way, then the associated validator would
+   change as well. If this is true, then we call this validator a
+   "strong validator."
+</p>
+<p>
+   However, there might be cases when a server prefers to change the
+   validator only on semantically significant changes, and not when
+   insignificant aspects of the entity change. A validator that does not
+   always change when the resource changes is a "weak validator."
+</p>
+<p>
+   Entity tags are normally "strong validators," but the protocol
+   provides a mechanism to tag an entity tag as "weak." One can think of
+   a strong validator as one that changes whenever the bits of an entity
+   changes, while a weak value changes whenever the meaning of an entity
+   changes. Alternatively, one can think of a strong validator as part
+   of an identifier for a specific entity, while a weak validator is
+   part of an identifier for a set of semantically equivalent entities.
+</p>
+<pre>      Note: One example of a strong validator is an integer that is
+      incremented in stable storage every time an entity is changed.
+</pre>
+<pre>      An entity's modification time, if represented with one-second
+      resolution, could be a weak validator, since it is possible that
+      the resource might be modified twice during a single second.
+</pre>
+<pre>      Support for weak validators is optional. However, weak validators
+      allow for more efficient caching of equivalent objects; for
+      example, a hit counter on a site is probably good enough if it is
+      updated every few days or weeks, and any value during that period
+      is likely "good enough" to be equivalent.
+</pre>
+<p>
+   A "use" of a validator is either when a client generates a request
+   and includes the validator in a validating header field, or when a
+   server compares two validators.
+</p>
+<p>
+   Strong validators are usable in any context. Weak validators are only
+   usable in contexts that do not depend on exact equality of an entity.
+   For example, either kind is usable for a conditional GET of a full
+   entity. However, only a strong validator is usable for a sub-range
+   retrieval, since otherwise the client might end up with an internally
+   inconsistent entity.
+</p>
+<p>
+   Clients MAY issue simple (non-subrange) GET requests with either weak
+   validators or strong validators. Clients MUST NOT use weak validators
+   in other forms of request.
+</p>
+<p>
+   The only function that the HTTP/1.1 protocol defines on validators is
+   comparison. There are two validator comparison functions, depending
+   on whether the comparison context allows the use of weak validators
+   or not:
+</p>
+<pre>      - The strong comparison function: in order to be considered equal,
+        both validators MUST be identical in every way, and both MUST
+        NOT be weak.
+</pre>
+<pre>      - The weak comparison function: in order to be considered equal,
+        both validators MUST be identical in every way, but either or
+        both of them MAY be tagged as "weak" without affecting the
+        result.
+</pre>
+<p>
+   An entity tag is strong unless it is explicitly tagged as weak.
+   Section 3.11 gives the syntax for entity tags.
+</p>
+<p>
+   A Last-Modified time, when used as a validator in a request, is
+   implicitly weak unless it is possible to deduce that it is strong,
+   using the following rules:
+</p>
+<pre>      - The validator is being compared by an origin server to the
+        actual current validator for the entity and,
+</pre>
+<pre>      - That origin server reliably knows that the associated entity did
+        not change twice during the second covered by the presented
+        validator.
+</pre>
+<p>
+   or
+</p>
+<pre>      - The validator is about to be used by a client in an If-
+        Modified-Since or If-Unmodified-Since header, because the client
+        has a cache entry for the associated entity, and
+</pre>
+<pre>      - That cache entry includes a Date value, which gives the time
+        when the origin server sent the original response, and
+</pre>
+<pre>      - The presented Last-Modified time is at least 60 seconds before
+        the Date value.
+</pre>
+<p>
+   or
+</p>
+<pre>      - The validator is being compared by an intermediate cache to the
+        validator stored in its cache entry for the entity, and
+</pre>
+<pre>      - That cache entry includes a Date value, which gives the time
+        when the origin server sent the original response, and
+</pre>
+<pre>      - The presented Last-Modified time is at least 60 seconds before
+        the Date value.
+</pre>
+<p>
+   This method relies on the fact that if two different responses were
+   sent by the origin server during the same second, but both had the
+   same Last-Modified time, then at least one of those responses would
+   have a Date value equal to its Last-Modified time. The arbitrary 60-
+   second limit guards against the possibility that the Date and Last-
+   Modified values are generated from different clocks, or at somewhat
+   different times during the preparation of the response. An
+   implementation MAY use a value larger than 60 seconds, if it is
+   believed that 60 seconds is too short.
+</p>
+<p>
+   If a client wishes to perform a sub-range retrieval on a value for
+   which it has only a Last-Modified time and no opaque validator, it
+   MAY do this only if the Last-Modified time is strong in the sense
+   described here.
+</p>
+<p>
+   A cache or origin server receiving a conditional request, other than
+   a full-body GET request, MUST use the strong comparison function to
+   evaluate the condition.
+</p>
+<p>
+   These rules allow HTTP/1.1 caches and clients to safely perform sub-
+   range retrievals on values that have been obtained from HTTP/1.0
+</p>
+<p>
+   servers.
+</p>
+<h3><a id='sec13.3.4'>13.3.4</a> Rules for When to Use Entity Tags and Last-Modified Dates</h3>
+<p>
+   We adopt a set of rules and recommendations for origin servers,
+   clients, and caches regarding when various validator types ought to
+   be used, and for what purposes.
+</p>
+<p>
+   HTTP/1.1 origin servers:
+</p>
+<pre>      - SHOULD send an entity tag validator unless it is not feasible to
+        generate one.
+</pre>
+<pre>      - MAY send a weak entity tag instead of a strong entity tag, if
+        performance considerations support the use of weak entity tags,
+        or if it is unfeasible to send a strong entity tag.
+</pre>
+<pre>      - SHOULD send a Last-Modified value if it is feasible to send one,
+        unless the risk of a breakdown in semantic transparency that
+        could result from using this date in an If-Modified-Since header
+        would lead to serious problems.
+</pre>
+<p>
+   In other words, the preferred behavior for an HTTP/1.1 origin server
+   is to send both a strong entity tag and a Last-Modified value.
+</p>
+<p>
+   In order to be legal, a strong entity tag MUST change whenever the
+   associated entity value changes in any way. A weak entity tag SHOULD
+   change whenever the associated entity changes in a semantically
+   significant way.
+</p>
+<pre>      Note: in order to provide semantically transparent caching, an
+      origin server must avoid reusing a specific strong entity tag
+      value for two different entities, or reusing a specific weak
+      entity tag value for two semantically different entities. Cache
+      entries might persist for arbitrarily long periods, regardless of
+      expiration times, so it might be inappropriate to expect that a
+      cache will never again attempt to validate an entry using a
+      validator that it obtained at some point in the past.
+</pre>
+<p>
+   HTTP/1.1 clients:
+</p>
+<pre>      - If an entity tag has been provided by the origin server, MUST
+        use that entity tag in any cache-conditional request (using If-
+        Match or If-None-Match).
+</pre>
+<pre>      - If only a Last-Modified value has been provided by the origin
+        server, SHOULD use that value in non-subrange cache-conditional
+        requests (using If-Modified-Since).
+</pre>
+<pre>      - If only a Last-Modified value has been provided by an HTTP/1.0
+        origin server, MAY use that value in subrange cache-conditional
+        requests (using If-Unmodified-Since:). The user agent SHOULD
+        provide a way to disable this, in case of difficulty.
+</pre>
+<pre>      - If both an entity tag and a Last-Modified value have been
+        provided by the origin server, SHOULD use both validators in
+        cache-conditional requests. This allows both HTTP/1.0 and
+        HTTP/1.1 caches to respond appropriately.
+</pre>
+<p>
+   An HTTP/1.1 origin server, upon receiving a conditional request that
+   includes both a Last-Modified date (e.g., in an If-Modified-Since or
+   If-Unmodified-Since header field) and one or more entity tags (e.g.,
+   in an If-Match, If-None-Match, or If-Range header field) as cache
+   validators, MUST NOT return a response status of 304 (Not Modified)
+   unless doing so is consistent with all of the conditional header
+   fields in the request.
+</p>
+<p>
+   An HTTP/1.1 caching proxy, upon receiving a conditional request that
+   includes both a Last-Modified date and one or more entity tags as
+   cache validators, MUST NOT return a locally cached response to the
+   client unless that cached response is consistent with all of the
+   conditional header fields in the request.
+</p>
+<pre>      Note: The general principle behind these rules is that HTTP/1.1
+      servers and clients should transmit as much non-redundant
+      information as is available in their responses and requests.
+      HTTP/1.1 systems receiving this information will make the most
+      conservative assumptions about the validators they receive.
+</pre>
+<pre>      HTTP/1.0 clients and caches will ignore entity tags. Generally,
+      last-modified values received or used by these systems will
+      support transparent and efficient caching, and so HTTP/1.1 origin
+      servers should provide Last-Modified values. In those rare cases
+      where the use of a Last-Modified value as a validator by an
+      HTTP/1.0 system could result in a serious problem, then HTTP/1.1
+      origin servers should not provide one.
+</pre>
+<h3><a id='sec13.3.5'>13.3.5</a> Non-validating Conditionals</h3>
+<p>
+   The principle behind entity tags is that only the service author
+   knows the semantics of a resource well enough to select an
+   appropriate cache validation mechanism, and the specification of any
+   validator comparison function more complex than byte-equality would
+   open up a can of worms. Thus, comparisons of any other headers
+   (except Last-Modified, for compatibility with HTTP/1.0) are never
+   used for purposes of validating a cache entry.
+</p>
+<h3><a id='sec13.4'>13.4</a> Response Cacheability</h3>
+<p>
+   Unless specifically constrained by a cache-control (section <a rel='xref' href="/specs/http11/sec14#sec14.9">14.9</a>)
+   directive, a caching system MAY always store a successful response
+   (see section <a rel='xref' href="/specs/http11/sec13#sec13.8">13.8</a>) as a cache entry, MAY return it without validation
+   if it is fresh, and MAY return it after successful validation. If
+   there is neither a cache validator nor an explicit expiration time
+   associated with a response, we do not expect it to be cached, but
+   certain caches MAY violate this expectation (for example, when little
+   or no network connectivity is available). A client can usually detect
+   that such a response was taken from a cache by comparing the Date
+   header to the current time.
+</p>
+<pre>      Note: some HTTP/1.0 caches are known to violate this expectation
+      without providing any Warning.
+</pre>
+<p>
+   However, in some cases it might be inappropriate for a cache to
+   retain an entity, or to return it in response to a subsequent
+   request. This might be because absolute semantic transparency is
+   deemed necessary by the service author, or because of security or
+   privacy considerations. Certain cache-control directives are
+   therefore provided so that the server can indicate that certain
+   resource entities, or portions thereof, are not to be cached
+   regardless of other considerations.
+</p>
+<p>
+   Note that section <a rel='xref' href="/specs/http11/sec14#sec14.8">14.8</a> normally prevents a shared cache from saving
+   and returning a response to a previous request if that request
+   included an Authorization header.
+</p>
+<p>
+   A response received with a status code of 200, 203, 206, 300, 301 or
+   410 MAY be stored by a cache and used in reply to a subsequent
+   request, subject to the expiration mechanism, unless a cache-control
+   directive prohibits caching. However, a cache that does not support
+   the Range and Content-Range headers MUST NOT cache 206 (Partial
+   Content) responses.
+</p>
+<p>
+   A response received with any other status code (e.g. status codes 302
+   and 307) MUST NOT be returned in a reply to a subsequent request
+   unless there are cache-control directives or another header(s) that
+   explicitly allow it. For example, these include the following: an
+   Expires header (section <a rel='xref' href="/specs/http11/sec14#sec14.21">14.21</a>); a "max-age", "s-maxage",  "must-
+   revalidate", "proxy-revalidate", "public" or "private" cache-control
+   directive (section <a rel='xref' href="/specs/http11/sec14#sec14.9">14.9</a>).
+</p>
+<h3><a id='sec13.5'>13.5</a> Constructing Responses From Caches</h3>
+<p>
+   The purpose of an HTTP cache is to store information received in
+   response to requests for use in responding to future requests. In
+   many cases, a cache simply returns the appropriate parts of a
+   response to the requester. However, if the cache holds a cache entry
+   based on a previous response, it might have to combine parts of a new
+   response with what is held in the cache entry.
+</p>
+<h3><a id='sec13.5.1'>13.5.1</a> End-to-end and Hop-by-hop Headers</h3>
+<p>
+   For the purpose of defining the behavior of caches and non-caching
+   proxies, we divide HTTP headers into two categories:
+</p>
+<pre>      - End-to-end headers, which are  transmitted to the ultimate
+        recipient of a request or response. End-to-end headers in
+        responses MUST be stored as part of a cache entry and MUST be
+        transmitted in any response formed from a cache entry.
+</pre>
+<pre>      - Hop-by-hop headers, which are meaningful only for a single
+        transport-level connection, and are not stored by caches or
+        forwarded by proxies.
+</pre>
+<p>
+   The following HTTP/1.1 headers are hop-by-hop headers:
+</p>
+<pre>      - Connection
+      - Keep-Alive
+      - Proxy-Authenticate
+      - Proxy-Authorization
+      - TE
+      - Trailers
+      - Transfer-Encoding
+      - Upgrade
+</pre>
+<p>
+   All other headers defined by HTTP/1.1 are end-to-end headers.
+</p>
+<p>
+   Other hop-by-hop headers MUST be listed in a Connection header,
+   (section 14.10) to be introduced into HTTP/1.1 (or later).
+</p>
+<h3><a id='sec13.5.2'>13.5.2</a> Non-modifiable Headers</h3>
+<p>
+   Some features of the HTTP/1.1 protocol, such as Digest
+   Authentication, depend on the value of certain end-to-end headers. A
+   transparent proxy SHOULD NOT modify an end-to-end header unless the
+   definition of that header requires or specifically allows that.
+</p>
+<p>
+   A transparent proxy MUST NOT modify any of the following fields in a
+   request or response, and it MUST NOT add any of these fields if not
+   already present:
+</p>
+<pre>      - Content-Location
+</pre>
+<pre>      - Content-MD5
+</pre>
+<pre>      - ETag
+</pre>
+<pre>      - Last-Modified
+</pre>
+<p>
+   A transparent proxy MUST NOT modify any of the following fields in a
+   response:
+</p>
+<pre>      - Expires
+</pre>
+<p>
+   but it MAY add any of these fields if not already present. If an
+   Expires header is added, it MUST be given a field-value identical to
+   that of the Date header in that response.
+</p>
+<p>
+   A  proxy MUST NOT modify or add any of the following fields in a
+   message that contains the no-transform cache-control directive, or in
+   any request:
+</p>
+<pre>      - Content-Encoding
+</pre>
+<pre>      - Content-Range
+</pre>
+<pre>      - Content-Type
+</pre>
+<p>
+   A non-transparent proxy MAY modify or add these fields to a message
+   that does not include no-transform, but if it does so, it MUST add a
+   Warning 214 (Transformation applied) if one does not already appear
+   in the message (see section <a rel='xref' href="/specs/http11/sec14#sec14.46">14.46</a>).
+</p>
+<pre>      Warning: unnecessary modification of end-to-end headers might
+      cause authentication failures if stronger authentication
+      mechanisms are introduced in later versions of HTTP. Such
+      authentication mechanisms MAY rely on the values of header fields
+      not listed here.
+</pre>
+<p>
+   The Content-Length field of a request or response is added or deleted
+   according to the rules in section 4.4. A transparent proxy MUST
+   preserve the entity-length (section <a rel='xref' href="/specs/http11/sec7#sec7.2.2">7.2.2</a>) of the entity-body,
+   although it MAY change the transfer-length (section <a rel='xref' href="/specs/http11/sec4#sec4.4">4.4</a>).
+</p>
+<h3><a id='sec13.5.3'>13.5.3</a> Combining Headers</h3>
+<p>
+   When a cache makes a validating request to a server, and the server
+   provides a 304 (Not Modified) response or a 206 (Partial Content)
+   response, the cache then constructs a response to send to the
+   requesting client.
+</p>
+<p>
+   If the status code is 304 (Not Modified), the cache uses the entity-
+   body stored in the cache entry as the entity-body of this outgoing
+   response. If the status code is 206 (Partial Content) and the ETag or
+   Last-Modified headers match exactly, the cache MAY combine the
+   contents stored in the cache entry with the new contents received in
+   the response and use the result as the entity-body of this outgoing
+   response, (see <a rel='xref' href="/specs/http11/sec13#sec13.5.4">13.5.4</a>).
+</p>
+<p>
+   The end-to-end headers stored in the cache entry are used for the
+   constructed response, except that
+</p>
+<pre>      - any stored Warning headers with warn-code 1xx (see section
+        <a rel='xref' href="/specs/http11/sec14#sec14.46">14.46</a>) MUST be deleted from the cache entry and the forwarded
+        response.
+</pre>
+<pre>      - any stored Warning headers with warn-code 2xx MUST be retained
+        in the cache entry and the forwarded response.
+</pre>
+<pre>      - any end-to-end headers provided in the 304 or 206 response MUST
+        replace the corresponding headers from the cache entry.
+</pre>
+<p>
+   Unless the cache decides to remove the cache entry, it MUST also
+   replace the end-to-end headers stored with the cache entry with
+   corresponding headers received in the incoming response, except for
+   Warning headers as described immediately above. If a header field-
+   name in the incoming response matches more than one header in the
+   cache entry, all such old headers MUST be replaced.
+</p>
+<p>
+   In other words, the set of end-to-end headers received in the
+   incoming response overrides all corresponding end-to-end headers
+   stored with the cache entry (except for stored Warning headers with
+   warn-code 1xx, which are deleted even if not overridden).
+</p>
+<pre>      Note: this rule allows an origin server to use a 304 (Not
+      Modified) or a 206 (Partial Content) response to update any header
+      associated with a previous response for the same entity or sub-
+      ranges thereof, although it might not always be meaningful or
+      correct to do so. This rule does not allow an origin server to use
+      a 304 (Not Modified) or a 206 (Partial Content) response to
+      entirely delete a header that it had provided with a previous
+      response.
+</pre>
+<h3><a id='sec13.5.4'>13.5.4</a> Combining Byte Ranges</h3>
+<p>
+   A response might transfer only a subrange of the bytes of an entity-
+   body, either because the request included one or more Range
+   specifications, or because a connection was broken prematurely. After
+   several such transfers, a cache might have received several ranges of
+   the same entity-body.
+</p>
+<p>
+   If a cache has a stored non-empty set of subranges for an entity, and
+   an incoming response transfers another subrange, the cache MAY
+   combine the new subrange with the existing set if both the following
+   conditions are met:
+</p>
+<pre>      - Both the incoming response and the cache entry have a cache
+        validator.
+</pre>
+<pre>      - The two cache validators match using the strong comparison
+        function (see section <a rel='xref' href="/specs/http11/sec13#sec13.3.3">13.3.3</a>).
+</pre>
+<p>
+   If either requirement is not met, the cache MUST use only the most
+   recent partial response (based on the Date values transmitted with
+   every response, and using the incoming response if these values are
+   equal or missing), and MUST discard the other partial information.
+</p>
+<h3><a id='sec13.6'>13.6</a> Caching Negotiated Responses</h3>
+<p>
+   Use of server-driven content negotiation (section <a rel='xref' href="/specs/http11/sec12#sec12.1">12.1</a>), as indicated
+   by the presence of a Vary header field in a response, alters the
+   conditions and procedure by which a cache can use the response for
+   subsequent requests. See section <a rel='xref' href="/specs/http11/sec14#sec14.44">14.44</a> for use of the Vary header
+   field by servers.
+</p>
+<p>
+   A server SHOULD use the Vary header field to inform a cache of what
+   request-header fields were used to select among multiple
+   representations of a cacheable response subject to server-driven
+   negotiation. The set of header fields named by the Vary field value
+   is known as the "selecting" request-headers.
+</p>
+<p>
+   When the cache receives a subsequent request whose Request-URI
+   specifies one or more cache entries including a Vary header field,
+   the cache MUST NOT use such a cache entry to construct a response to
+   the new request unless all of the selecting request-headers present
+   in the new request match the corresponding stored request-headers in
+   the original request.
+</p>
+<p>
+   The selecting request-headers from two requests are defined to match
+   if and only if the selecting request-headers in the first request can
+   be transformed to the selecting request-headers in the second request
+</p>
+<p>
+   by adding or removing linear white space (LWS) at places where this
+   is allowed by the corresponding BNF, and/or combining multiple
+   message-header fields with the same field name following the rules
+   about message headers in section <a rel='xref' href="/specs/http11/sec4#sec4.2">4.2</a>.
+</p>
+<p>
+   A Vary header field-value of "*" always fails to match and subsequent
+   requests on that resource can only be properly interpreted by the
+   origin server.
+</p>
+<p>
+   If the selecting request header fields for the cached entry do not
+   match the selecting request header fields of the new request, then
+   the cache MUST NOT use a cached entry to satisfy the request unless
+   it first relays the new request to the origin server in a conditional
+   request and the server responds with 304 (Not Modified), including an
+   entity tag or Content-Location that indicates the entity to be used.
+</p>
+<p>
+   If an entity tag was assigned to a cached representation, the
+   forwarded request SHOULD be conditional and include the entity tags
+   in an If-None-Match header field from all its cache entries for the
+   resource. This conveys to the server the set of entities currently
+   held by the cache, so that if any one of these entities matches the
+   requested entity, the server can use the ETag header field in its 304
+   (Not Modified) response to tell the cache which entry is appropriate.
+   If the entity-tag of the new response matches that of an existing
+   entry, the new response SHOULD be used to update the header fields of
+   the existing entry, and the result MUST be returned to the client.
+</p>
+<p>
+   If any of the existing cache entries contains only partial content
+   for the associated entity, its entity-tag SHOULD NOT be included in
+   the If-None-Match header field unless the request is for a range that
+   would be fully satisfied by that entry.
+</p>
+<p>
+   If a cache receives a successful response whose Content-Location
+   field matches that of an existing cache entry for the same Request-
+   ]URI, whose entity-tag differs from that of the existing entry, and
+   whose Date is more recent than that of the existing entry, the
+   existing entry SHOULD NOT be returned in response to future requests
+   and SHOULD be deleted from the cache.
+</p>
+<h3><a id='sec13.7'>13.7</a> Shared and Non-Shared Caches</h3>
+<p>
+   For reasons of security and privacy, it is necessary to make a
+   distinction between "shared" and "non-shared" caches. A non-shared
+   cache is one that is accessible only to a single user. Accessibility
+   in this case SHOULD be enforced by appropriate security mechanisms.
+   All other caches are considered to be "shared." Other sections of
+</p>
+<p>
+   this specification place certain constraints on the operation of
+   shared caches in order to prevent loss of privacy or failure of
+   access controls.
+</p>
+<h3><a id='sec13.8'>13.8</a> Errors or Incomplete Response Cache Behavior</h3>
+<p>
+   A cache that receives an incomplete response (for example, with fewer
+   bytes of data than specified in a Content-Length header) MAY store
+   the response. However, the cache MUST treat this as a partial
+   response. Partial responses MAY be combined as described in section
+   <a rel='xref' href="/specs/http11/sec13#sec13.5.4">13.5.4</a>; the result might be a full response or might still be
+   partial. A cache MUST NOT return a partial response to a client
+   without explicitly marking it as such, using the 206 (Partial
+   Content) status code. A cache MUST NOT return a partial response
+   using a status code of 200 (OK).
+</p>
+<p>
+   If a cache receives a 5xx response while attempting to revalidate an
+   entry, it MAY either forward this response to the requesting client,
+   or act as if the server failed to respond. In the latter case, it MAY
+   return a previously received response unless the cached entry
+   includes the "must-revalidate" cache-control directive (see section
+   <a rel='xref' href="/specs/http11/sec14#sec14.9">14.9</a>).
+</p>
+<h3><a id='sec13.9'>13.9</a> Side Effects of GET and HEAD</h3>
+<p>
+   Unless the origin server explicitly prohibits the caching of their
+   responses, the application of GET and HEAD methods to any resources
+   SHOULD NOT have side effects that would lead to erroneous behavior if
+   these responses are taken from a cache. They MAY still have side
+   effects, but a cache is not required to consider such side effects in
+   its caching decisions. Caches are always expected to observe an
+   origin server's explicit restrictions on caching.
+</p>
+<p>
+   We note one exception to this rule: since some applications have
+   traditionally used GETs and HEADs with query URLs (those containing a
+   "?" in the rel_path part) to perform operations with significant side
+   effects, caches MUST NOT treat responses to such URIs as fresh unless
+   the server provides an explicit expiration time. This specifically
+   means that responses from HTTP/1.0 servers for such URIs SHOULD NOT
+   be taken from a cache. See section <a rel='xref' href="/specs/http11/sec9#sec9.1.1">9.1.1</a> for related information.
+</p>
+<h3><a id='sec13.10'>13.10</a> Invalidation After Updates or Deletions</h3>
+<p>
+   The effect of certain methods performed on a resource at the origin
+   server might cause one or more existing cache entries to become non-
+   transparently invalid. That is, although they might continue to be
+   "fresh," they do not accurately reflect what the origin server would
+   return for a new request on that resource.
+</p>
+<p>
+   There is no way for the HTTP protocol to guarantee that all such
+   cache entries are marked invalid. For example, the request that
+   caused the change at the origin server might not have gone through
+   the proxy where a cache entry is stored. However, several rules help
+   reduce the likelihood of erroneous behavior.
+</p>
+<p>
+   In this section, the phrase "invalidate an entity" means that the
+   cache will either remove all instances of that entity from its
+   storage, or will mark these as "invalid" and in need of a mandatory
+   revalidation before they can be returned in response to a subsequent
+   request.
+</p>
+<p>
+   Some HTTP methods MUST cause a cache to invalidate an entity. This is
+   either the entity referred to by the Request-URI, or by the Location
+   or Content-Location headers (if present). These methods are:
+</p>
+<pre>      - PUT
+</pre>
+<pre>      - DELETE
+</pre>
+<pre>      - POST
+</pre>
+<p>
+   In order to prevent denial of service attacks, an invalidation based
+   on the URI in a Location or Content-Location header MUST only be
+   performed if the host part is the same as in the Request-URI.
+</p>
+<p>
+   A cache that passes through requests for methods it does not
+   understand SHOULD invalidate any entities referred to by the
+   Request-URI.
+</p>
+<h3><a id='sec13.11'>13.11</a> Write-Through Mandatory</h3>
+<p>
+   All methods that might be expected to cause modifications to the
+   origin server's resources MUST be written through to the origin
+   server. This currently includes all methods except for GET and HEAD.
+   A cache MUST NOT reply to such a request from a client before having
+   transmitted the request to the inbound server, and having received a
+   corresponding response from the inbound server. This does not prevent
+   a proxy cache from sending a 100 (Continue) response before the
+   inbound server has sent its final reply.
+</p>
+<p>
+   The alternative (known as "write-back" or "copy-back" caching) is not
+   allowed in HTTP/1.1, due to the difficulty of providing consistent
+   updates and the problems arising from server, cache, or network
+   failure prior to write-back.
+</p>
+<h3><a id='sec13.12'>13.12</a> Cache Replacement</h3>
+<p>
+   If a new cacheable (see sections <a rel='xref' href="/specs/http11/sec14#sec14.9.2">14.9.2</a>, <a rel='xref' href="/specs/http11/sec13#sec13.2.5">13.2.5</a>, <a rel='xref' href="/specs/http11/sec13#sec13.2.6">13.2.6</a> and <a rel='xref' href="/specs/http11/sec13#sec13.8">13.8</a>)
+   response is received from a resource while any existing responses for
+   the same resource are cached, the cache SHOULD use the new response
+   to reply to the current request. It MAY insert it into cache storage
+   and MAY, if it meets all other requirements, use it to respond to any
+   future requests that would previously have caused the old response to
+   be returned. If it inserts the new response into cache storage  the
+   rules in section <a rel='xref' href="/specs/http11/sec13#sec13.5.3">13.5.3</a> apply.
+</p>
+<pre>      Note: a new response that has an older Date header value than
+      existing cached responses is not cacheable.
+</pre>
+<h3><a id='sec13.13'>13.13</a> History Lists</h3>
+<p>
+   User agents often have history mechanisms, such as "Back" buttons and
+   history lists, which can be used to redisplay an entity retrieved
+   earlier in a session.
+</p>
+<p>
+   History mechanisms and caches are different. In particular history
+   mechanisms SHOULD NOT try to show a semantically transparent view of
+   the current state of a resource. Rather, a history mechanism is meant
+   to show exactly what the user saw at the time when the resource was
+   retrieved.
+</p>
+<p>
+   By default, an expiration time does not apply to history mechanisms.
+   If the entity is still in storage, a history mechanism SHOULD display
+   it even if the entity has expired, unless the user has specifically
+   configured the agent to refresh expired history documents.
+</p>
+<p>
+   This is not to be construed to prohibit the history mechanism from
+   telling the user that a view might be stale.
+</p>
+<pre>      Note: if history list mechanisms unnecessarily prevent users from
+      viewing stale resources, this will tend to force service authors
+      to avoid using HTTP expiration controls and cache controls when
+      they would otherwise like to. Service authors may consider it
+      important that users not be presented with error messages or
+      warning messages when they use navigation controls (such as BACK)
+      to view previously fetched resources. Even though sometimes such
+      resources ought not to cached, or ought to expire quickly, user
+      interface considerations may force service authors to resort to
+      other means of preventing caching (e.g. "once-only" URLs) in order
+      not to suffer the effects of improperly functioning history
+      mechanisms.
+</pre>
+  </article>
+</MainLayout>

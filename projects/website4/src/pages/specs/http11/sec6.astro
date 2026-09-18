@@ -1,0 +1,161 @@
+---
+import MainLayout from "../../../layouts/MainLayout.astro";
+
+const title = "HTTP/1.1: Response";
+---
+
+<MainLayout
+  title={`${title} - Caleb Owens`}
+  canonicalUrl="https://cto.je/specs/http11/sec6/"
+  description="RFC 2616: Hypertext Transfer Protocol -- HTTP/1.1, imported for reference."
+>
+  <article>
+<address>part of <a rev='Section' href="/specs/http11/">Hypertext Transfer Protocol -- HTTP/1.1</a><br />
+RFC 2616 Fielding, et al.</address>
+<h2><a id='sec6'>6</a> Response</h2>
+<p>
+   After receiving and interpreting a request message, a server responds
+   with an HTTP response message.
+</p>
+<pre>       Response      = Status-Line               ; Section 6.1
+                       *(( general-header        ; Section <a rel='xref' href="/specs/http11/sec4#sec4.5">4.5</a>
+                        | response-header        ; Section <a rel='xref' href="/specs/http11/sec6#sec6.2">6.2</a>
+                        | entity-header ) CRLF)  ; Section <a rel='xref' href="/specs/http11/sec7#sec7.1">7.1</a>
+                       CRLF
+                       [ message-body ]          ; Section <a rel='xref' href="/specs/http11/sec7#sec7.2">7.2</a>
+</pre>
+<h3><a id='sec6.1'>6.1</a> Status-Line</h3>
+<p>
+   The first line of a Response message is the Status-Line, consisting
+   of the protocol version followed by a numeric status code and its
+   associated textual phrase, with each element separated by SP
+   characters. No CR or LF is allowed except in the final CRLF sequence.
+</p>
+<pre>       Status-Line = HTTP-Version SP Status-Code SP Reason-Phrase CRLF
+</pre>
+<h3><a id='sec6.1.1'>6.1.1</a> Status Code and Reason Phrase</h3>
+<p>
+   The Status-Code element is a 3-digit integer result code of the
+   attempt to understand and satisfy the request. These codes are fully
+   defined in section 10. The Reason-Phrase is intended to give a short
+   textual description of the Status-Code. The Status-Code is intended
+   for use by automata and the Reason-Phrase is intended for the human
+   user. The client is not required to examine or display the Reason-
+   Phrase.
+</p>
+<p>
+   The first digit of the Status-Code defines the class of response. The
+   last two digits do not have any categorization role. There are 5
+   values for the first digit:
+</p>
+<pre>      - 1xx: Informational - Request received, continuing process
+</pre>
+<pre>      - 2xx: Success - The action was successfully received,
+        understood, and accepted
+</pre>
+<pre>      - 3xx: Redirection - Further action must be taken in order to
+        complete the request
+</pre>
+<pre>      - 4xx: Client Error - The request contains bad syntax or cannot
+        be fulfilled
+</pre>
+<pre>      - 5xx: Server Error - The server failed to fulfill an apparently
+        valid request
+</pre>
+<p>
+   The individual values of the numeric status codes defined for
+   HTTP/1.1, and an example set of corresponding Reason-Phrase's, are
+   presented below. The reason phrases listed here are only
+   recommendations -- they MAY be replaced by local equivalents without
+   affecting the protocol.
+</p>
+<pre>      Status-Code    =
+            "100"  ; Section <a rel='xref' href="/specs/http11/sec10#sec10.1.1">10.1.1</a>: Continue
+          | "101"  ; Section <a rel='xref' href="/specs/http11/sec10#sec10.1.2">10.1.2</a>: Switching Protocols
+          | "200"  ; Section <a rel='xref' href="/specs/http11/sec10#sec10.2.1">10.2.1</a>: OK
+          | "201"  ; Section <a rel='xref' href="/specs/http11/sec10#sec10.2.2">10.2.2</a>: Created
+          | "202"  ; Section <a rel='xref' href="/specs/http11/sec10#sec10.2.3">10.2.3</a>: Accepted
+          | "203"  ; Section <a rel='xref' href="/specs/http11/sec10#sec10.2.4">10.2.4</a>: Non-Authoritative Information
+          | "204"  ; Section <a rel='xref' href="/specs/http11/sec10#sec10.2.5">10.2.5</a>: No Content
+          | "205"  ; Section <a rel='xref' href="/specs/http11/sec10#sec10.2.6">10.2.6</a>: Reset Content
+          | "206"  ; Section <a rel='xref' href="/specs/http11/sec10#sec10.2.7">10.2.7</a>: Partial Content
+          | "300"  ; Section <a rel='xref' href="/specs/http11/sec10#sec10.3.1">10.3.1</a>: Multiple Choices
+          | "301"  ; Section <a rel='xref' href="/specs/http11/sec10#sec10.3.2">10.3.2</a>: Moved Permanently
+          | "302"  ; Section <a rel='xref' href="/specs/http11/sec10#sec10.3.3">10.3.3</a>: Found
+          | "303"  ; Section <a rel='xref' href="/specs/http11/sec10#sec10.3.4">10.3.4</a>: See Other
+          | "304"  ; Section <a rel='xref' href="/specs/http11/sec10#sec10.3.5">10.3.5</a>: Not Modified
+          | "305"  ; Section <a rel='xref' href="/specs/http11/sec10#sec10.3.6">10.3.6</a>: Use Proxy
+          | "307"  ; Section <a rel='xref' href="/specs/http11/sec10#sec10.3.8">10.3.8</a>: Temporary Redirect
+          | "400"  ; Section <a rel='xref' href="/specs/http11/sec10#sec10.4.1">10.4.1</a>: Bad Request
+          | "401"  ; Section <a rel='xref' href="/specs/http11/sec10#sec10.4.2">10.4.2</a>: Unauthorized
+          | "402"  ; Section <a rel='xref' href="/specs/http11/sec10#sec10.4.3">10.4.3</a>: Payment Required
+          | "403"  ; Section <a rel='xref' href="/specs/http11/sec10#sec10.4.4">10.4.4</a>: Forbidden
+          | "404"  ; Section <a rel='xref' href="/specs/http11/sec10#sec10.4.5">10.4.5</a>: Not Found
+          | "405"  ; Section <a rel='xref' href="/specs/http11/sec10#sec10.4.6">10.4.6</a>: Method Not Allowed
+          | "406"  ; Section <a rel='xref' href="/specs/http11/sec10#sec10.4.7">10.4.7</a>: Not Acceptable
+</pre>
+<pre>          | "407"  ; Section 10.4.8: Proxy Authentication Required
+          | "408"  ; Section <a rel='xref' href="/specs/http11/sec10#sec10.4.9">10.4.9</a>: Request Time-out
+          | "409"  ; Section <a rel='xref' href="/specs/http11/sec10#sec10.4.10">10.4.10</a>: Conflict
+          | "410"  ; Section <a rel='xref' href="/specs/http11/sec10#sec10.4.11">10.4.11</a>: Gone
+          | "411"  ; Section <a rel='xref' href="/specs/http11/sec10#sec10.4.12">10.4.12</a>: Length Required
+          | "412"  ; Section <a rel='xref' href="/specs/http11/sec10#sec10.4.13">10.4.13</a>: Precondition Failed
+          | "413"  ; Section <a rel='xref' href="/specs/http11/sec10#sec10.4.14">10.4.14</a>: Request Entity Too Large
+          | "414"  ; Section <a rel='xref' href="/specs/http11/sec10#sec10.4.15">10.4.15</a>: Request-URI Too Large
+          | "415"  ; Section <a rel='xref' href="/specs/http11/sec10#sec10.4.16">10.4.16</a>: Unsupported Media Type
+          | "416"  ; Section <a rel='xref' href="/specs/http11/sec10#sec10.4.17">10.4.17</a>: Requested range not satisfiable
+          | "417"  ; Section <a rel='xref' href="/specs/http11/sec10#sec10.4.18">10.4.18</a>: Expectation Failed
+          | "500"  ; Section <a rel='xref' href="/specs/http11/sec10#sec10.5.1">10.5.1</a>: Internal Server Error
+          | "501"  ; Section <a rel='xref' href="/specs/http11/sec10#sec10.5.2">10.5.2</a>: Not Implemented
+          | "502"  ; Section <a rel='xref' href="/specs/http11/sec10#sec10.5.3">10.5.3</a>: Bad Gateway
+          | "503"  ; Section <a rel='xref' href="/specs/http11/sec10#sec10.5.4">10.5.4</a>: Service Unavailable
+          | "504"  ; Section <a rel='xref' href="/specs/http11/sec10#sec10.5.5">10.5.5</a>: Gateway Time-out
+          | "505"  ; Section <a rel='xref' href="/specs/http11/sec10#sec10.5.6">10.5.6</a>: HTTP Version not supported
+          | extension-code
+</pre>
+<pre>      extension-code = 3DIGIT
+      Reason-Phrase  = *&lt;TEXT, excluding CR, LF>
+</pre>
+<p>
+   HTTP status codes are extensible. HTTP applications are not required
+   to understand the meaning of all registered status codes, though such
+   understanding is obviously desirable. However, applications MUST
+   understand the class of any status code, as indicated by the first
+   digit, and treat any unrecognized response as being equivalent to the
+   x00 status code of that class, with the exception that an
+   unrecognized response MUST NOT be cached. For example, if an
+   unrecognized status code of 431 is received by the client, it can
+   safely assume that there was something wrong with its request and
+   treat the response as if it had received a 400 status code. In such
+   cases, user agents SHOULD present to the user the entity returned
+   with the response, since that entity is likely to include human-
+   readable information which will explain the unusual status.
+</p>
+<h3><a id='sec6.2'>6.2</a> Response Header Fields</h3>
+<p>
+   The response-header fields allow the server to pass additional
+   information about the response which cannot be placed in the Status-
+   Line. These header fields give information about the server and about
+   further access to the resource identified by the Request-URI.
+</p>
+<pre>       response-header = Accept-Ranges           ; Section 14.5
+                       | Age                     ; Section <a rel='xref' href="/specs/http11/sec14#sec14.6">14.6</a>
+                       | ETag                    ; Section <a rel='xref' href="/specs/http11/sec14#sec14.19">14.19</a>
+                       | Location                ; Section <a rel='xref' href="/specs/http11/sec14#sec14.30">14.30</a>
+                       | Proxy-Authenticate      ; Section <a rel='xref' href="/specs/http11/sec14#sec14.33">14.33</a>
+</pre>
+<pre>                       | Retry-After             ; Section 14.37
+                       | Server                  ; Section <a rel='xref' href="/specs/http11/sec14#sec14.38">14.38</a>
+                       | Vary                    ; Section <a rel='xref' href="/specs/http11/sec14#sec14.44">14.44</a>
+                       | WWW-Authenticate        ; Section <a rel='xref' href="/specs/http11/sec14#sec14.47">14.47</a>
+</pre>
+<p>
+   Response-header field names can be extended reliably only in
+   combination with a change in the protocol version. However, new or
+   experimental header fields MAY be given the semantics of response-
+   header fields if all parties in the communication recognize them to
+   be response-header fields. Unrecognized header fields are treated as
+   entity-header fields.
+</p>
+  </article>
+</MainLayout>
