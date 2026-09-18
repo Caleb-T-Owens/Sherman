@@ -1,13 +1,24 @@
 :root {
-  --color-text: rgb(25, 25, 25);
-  --color-header: rgb(38, 59, 66);
-  --color-anchor: rgb(0, 76, 102);
-  --color-anchor-hover: rgb(12, 102, 132);
-  --color-anchor-visited: rgb(83, 0, 102);
-  --color-border: rgb(200, 200, 200);
-  --color-code-bg: rgb(240, 240, 240);
-  --color-background: rgb(255, 255, 255);
+  color-scheme: light dark;
+
+  --color-text: light-dark(rgb(25, 25, 25), rgb(225, 225, 225));
+  --color-header: light-dark(rgb(38, 59, 66), rgb(150, 190, 205));
+  --color-anchor: light-dark(rgb(0, 76, 102), rgb(110, 180, 210));
+  --color-anchor-hover: light-dark(rgb(12, 102, 132), rgb(140, 205, 230));
+  --color-anchor-visited: light-dark(rgb(83, 0, 102), rgb(195, 145, 215));
+  --color-border: light-dark(rgb(200, 200, 200), rgb(70, 70, 70));
+  --color-code-bg: light-dark(rgb(240, 240, 240), rgb(40, 40, 40));
+  --color-background: light-dark(rgb(255, 255, 255), rgb(20, 20, 20));
   --readable-width: 1000px;
+}
+
+/* explicit override from ThemeSelector; absent = follow OS via color-scheme: light dark above */
+:root.theme-light {
+  color-scheme: light;
+}
+
+:root.theme-dark {
+  color-scheme: dark;
 }
 
 * {
@@ -194,6 +205,19 @@ code {
 .astro-code {
   background-color: var(--color-code-bg) !important;
   padding: 8px;
+}
+
+/* shiki inlines the light color directly and only the dark color behind a var */
+@media (prefers-color-scheme: dark) {
+  :root:not(.theme-light) .astro-code,
+  :root:not(.theme-light) .astro-code span {
+    color: var(--shiki-dark) !important;
+  }
+}
+
+:root.theme-dark .astro-code,
+:root.theme-dark .astro-code span {
+  color: var(--shiki-dark) !important;
 }
 
 input[type="radio"] {
